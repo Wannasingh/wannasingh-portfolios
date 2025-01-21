@@ -9,24 +9,24 @@ export default function ServicesSection() {
 
   const services = [
     {
-      icon: "✨",
-      title: "User Research",
-      description: "Services we're providing that derive 99% result",
+      icon: "⚛️",
+      title: "React Development",
+      description: "Building responsive and interactive user interfaces with React",
     },
     {
-      icon: "🎨",
-      title: "Wireframing",
-      description: "Services we're providing that derive 99% result",
+      icon: "🔄",
+      title: "Next.js Applications",
+      description: "Creating server-side rendered and static websites with Next.js",
     },
     {
-      icon: "💡",
-      title: "UI Designing",
-      description: "Services we're providing that derive 99% result",
+      icon: "🖥️",
+      title: "Full Stack Integration",
+      description: "Connecting front-end with back-end services and databases",
     },
     {
-      icon: "⚡",
-      title: "Prototyping",
-      description: "Services we're providing that derive 99% result",
+      icon: "🚀",
+      title: "Performance Optimization",
+      description: "Enhancing app speed and efficiency for better user experience",
     },
   ];
 

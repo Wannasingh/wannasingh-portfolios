@@ -10,7 +10,7 @@ export default function Header() {
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 p-4">
-      <div className="max-w-7xl mx-auto relative">
+      <div className="container mx-auto relative">
         {/* Desktop Navigation */}
         <nav className="bg-white border-2 border-black hidden md:flex items-stretch justify-between shadow-[4px_4px_0px_0px_rgba(0,0,0,0.15)] relative">
           <Image
@@ -39,7 +39,7 @@ export default function Header() {
           />
           <Link
             href="/"
-            className="flex items-center px-4 py-2 border-r-2 border-black"
+            className="flex items-center px-4 py-2  border-black"
           >
             <Image
               src={StarIcon}
@@ -61,10 +61,10 @@ export default function Header() {
               href="/portfolio"
               className="px-6 py-3 text-base font-medium border-r-2 border-black flex items-center relative"
             >
-              <span className="bg-yellow-300 absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
+              <span className="relative z-10">
                 Portfolio
+                <span className="absolute inset-2 bg-yellow-300 -z-10 -px-2"></span>
               </span>
-              <span className="relative text-black z-10">Portfolio</span>
             </Link>
             <Link
               href="/hire-me"
@@ -139,7 +139,7 @@ export default function Header() {
             >
               <span className="relative z-10">
                 Portfolio
-                <span className="absolute inset-0 bg-yellow-300 -z-10 transform skew-x-12"></span>
+                <span className="absolute inset-2 bg-yellow-300 -z-10 -px-2"></span>
               </span>
             </Link>
             <Link
