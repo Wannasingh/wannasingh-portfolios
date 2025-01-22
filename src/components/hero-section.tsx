@@ -208,7 +208,7 @@ export default function HeroSection() {
       </div>
 
       {/* Pink Star Decoration (Bottom Left) */}
-      <div className="absolute bottom-0 left-0">
+      <div className="absolute bottom-3 left-0">
         <Star className="w-8 h-8 text-pink-500" />
       </div>
     </main>

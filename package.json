@@ -6,7 +6,9 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "docker-build": "docker build -t wannasingh-portfolio .",
+    "docker-run": "docker run -p 3000:3000 wannasingh-portfolio"
   },
   "dependencies": {
     "@radix-ui/react-slot": "^1.1.1",
