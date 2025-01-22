@@ -7,7 +7,7 @@ import Frame13 from "../assets/Frame 13.svg";
 
 export default function HeroSection() {
   return (
-    <main className="relative container px-4 py-12 pt-20 mx-auto md:pt-28">
+    <main className="relative container px-4 py-12 pt-20 mx-auto md:pt-28 font-mono">
       {/* Pink Star Decoration */}
       <div className="absolute top-1 left-8 w-36 h-36 md:w-48 md:h-48 -rotate-12 md:-top-5 md:left-2">
         <div className="flex justify-start md:justify-start">
@@ -181,11 +181,11 @@ export default function HeroSection() {
             alt="Decorative border"
             width={384}
             height={384}
-            className="absolute inset-0 w-full h-auto filter drop-shadow-lg"
+            className="absolute inset-0 w-full h-full filter drop-shadow-lg object-contain"
           />
 
           {/* Image container */}
-          <div className="absolute inset-6 overflow-hidden border-collapse border-gray-300 rounded-sm">
+          <div className="absolute inset-7 flex items-center justify-center">
             <Image
               src={PictureProfile}
               alt="Profile Picture"

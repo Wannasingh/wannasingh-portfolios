@@ -13,7 +13,7 @@ export default function Footer() {
   ];
 
   return (
-    <footer className="py-6 border-t border-[#E5E5E5]">
+    <footer className="py-6 border-t border-[#E5E5E5] font-mono">
       <div className="container mx-auto px-4">
         <div className="flex justify-between items-center">
           <p className="text-sm text-gray-500">Wannasingh 2025</p>

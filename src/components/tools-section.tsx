@@ -12,7 +12,7 @@ export default function ToolsSection() {
   ];
 
   return (
-    <section className="py-6 border-y border-[#E5E5E5]">
+    <section className="py-6 border-y border-[#E5E5E5] font-mono">
       <div className="container mx-auto px-4">
         <ul className="grid grid-cols-4 md:flex md:flex-wrap md:justify-between items-center gap-4 md:gap-0">
           {tools.map((tool, index) => (
