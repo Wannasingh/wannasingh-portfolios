@@ -1,17 +1,22 @@
 import Link from "next/link";
+import {
+  FaInstagram,
+  FaFacebookSquare,
+} from "react-icons/fa";
+import { FaSquareXTwitter } from "react-icons/fa6";
 
 export default function Footer() {
   const socialLinks = [
-    { icon: "🌐", href: "#" },
-    { icon: "📱", href: "#" },
-    { icon: "✉️", href: "#" },
+    { icon: <FaInstagram />, href: "#" },
+    { icon: <FaFacebookSquare />, href: "#" },
+    { icon: <FaSquareXTwitter />, href: "#" },
   ];
 
   return (
-    <footer className="py-6 border-t border-[#E5E5E5]">
+    <footer className="py-6 border-t border-[#E5E5E5] font-mono">
       <div className="container mx-auto px-4">
         <div className="flex justify-between items-center">
-          <p className="text-sm text-gray-500">Portfolio 2024</p>
+          <p className="text-sm text-gray-500">Wannasingh 2025</p>
           <div className="flex space-x-4">
             {socialLinks.map((link, index) => (
               <Link
