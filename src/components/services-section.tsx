@@ -1,32 +1,39 @@
 import { Card, CardContent } from "@/components/ui/card";
 import Link from "next/link";
+import { RiNextjsFill } from "react-icons/ri";
+import { FaReact } from "react-icons/fa";
+import { IoLogoJavascript } from "react-icons/io5";
 
 export default function ServicesSection() {
   const stats = [
-    { number: "39", label: "Projects" },
-    { number: "100k+", label: "generated" },
+    { number: "10+", label: "Technologies" },
+    { number: "20+", label: "Personal Projects" },
   ];
 
   const services = [
     {
-      icon: "⚛️",
+      icon: <FaReact className="text-blue-500" />,
       title: "React Development",
-      description: "Building responsive and interactive user interfaces with React",
+      description:
+        "Crafting responsive and interactive user interfaces with React",
     },
     {
-      icon: "🔄",
+      icon: <RiNextjsFill />,
       title: "Next.js Applications",
-      description: "Creating server-side rendered and static websites with Next.js",
+      description:
+        "Building high-performance server-side rendered and static websites",
     },
     {
-      icon: "🖥️",
+      icon: <IoLogoJavascript />,
       title: "Full Stack Integration",
-      description: "Connecting front-end with back-end services and databases",
+      description:
+        "Seamlessly connecting front-end with back-end services and databases",
     },
     {
       icon: "🚀",
       title: "Performance Optimization",
-      description: "Enhancing app speed and efficiency for better user experience",
+      description:
+        "Enhancing app speed and efficiency for optimal user experience",
     },
   ];
 
@@ -34,7 +41,7 @@ export default function ServicesSection() {
     <section className="py-16">
       <div className="container mx-auto px-4">
         <h2 className="text-2xl font-semibold mb-8">
-          Services we&apos;re providing
+          Services I&apos;m providing
           <br />
           that derive 99% result ☺️
         </h2>

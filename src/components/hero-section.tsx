@@ -2,11 +2,7 @@ import { Button } from "@/components/ui/button";
 import PictureProfile from "@/images/profile.jpg";
 import Image from "next/image";
 import Border from "../assets/Border.svg";
-import {
-  Star,
-  LightbulbIcon,
-  CodeXml,
-} from "lucide-react";
+import { Star, LightbulbIcon, CodeXml } from "lucide-react";
 import Frame13 from "../assets/Frame 13.svg";
 
 export default function HeroSection() {
@@ -35,6 +31,7 @@ export default function HeroSection() {
               websites
               <span className="absolute inset-2 bg-yellow-300 -z-10"></span>
             </span>{" "}
+            <br />
             <span>with cutting-edge code and creativity.</span>
           </h1>
 
@@ -59,11 +56,12 @@ export default function HeroSection() {
         <div className="relative w-72 h-72 md:w-96 md:h-96 mt-20 md:mt-10">
           <div className="absolute -top-28 right-20 md:right-36 z-10">
             <svg
-              width="260"
-              height="150"
+              width="100%"
+              height="auto"
               viewBox="0 0 310 195"
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
+              className="max-w-full"
             >
               <g clipPath="url(#clip0_1_972)">
                 <g filter="url(#filter0_d_1_972)">
@@ -183,7 +181,7 @@ export default function HeroSection() {
             alt="Decorative border"
             width={384}
             height={384}
-            className="absolute inset-0 w-full h-full filter drop-shadow-lg"
+            className="absolute inset-0 w-full h-auto filter drop-shadow-lg"
           />
 
           {/* Image container */}

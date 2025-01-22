@@ -1,5 +1,5 @@
 import { FaReact, FaDocker, FaNodeJs, } from "react-icons/fa";
-import { SiMongodb, SiTypescript } from "react-icons/si";
+import { SiTypescript } from "react-icons/si";
 import { RiSupabaseFill } from "react-icons/ri";
 
 export default function ToolsSection() {
