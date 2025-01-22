@@ -1,63 +1,47 @@
-import { Card, CardContent } from "@/components/ui/card";
-import Image from "next/image";
+import { Card } from "@/components/ui/card";
 
 export default function TestimonialsSection() {
   const testimonials = [
     {
-      quote: "Design is a bridge that connects everyone and everything",
-      author: "Client First Name",
-      role: "UX Designer, Company Name",
-      avatar: "/placeholder.svg",
+      quote: "Design is a bridge that connects business goals with user needs. Really happy with the outcome!",
+      author: "Client Name",
+      initials: "CN",
     },
     {
-      quote: "Design is a bridge that connects everyone and everything",
+      quote: "Design is a bridge that connects business goals with user needs. Really happy with the outcome!",
       author: "Client Name",
-      role: "UX Designer, Company Name",
-      avatar: "/placeholder.svg",
-    },
-    {
-      quote: "Design is a bridge that connects everyone and everything",
-      author: "Client Name",
-      role: "UX Designer, Company Name",
-      avatar: "/placeholder.svg",
-    },
-    {
-      quote: "Design is a bridge that connects everyone and everything",
-      author: "Client Name",
-      role: "UX Designer, Company Name",
-      avatar: "/placeholder.svg",
+      initials: "CN",
     },
   ];
 
   return (
-    <section className="py-16">
-      <div className="container mx-auto px-4">
-        <h2 className="text-2xl font-semibold mb-8">
-          Here&apos;s what my clients
-          <br />
-          are saying about my work
-        </h2>
-        <div className="space-y-6">
-          {testimonials.map((testimonial, index) => (
-            <Card key={index} className="border-2 rounded-xl">
-              <CardContent className="p-6 flex items-start space-x-4">
-                <Image
-                  src={testimonial.avatar || "/placeholder.svg"}
-                  alt={testimonial.author}
-                  width={48}
-                  height={48}
-                  className="rounded-full"
-                />
-                <div>
-                  <p className="text-gray-800 mb-2">{testimonial.quote}</p>
-                  <p className="text-sm font-medium">{testimonial.author}</p>
-                  <p className="text-sm text-gray-500">{testimonial.role}</p>
+      <section className="container mx-auto px-4 py-7 font-mono">
+        {/* Testimonials Section */}
+        <div className="space-y-4">
+          <h2 className="text-2xl font-bold">
+            Here&apos;s what my clients are saying about my work ✨
+          </h2>
+          <div className="space-y-4">
+            {testimonials.map((testimonial, index) => (
+              <Card
+                key={index}
+                className="p-4 border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]"
+              >
+                <div className="flex items-start gap-4">
+                  <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center text-sm font-bold">
+                    {testimonial.initials}
+                  </div>
+                  <div>
+                    <p className="font-bold">{testimonial.author}</p>
+                    <p className="text-sm text-gray-600">
+                      {testimonial.quote}
+                    </p>
+                  </div>
                 </div>
-              </CardContent>
-            </Card>
-          ))}
+              </Card>
+            ))}
+          </div>
         </div>
-      </div>
-    </section>
+      </section>
   );
 }
