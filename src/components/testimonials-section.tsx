@@ -23,7 +23,7 @@ export default function ProjectHighlightsSection() {
     <section className="container mx-auto px-4 py-7 font-mono">
       <div className="space-y-4">
         <h2 className="text-2xl font-bold">
-          Here are some projects I've worked on ✨
+          Here are some projects I&apos;ve worked on ✨
         </h2>
         <div className="space-y-4">
           {highlights.map((project, index) => (
@@ -33,9 +33,7 @@ export default function ProjectHighlightsSection() {
             >
               <div className="space-y-2">
                 <h3 className="font-bold text-lg">{project.title}</h3>
-                <p className="text-sm text-gray-600">
-                  {project.description}
-                </p>
+                <p className="text-sm text-gray-600">{project.description}</p>
                 <p className="text-xs font-semibold text-blue-600">
                   Tech Stack: {project.tech}
                 </p>
@@ -45,9 +43,11 @@ export default function ProjectHighlightsSection() {
         </div>
         <Card className="p-4 border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
           <p className="text-sm">
-            As a new full stack developer, I'm passionate about creating efficient, user-friendly applications. 
-            I'm constantly learning and improving my skills to deliver high-quality solutions. 
-            I'm excited about the opportunity to bring fresh perspectives and innovative ideas to your projects!
+            As a new full stack developer, I&apos;m passionate about creating
+            efficient, user-friendly applications. I&apos;m constantly learning
+            and improving my skills to deliver high-quality solutions. I&apos;m
+            excited about the opportunity to bring fresh perspectives and
+            innovative ideas to your projects!
           </p>
         </Card>
       </div>
