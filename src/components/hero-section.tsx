@@ -14,7 +14,7 @@ export default function HeroSection() {
           <Star className="w-8 h-8 text-pink-500" />
         </div>
       </div>
-      <div className="absolute w-36 h-36 -top-6 -right-14 md:-top-4 md:-right-20 md:w-36 md:h-36 -rotate-45">
+      <div className="absolute w-36 h-36 -top-6 md:-top-4 md:w-36 md:h-36 -rotate-45">
         <div className="flex justify-end md:justify-end">
           <Star className="w-8 h-8 text-pink-500" />
         </div>
