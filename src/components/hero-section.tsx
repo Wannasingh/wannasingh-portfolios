@@ -7,7 +7,7 @@ import Frame13 from "../assets/Frame 13.svg";
 
 export default function HeroSection() {
   return (
-    <main className="relative container px-4 py-12 pt-20 mx-auto md:pt-28 font-mono">
+    <main className="relative container px-6 py-12 pt-20 mx-auto md:pt-28 font-mono">
       {/* Pink Star Decoration */}
       <div className="absolute top-1 left-8 w-36 h-36 md:w-48 md:h-48 -rotate-12 md:-top-5 md:left-2">
         <div className="flex justify-start md:justify-start">
