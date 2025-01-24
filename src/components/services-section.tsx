@@ -71,7 +71,7 @@ export default function ServicesSection() {
   return (
     <section
       ref={sectionRef}
-      className={`container mx-auto px-4 py-16 font-mono transition-opacity duration-1000 ${
+      className={`container mx-auto px-6 py-16 font-mono transition-opacity duration-1000 ${
         isSectionVisible ? "opacity-100" : "opacity-0"
       }`}
     >

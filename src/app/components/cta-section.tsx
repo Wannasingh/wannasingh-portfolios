@@ -79,7 +79,7 @@ export default function CTASection() {
       }`}
     >
       <Toaster />
-      <div className="container mx-auto px-4">
+      <div className="container mx-auto px-6">
         {/* CTA Section */}
         <Card className="p-6 text-center border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
           <h2 className="text-2xl font-bold mb-4">
