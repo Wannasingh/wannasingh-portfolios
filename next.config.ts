@@ -9,6 +9,7 @@ const nextConfig: NextConfig = {
     EMAIL_PASS: process.env.EMAIL_PASS,
     EMAIL_TO: process.env.EMAIL_TO,
   },
+  output: "standalone",
 };
 
 export default nextConfig;
