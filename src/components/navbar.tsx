@@ -8,6 +8,10 @@ import { useState } from "react";
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
+  const handleLinkClick = () => {
+    setIsMenuOpen(false);
+  };
+
   return (
     <header className="fixed top-0 left-0 right-0 z-50 p-4 font-mono">
       <div className="container mx-auto relative">
@@ -37,10 +41,7 @@ export default function Header() {
             width={10}
             className="absolute -bottom-[6px] -right-[6px] transform rotate-180 shadow-[-4px_-2px_0px_0px_rgba(0,0,0,0.15)]"
           />
-          <Link
-            href="/"
-            className="flex items-center px-4 py-2  border-black"
-          >
+          <Link href="/" className="flex items-center px-4 py-2  border-black">
             <Image
               src={StarIcon}
               alt="Star icon"
@@ -48,7 +49,7 @@ export default function Header() {
               height={20}
               className="mr-2"
             />
-            <span className="text-xl font-bold">wannasingh</span>
+            <span className="text-xl font-bold">Wannasingh</span>
           </Link>
           <div className="flex h-full">
             <Link
@@ -130,12 +131,14 @@ export default function Header() {
             <Link
               href="/about"
               className="block px-6 py-3 text-base font-medium border-b-2 border-black"
+              onClick={handleLinkClick}
             >
               About //
             </Link>
             <Link
               href="/portfolio"
               className="block px-6 py-3 text-base font-medium border-b-2 border-black relative"
+              onClick={handleLinkClick}
             >
               <span className="relative z-10">
                 Portfolio
@@ -145,6 +148,7 @@ export default function Header() {
             <Link
               href="/hire-me"
               className="block px-6 py-3 text-base font-medium"
+              onClick={handleLinkClick}
             >
               Hire Me
             </Link>

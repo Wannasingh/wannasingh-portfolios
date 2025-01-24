@@ -1,9 +1,14 @@
+"use client"
 import { Card } from "@/components/ui/card";
 import Image from "next/image";
 import profileImage from "../../images/profile.jpg";
 import { TbExternalLink } from "react-icons/tb";
+import { useIntersectionObserver } from "@/hooks/useIntersectionObserver";
 
 export default function Portfolio() {
+  const [sectionRef, isSectionVisible] = useIntersectionObserver<HTMLElement>({
+    threshold: 0.1,
+  });
   const portfolioItems = [
     {
       image: profileImage ,
@@ -28,7 +33,12 @@ export default function Portfolio() {
   ];
 
   return (
-    <section className="container mx-auto px-4 py-16 font-mono space-y-4">
+    <section
+      ref={sectionRef}
+      className={`container mx-auto px-6 py-16 font-mono space-y-4 transition-opacity duration-1000 ${
+        isSectionVisible ? "opacity-100" : "opacity-0"
+      }`}
+    >
       <h2 className="text-2xl font-bold flex items-center gap-2 md:justify-center">
         My Portfolio <span className="text-blue-500">🌸</span>
       </h2>

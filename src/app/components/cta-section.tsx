@@ -11,8 +11,12 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { toast, Toaster } from "sonner";
 import { Card } from "@/components/ui/card";
+import { useIntersectionObserver } from "@/hooks/useIntersectionObserver";
 
 export default function CTASection() {
+  const [sectionRef, isSectionVisible] = useIntersectionObserver<HTMLElement>({
+    threshold: 0.1,
+  });
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -68,16 +72,22 @@ export default function CTASection() {
   };
 
   return (
-    <section className="py-6 font-mono">
+    <section
+      ref={sectionRef}
+      className={`py-6 font-mono transition-opacity duration-1000 ${
+        isSectionVisible ? "opacity-100" : "opacity-0"
+      }`}
+    >
       <Toaster />
-      <div className="container mx-auto px-4">
+      <div className="container mx-auto px-6">
         {/* CTA Section */}
         <Card className="p-6 text-center border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
           <h2 className="text-2xl font-bold mb-4">
             Let&apos;s build your full stack masterpiece 🚀
           </h2>
           <p className="mb-4">
-            Ready to bring your full stack vision to life? Let&apos;s collaborate and create something extraordinary!
+            Ready to bring your full stack vision to life? Let&apos;s
+            collaborate and create something extraordinary!
           </p>
           <Popover>
             <PopoverTrigger asChild>
