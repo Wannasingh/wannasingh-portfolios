@@ -1,9 +1,11 @@
+"use client";
 import { Card } from "@/components/ui/card";
 import { RiNextjsFill } from "react-icons/ri";
 import { FaReact } from "react-icons/fa";
 import { IoLogoJavascript } from "react-icons/io5";
 import { FaNode } from "react-icons/fa6";
-import { ReactNode } from 'react';
+import { ReactNode } from "react";
+import { useIntersectionObserver } from "@/hooks/useIntersectionObserver";
 
 function ServiceCard({
   icon,
@@ -26,6 +28,14 @@ function ServiceCard({
 }
 
 export default function ServicesSection() {
+  const [sectionRef, isSectionVisible] = useIntersectionObserver<HTMLElement>({
+    threshold: 0.1,
+  });
+  const [servicesRef, isServicesVisible] =
+    useIntersectionObserver<HTMLDivElement>({
+      threshold: 0.1,
+    });
+
   const stats = [
     { number: "10+", label: "Technologies" },
     { number: "20+", label: "Personal Projects" },
@@ -33,53 +43,67 @@ export default function ServicesSection() {
 
   const services = [
     {
-      icon: <FaReact/>,
+      icon: <FaReact />,
       title: "React Development",
-      description: "Crafting responsive and interactive user interfaces with React",
+      description:
+        "Crafting responsive and interactive user interfaces with React",
     },
     {
-      icon: <RiNextjsFill/>,
+      icon: <RiNextjsFill />,
       title: "Next.js Applications",
-      description: "Building high-performance server-side rendered and static websites",
+      description:
+        "Building high-performance server-side rendered and static websites",
     },
     {
-      icon: <IoLogoJavascript/>,
+      icon: <IoLogoJavascript />,
       title: "Full Stack Integration",
-      description: "Seamlessly connecting front-end with back-end services and databases",
+      description:
+        "Seamlessly connecting front-end with back-end services and databases",
     },
     {
-      icon: <FaNode/>,
+      icon: <FaNode />,
       title: "Performance Optimization",
-      description: "Enhancing app speed and efficiency for optimal user experience",
+      description:
+        "Enhancing app speed and efficiency for optimal user experience",
     },
   ];
 
   return (
-      <section className="container mx-auto px-4 py-16 font-mono">
-        <h2 className="text-2xl font-semibold mb-8">
-          Services I&apos;m providing
-          <br />
-          that derive 99% result ☺️
-        </h2>
-        <div className="grid grid-cols-2 gap-8 mb-12">
-          {stats.map((stat) => (
-            <div key={stat.label}>
-              <div className="text-3xl font-bold">{stat.number}</div>
-              <div className="text-sm text-gray-500">{stat.label}</div>
-            </div>
-          ))}
-        </div>
+    <section
+      ref={sectionRef}
+      className={`container mx-auto px-4 py-16 font-mono transition-opacity duration-1000 ${
+        isSectionVisible ? "opacity-100" : "opacity-0"
+      }`}
+    >
+      <h2 className="text-2xl font-semibold mb-8">
+        Services I&apos;m providing
+        <br />
+        that derive 99% result ☺️
+      </h2>
+      <div className="grid grid-cols-2 gap-8 mb-12">
+        {stats.map((stat) => (
+          <div key={stat.label}>
+            <div className="text-3xl font-bold">{stat.number}</div>
+            <div className="text-sm text-gray-500">{stat.label}</div>
+          </div>
+        ))}
+      </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {services.map((service) => (
-            <ServiceCard
-              key={service.title}
-              icon={service.icon}
-              title={service.title}
-              description={service.description}
-            />
-          ))}
-        </div>
-      </section>
+      <div
+        ref={servicesRef}
+        className={`grid grid-cols-1 md:grid-cols-2 gap-6 transition-opacity duration-1000 ${
+          isServicesVisible ? "opacity-100" : "opacity-0"
+        }`}
+      >
+        {services.map((service) => (
+          <ServiceCard
+            key={service.title}
+            icon={service.icon}
+            title={service.title}
+            description={service.description}
+          />
+        ))}
+      </div>
+    </section>
   );
 }

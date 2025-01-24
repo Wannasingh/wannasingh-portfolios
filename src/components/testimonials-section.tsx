@@ -1,6 +1,11 @@
+"use client"
 import { Card } from "@/components/ui/card";
+import { useIntersectionObserver } from "@/hooks/useIntersectionObserver";
 
 export default function ProjectHighlightsSection() {
+  const [sectionRef, isSectionVisible] = useIntersectionObserver<HTMLElement>({
+    threshold: 0.1,
+  });
   const highlights = [
     {
       title: "E-commerce Platform",
@@ -20,7 +25,12 @@ export default function ProjectHighlightsSection() {
   ];
 
   return (
-    <section className="container mx-auto px-4 py-7 font-mono">
+    <section
+      ref={sectionRef}
+      className={`container mx-auto px-4 py-7 font-mono transition-opacity duration-1000 ${
+        isSectionVisible ? "opacity-100" : "opacity-0"
+      }`}
+    >
       <div className="space-y-4">
         <h2 className="text-2xl font-bold">
           Here are some projects I&apos;ve worked on ✨
