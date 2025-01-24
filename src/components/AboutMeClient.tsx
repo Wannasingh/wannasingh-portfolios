@@ -6,12 +6,17 @@ import { FaCode, FaServer, FaDatabase, FaUsers } from "react-icons/fa";
 import Image from "next/image";
 import profilePic from "@/images/profile.jpg";
 import Link from "next/link";
-import AnimatedSection from "@/components/AnimatedSection";
+import { motion } from "framer-motion";
 
 const AboutMeClient = () => {
   return (
     <div className="container mx-auto px-6 py-16 font-mono">
-      <AnimatedSection>
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6 }}
+      >
         <Card className="p-6 border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
           <h2 className="text-2xl font-bold mb-4">Who Am I?</h2>
           <p className="text-lg">
@@ -22,9 +27,14 @@ const AboutMeClient = () => {
             technologies.
           </p>
         </Card>
-      </AnimatedSection>
+      </motion.div>
 
-      <AnimatedSection>
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6 }}
+      >
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
           <SkillCard
             icon={<FaCode className="text-3xl mb-2" />}
@@ -47,9 +57,14 @@ const AboutMeClient = () => {
             description="I pride myself on being a strong team player with excellent communication skills. I believe in the power of collaboration and enjoy working in diverse, cross-functional teams."
           />
         </div>
-      </AnimatedSection>
+      </motion.div>
 
-      <AnimatedSection>
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6 }}
+      >
         <Card className="p-6 border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] mt-8">
           <h2 className="text-2xl font-bold mb-4">What Drives Me</h2>
           <p className="text-lg">
@@ -62,9 +77,14 @@ const AboutMeClient = () => {
             seamlessly.
           </p>
         </Card>
-      </AnimatedSection>
+      </motion.div>
 
-      <AnimatedSection>
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6 }}
+      >
         <Card className="p-6 border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] mt-8">
           <h2 className="text-2xl font-bold mb-4">Let&apos;s Connect!</h2>
           <p className="text-lg">
@@ -73,13 +93,23 @@ const AboutMeClient = () => {
             Let&apos;s connect and create something amazing together!
           </p>
         </Card>
-      </AnimatedSection>
+      </motion.div>
 
-      <AnimatedSection>
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6 }}
+      >
         <Timeline className="p-8 relative px-4 mt-8" />
-      </AnimatedSection>
+      </motion.div>
 
-      <AnimatedSection>
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6 }}
+      >
         <div className="mt-12 flex flex-col items-center">
           <div className="bg-white border-4 border-black p-8 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] relative">
             <div className="relative w-64 h-64 mb-6 mx-auto">
@@ -110,7 +140,7 @@ const AboutMeClient = () => {
             </div>
           </div>
         </div>
-      </AnimatedSection>
+      </motion.div>
     </div>
   );
 };
