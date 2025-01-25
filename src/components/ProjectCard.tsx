@@ -2,6 +2,7 @@ import { Card } from "@/components/ui/card";
 import Link from "next/link";
 import Image from "next/image";
 import { Project } from "@/data/projects";
+import { FiGithub, FiExternalLink } from "react-icons/fi";
 
 interface ProjectCardProps {
   project: Project;
@@ -9,7 +10,9 @@ interface ProjectCardProps {
 
 export default function ProjectCard({ project }: ProjectCardProps) {
   return (
-    <Card className="overflow-hidden bg-white border-none shadow-xl hover:shadow-2xl transition-shadow duration-300">
+    <Card className="overflow-hidden bg-white border-sm shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] 
+    hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:-translate-x-[2px] hover:-translate-y-[2px] 
+    transition-all duration-300">
       <div className="flex flex-col lg:flex-row">
         {/* Project Image Section */}
         <div className="lg:w-2/5 relative">
@@ -24,7 +27,9 @@ export default function ProjectCard({ project }: ProjectCardProps) {
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent lg:bg-gradient-to-r" />
               <div className="absolute bottom-4 left-4 lg:bottom-8 lg:left-8 z-10">
-                <h1 className="text-3xl font-bold text-white mb-2">{project.name}</h1>
+                <h1 className="text-3xl font-bold text-white mb-2">
+                  {project.name}
+                </h1>
                 <div className="flex flex-wrap gap-2">
                   {project.technologies.slice(0, 3).map((tech, index) => (
                     <span
@@ -35,7 +40,9 @@ export default function ProjectCard({ project }: ProjectCardProps) {
                     </span>
                   ))}
                   {project.technologies.length > 3 && (
-                    <span className="text-white/80 text-xs">+{project.technologies.length - 3} more</span>
+                    <span className="text-white/80 text-xs">
+                      +{project.technologies.length - 3} more
+                    </span>
                   )}
                 </div>
               </div>
@@ -46,7 +53,7 @@ export default function ProjectCard({ project }: ProjectCardProps) {
         {/* Project Details Section */}
         <div className="lg:w-3/5 p-6 lg:p-8 space-y-6">
           <p className="text-gray-600">{project.overview}</p>
-          
+
           <div className="space-y-4">
             <h2 className="text-xl font-semibold">Key Features</h2>
             <ul className="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm text-gray-600">
@@ -64,16 +71,18 @@ export default function ProjectCard({ project }: ProjectCardProps) {
               href={project.githubLink}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex-1 bg-black text-white px-6 py-3 rounded-lg hover:bg-gray-800 transition-colors text-center font-medium"
+              className="flex-1 flex items-center justify-center gap-2 bg-black hover:bg-gray-800 text-white font-bold py-2 px-4 border-b-4 border-gray-700 hover:border-gray-900 rounded transform hover:-translate-y-1 transition-all duration-200 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]"
             >
+              <FiGithub className="text-xl" />
               View Source
             </Link>
             <Link
               href={project.demoLink}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex-1 bg-blue-500 text-white px-6 py-3 rounded-lg hover:bg-blue-600 transition-colors text-center font-medium"
+              className="flex-1 flex items-center justify-center gap-2 bg-blue-300 hover:bg-blue-400 text-black font-bold py-2 px-4 border-b-4 border-blue-500 hover:border-blue-600 rounded transform hover:-translate-y-1 transition-all duration-200 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]"
             >
+              <FiExternalLink className="text-xl" />
               Live Demo
             </Link>
           </div>

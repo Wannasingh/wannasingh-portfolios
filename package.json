@@ -30,7 +30,9 @@
     "react-icons": "^5.4.0",
     "sonner": "^1.7.2",
     "tailwind-merge": "^2.6.0",
-    "tailwindcss-animate": "^1.0.7"
+    "tailwindcss-animate": "^1.0.7",
+    "@types/three": "^0.160.0",
+    "three": "^0.160.0"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
