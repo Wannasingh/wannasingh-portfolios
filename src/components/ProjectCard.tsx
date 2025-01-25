@@ -3,6 +3,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { Project } from "@/data/projects";
 import { FiGithub, FiExternalLink } from "react-icons/fi";
+import * as Popover from '@radix-ui/react-popover';
 
 interface ProjectCardProps {
   project: Project;
@@ -40,9 +41,31 @@ export default function ProjectCard({ project }: ProjectCardProps) {
                     </span>
                   ))}
                   {project.technologies.length > 3 && (
-                    <span className="text-white/80 text-xs">
-                      +{project.technologies.length - 3} more
-                    </span>
+                    <Popover.Root>
+                      <Popover.Trigger asChild>
+                        <button className="bg-white/20 backdrop-blur-sm text-white text-xs font-medium px-2.5 py-0.5 rounded hover:bg-white/30 transition-colors duration-200">
+                          +{project.technologies.length - 3} more
+                        </button>
+                      </Popover.Trigger>
+                      <Popover.Portal>
+                        <Popover.Content 
+                          className="bg-white rounded-lg p-4 z-50 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] border-2 border-black animate-in fade-in-0 zoom-in-95 data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95" 
+                          sideOffset={5}
+                        >
+                          <div className="flex flex-wrap gap-2 max-w-[250px]">
+                            {project.technologies.slice(3).map((tech, index) => (
+                              <span
+                                key={index}
+                                className="bg-blue-50 text-black text-xs font-medium px-2.5 py-0.5 rounded border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]"
+                              >
+                                {tech}
+                              </span>
+                            ))}
+                          </div>
+                          <Popover.Arrow className="fill-black stroke-black stroke-2" />
+                        </Popover.Content>
+                      </Popover.Portal>
+                    </Popover.Root>
                   )}
                 </div>
               </div>

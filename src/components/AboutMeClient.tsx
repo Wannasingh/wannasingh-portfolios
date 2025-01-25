@@ -15,8 +15,13 @@ const AboutMeClient = () => {
     <div className="relative min-h-screen -mt-20 pt-20">
       <div className="absolute inset-0 bg-gradient-to-br from-white via-blue-50/40 to-yellow-50/20" />
       <div className="container mx-auto px-6 py-16 font-mono relative">
-        <ProfileHeader />
-
+        <ProfileHeader
+          pageType="about"
+          title="About Me"
+          description="Learn more about my journey and experience in software development."
+          primaryButton={{ text: "View Portfolio", href: "/portfolio" }}
+          secondaryButton={{ text: "Contact Me", href: "/hire-me" }}
+        />
         {/* Skills Grid */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -60,11 +65,11 @@ const AboutMeClient = () => {
             <p className="text-lg leading-relaxed">
               What drives me is the challenge of building scalable, efficient
               applications that solve real-world problems. I thrive on finding
-              innovative solutions and continuously expanding my knowledge in this
-              ever-evolving field. Whether it&apos;s optimizing database queries,
-              implementing complex frontend state management, or architecting
-              microservices, I&apos;m always eager to dive in and make things work
-              seamlessly.
+              innovative solutions and continuously expanding my knowledge in
+              this ever-evolving field. Whether it&apos;s optimizing database
+              queries, implementing complex frontend state management, or
+              architecting microservices, I&apos;m always eager to dive in and
+              make things work seamlessly.
             </p>
           </Card>
         </motion.div>

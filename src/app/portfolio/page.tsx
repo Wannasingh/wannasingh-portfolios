@@ -10,10 +10,15 @@ export default function ProjectPage() {
       <div className="absolute inset-0 bg-gradient-to-br from-white via-blue-50/40 to-yellow-50/20" />
       <div className="container mx-auto px-6 py-16 font-mono relative">
         {/* Header Section */}
-        <ProfileHeader />
-
+        <ProfileHeader
+          pageType="portfolio"
+          title="My Portfolio"
+          description="Welcome to my portfolio! Here you'll find a collection of projects that showcase my skills and experience in full-stack development."
+          primaryButton={{ text: "Contact Me", href: "/hire-me" }}
+          secondaryButton={{ text: "About Me", href: "/about" }}
+        />
         {/* Projects Grid */}
-        <section className="container mx-auto px-4 sm:px-6 py-4 pb-10">
+        <section className="py-4 pb-10">
           <div className="grid grid-cols-1 gap-12">
             {projects.map((project, index) => (
               <motion.div
