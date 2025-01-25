@@ -5,7 +5,7 @@ import { FaReact } from "react-icons/fa";
 import { IoLogoJavascript } from "react-icons/io5";
 import { FaNode } from "react-icons/fa6";
 import { ReactNode } from "react";
-import { useIntersectionObserver } from "@/hooks/useIntersectionObserver";
+import { motion } from "framer-motion";
 
 function ServiceCard({
   icon,
@@ -17,25 +17,24 @@ function ServiceCard({
   description: string;
 }) {
   return (
-    <Card className="p-4 border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
-      <div className="w-8 h-8 flex items-center justify-center font-bold mb-2">
-        {icon}
-      </div>
-      <h3 className="font-bold mb-2">{title}</h3>
-      <p className="text-sm text-gray-600">{description}</p>
-    </Card>
+    <motion.div
+      initial={{ opacity: 0, y: 20 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.6 }}
+    >
+      <Card className="p-4 border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+        <div className="w-8 h-8 flex items-center justify-center font-bold mb-2">
+          {icon}
+        </div>
+        <h3 className="font-bold mb-2">{title}</h3>
+        <p className="text-sm text-gray-600">{description}</p>
+      </Card>
+    </motion.div>
   );
 }
 
 export default function ServicesSection() {
-  const [sectionRef, isSectionVisible] = useIntersectionObserver<HTMLElement>({
-    threshold: 0.1,
-  });
-  const [servicesRef, isServicesVisible] =
-    useIntersectionObserver<HTMLDivElement>({
-      threshold: 0.1,
-    });
-
   const stats = [
     { number: "10+", label: "Technologies" },
     { number: "20+", label: "Personal Projects" },
@@ -69,32 +68,41 @@ export default function ServicesSection() {
   ];
 
   return (
-    <section
-      ref={sectionRef}
-      className={`container mx-auto px-6 py-16 font-mono transition-opacity duration-1000 ${
-        isSectionVisible ? "opacity-100" : "opacity-0"
-      }`}
+    <motion.section
+      initial={{ opacity: 0 }}
+      whileInView={{ opacity: 1 }}
+      viewport={{ once: true }}
+      transition={{ duration: 0.8 }}
+      className="container mx-auto px-6 py-16 font-mono"
     >
-      <h2 className="text-2xl font-semibold mb-8">
-        Services I&apos;m providing
-        <br />
-        that derive 99% result ☺️
-      </h2>
-      <div className="grid grid-cols-2 gap-8 mb-12">
-        {stats.map((stat) => (
-          <div key={stat.label}>
-            <div className="text-3xl font-bold">{stat.number}</div>
-            <div className="text-sm text-gray-500">{stat.label}</div>
-          </div>
-        ))}
-      </div>
-
-      <div
-        ref={servicesRef}
-        className={`grid grid-cols-1 md:grid-cols-2 gap-6 transition-opacity duration-1000 ${
-          isServicesVisible ? "opacity-100" : "opacity-0"
-        }`}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.6 }}
       >
+        <h2 className="text-2xl font-semibold mb-8">
+          Services I&apos;m providing
+          <br />
+          that derive 99% result ☺️
+        </h2>
+        <div className="grid grid-cols-2 gap-8 mb-12">
+          {stats.map((stat) => (
+            <motion.div
+              key={stat.label}
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+            >
+              <div className="text-3xl font-bold">{stat.number}</div>
+              <div className="text-sm text-gray-500">{stat.label}</div>
+            </motion.div>
+          ))}
+        </div>
+      </motion.div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         {services.map((service) => (
           <ServiceCard
             key={service.title}
@@ -104,6 +112,6 @@ export default function ServicesSection() {
           />
         ))}
       </div>
-    </section>
+    </motion.section>
   );
 }
