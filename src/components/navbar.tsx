@@ -13,8 +13,7 @@ export default function Header() {
   };
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 p-4 font-mono">
-      <div className="container mx-auto relative">
+    <header className="container mx-auto fixed top-0 left-0 right-0 z-50 p-4 font-mono">
         {/* Desktop Navigation */}
         <nav className="bg-white border-2 border-black hidden md:flex items-stretch justify-between shadow-[4px_4px_0px_0px_rgba(0,0,0,0.15)] relative">
           <Image
@@ -154,7 +153,6 @@ export default function Header() {
             </Link>
           </div>
         )}
-      </div>
     </header>
   );
 }
