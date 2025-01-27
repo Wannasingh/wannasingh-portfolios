@@ -2,30 +2,54 @@
 import { Card } from "@/components/ui/card";
 import Image from "next/image";
 import profileImage from "../../images/profile.jpg";
-import { TbExternalLink } from "react-icons/tb";
+import { TbExternalLink, TbBrandGithub } from "react-icons/tb";
 import { motion } from "framer-motion";
+import Link from "next/link";
+import { StaticImageData } from "next/image";
+
+// First, let's add an interface for the portfolio items
+interface PortfolioItem {
+  image: StaticImageData;
+  title: string;
+  description: string;
+  tags?: string[];
+  liveUrl?: string;
+  githubUrl?: string;
+}
 
 export default function Portfolio() {
-  const portfolioItems = [
+  const portfolioItems: PortfolioItem[] = [
     {
-      image: profileImage ,
+      image: profileImage,
       title: "Portfolio design",
       description: "UI design - User research - webflow develop",
-    },
-    {
-      image: profileImage ,
-      title: "Portfolio design",
-      description: "UI design - User research - webflow develop",
+      tags: ["Next.js", "TailwindCSS", "TypeScript"],
+      liveUrl: "https://wannasingh-portfolios.vercel.app/",
+      githubUrl: "https://wannasingh-portfolios.vercel.app/"
     },
     {
       image: profileImage,
       title: "Portfolio design",
       description: "UI design - User research - webflow develop",
+      tags: ["Next.js", "TailwindCSS", "TypeScript"],
+      liveUrl: "https://wannasingh-portfolios.vercel.app/",
+      githubUrl: "https://wannasingh-portfolios.vercel.app/",
     },
     {
       image: profileImage,
       title: "Portfolio design",
       description: "UI design - User research - webflow develop",
+      tags: ["Next.js", "TailwindCSS", "TypeScript"],
+      liveUrl: "https://wannasingh-portfolios.vercel.app/",
+      githubUrl: "https://wannasingh-portfolios.vercel.app/",
+    },
+    {
+      image: profileImage,
+      title: "Portfolio design",
+      description: "UI design - User research - webflow develop",
+      tags: ["Next.js", "TailwindCSS", "TypeScript"],
+      liveUrl: "https://wannasingh-portfolios.vercel.app/",
+      githubUrl: "https://wannasingh-portfolios.vercel.app/",
     },
   ];
 
@@ -35,18 +59,25 @@ export default function Portfolio() {
       whileInView={{ opacity: 1 }}
       viewport={{ once: true }}
       transition={{ duration: 0.8 }}
-      className="container mx-auto px-6 py-16 font-mono space-y-4"
+      className="container mx-auto px-6 py-2 font-mono"
     >
-      <motion.h2
+      <motion.div 
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
         transition={{ duration: 0.6 }}
-        className="text-2xl font-bold flex items-center gap-2 md:justify-center"
+        className="text-center mb-12"
       >
-        My Portfolio <span className="text-blue-500">🌸</span>
-      </motion.h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <h2 className="text-2xl md:text-4xl font-bold mb-4">
+          Featured Projects
+          <span className="text-blue-500 ml-2">🌸</span>
+        </h2>
+        <p className="text-gray-600 max-w-2xl mx-auto">
+          A collection of projects that showcase my skills in web development and design
+        </p>
+      </motion.div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         {portfolioItems.map((item, index) => (
           <motion.div
             key={index}
@@ -54,38 +85,44 @@ export default function Portfolio() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.6, delay: index * 0.1 }}
-            className="group relative"
           >
-            <Card className="bg-white px-4 py-4 border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all duration-200 hover:-translate-y-1">
+            <Card className="group overflow-hidden border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:-translate-x-[2px] hover:-translate-y-[2px] transition-all duration-300">
               <div className="relative">
                 <Image
                   src={item.image}
                   alt={item.title}
-                  width={400}
-                  height={300}
-                  className="w-full aspect-[4/3] object-cover rounded-sm md:pb-28 pb-24"
+                  width={600}
+                  height={400}
+                  className="w-full aspect-video object-cover transition-transform duration-300 group-hover:scale-100"
                 />
-                <motion.div
-                  initial={{ opacity: 0, x: -20 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.4, delay: 0.2 + index * 0.1 }}
-                  className="absolute bottom-14 md:bottom-16 left-3 px-3 py-1"
-                >
-                  <p className="font-bold text-lg">{item.title}</p>
-                </motion.div>
-                <motion.div
-                  initial={{ opacity: 0, x: -20 }}
-                  whileInView={{ opacity: 1, x: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.4, delay: 0.3 + index * 0.1 }}
-                  className="absolute bottom-4 md:bottom-10 left-3 text-xl px-3 py-1"
-                >
-                  <p className="font-bold text-sm">{item.description}</p>
-                </motion.div>
-                <button className="absolute bottom-3 right-3 bg-white p-1.5 border-2 border-black rounded-sm shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] opacity-0 group-hover:opacity-100 transition-opacity">
-                  <TbExternalLink />
-                </button>
+                <div className="absolute inset-0 bg-black bg-opacity-60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center gap-4">
+                  {item.liveUrl && (
+                    <Link href={item.liveUrl || '#'} className="bg-blue-500 p-2 rounded-lg border-2 border-white text-white hover:bg-blue-600 transition-colors">
+                      <TbExternalLink size={20} />
+                    </Link>
+                  )}
+                  {item.githubUrl && (
+                    <Link href={item.githubUrl || '#'} className="bg-gray-800 p-2 rounded-lg border-2 border-white text-white hover:bg-gray-900 transition-colors">
+                      <TbBrandGithub size={20} />
+                    </Link>
+                  )}
+                </div>
+              </div>
+              <div className="p-6">
+                <h3 className="text-xl font-bold mb-2">{item.title}</h3>
+                <p className="text-gray-600 mb-4">{item.description}</p>
+                {item.tags && (
+                  <div className="flex flex-wrap gap-2">
+                    {item.tags.map((tag, tagIndex) => (
+                      <span 
+                        key={tagIndex}
+                        className="bg-gray-100 px-3 py-1 text-sm border-2 border-black rounded-full"
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                )}
               </div>
             </Card>
           </motion.div>
