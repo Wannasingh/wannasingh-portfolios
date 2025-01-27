@@ -1,10 +1,10 @@
-'use client';
+"use client";
 
-import React, { useState } from 'react';
-import {ProfileHeader} from '@/components/ProfileHeader';
-import { FaGithub, FaLinkedin, FaEnvelope } from 'react-icons/fa';
-import { motion } from 'framer-motion';
-import { FaReact, FaNodeJs, FaGit, FaServer, FaTools } from 'react-icons/fa';
+import React, { useState } from "react";
+import { ProfileHeader } from "@/components/ProfileHeader";
+import { FaGithub, FaLinkedin, FaEnvelope, FaFileAlt } from "react-icons/fa";
+import { motion } from "framer-motion";
+import { FaReact, FaNodeJs, FaGit, FaServer, FaTools } from "react-icons/fa";
 import {
   SiNextdotjs,
   SiTypescript,
@@ -16,22 +16,37 @@ import {
   SiFigma,
   SiShadcnui,
   SiVercel,
+  SiOpenai,
+  SiGithubcopilot,
 } from "react-icons/si";
-import { BiCodeBlock } from 'react-icons/bi';
+import { BiCodeBlock, BiBrain, BiBot } from "react-icons/bi";
+import {
+  FaRobot,
+  FaCode,
+  FaPencilAlt,
+  FaImage,
+  FaLightbulb,
+} from "react-icons/fa";
+import { sendEmail } from "@/lib/email";
 
 export default function HireMePage() {
   const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    message: '',
+    name: "",
+    email: "",
+    message: "",
+    isResumeRequest: false,
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    console.log('Form submitted:', formData);
-  };
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+      e.preventDefault();
+      await sendEmail(formData, () => 
+        setFormData({ name: "", email: "", message: "", isResumeRequest: false })
+      );
+    };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
@@ -169,6 +184,89 @@ export default function HireMePage() {
                       {
                         name: "CI/CD",
                         icon: <BiCodeBlock className="text-[#2088FF]" />,
+                      },
+                    ].map((skill) => (
+                      <span
+                        key={skill.name}
+                        className="bg-gray-100 px-3 py-1 text-sm border-2 border-black rounded-full flex items-center gap-1"
+                      >
+                        {skill.icon}
+                        {skill.name}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* AI & Machine Learning */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              className="bg-white p-6 rounded-lg border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:-translate-x-[2px] hover:-translate-y-[2px] transition-all duration-300"
+            >
+              <h2 className="text-2xl font-bold mb-6 border-b-2 border-black pb-2">
+                Ability to Use AI
+              </h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div className="space-y-3">
+                  <h3 className="font-bold flex items-center gap-2">
+                    <FaRobot className="text-[#FF6B6B]" />
+                    AI Tools
+                  </h3>
+                  <div className="flex flex-wrap gap-2">
+                    {[
+                      {
+                        name: "ChatGPT",
+                        icon: <SiOpenai className="text-[#00A67E]" />,
+                      },
+                      {
+                        name: "GitHub Copilot",
+                        icon: <SiGithubcopilot className="text-[#412991]" />,
+                      },
+                      {
+                        name: "Claude",
+                        icon: <BiBot className="text-[#000000]" />,
+                      },
+                      {
+                        name: "Midjourney",
+                        icon: <FaImage className="text-[#FFD21E]" />,
+                      },
+                    ].map((skill) => (
+                      <span
+                        key={skill.name}
+                        className="bg-gray-100 px-3 py-1 text-sm border-2 border-black rounded-full flex items-center gap-1"
+                      >
+                        {skill.icon}
+                        {skill.name}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="space-y-3">
+                  <h3 className="font-bold flex items-center gap-2">
+                    <BiBrain className="text-[#4B5563]" />
+                    AI Applications
+                  </h3>
+                  <div className="flex flex-wrap gap-2">
+                    {[
+                      {
+                        name: "Code Assistance",
+                        icon: <FaCode className="text-[#3178C6]" />,
+                      },
+                      {
+                        name: "Content Writing",
+                        icon: <FaPencilAlt className="text-[#FF4154]" />,
+                      },
+                      {
+                        name: "Image Generation",
+                        icon: <FaImage className="text-[#38BDF8]" />,
+                      },
+                      {
+                        name: "Problem Solving",
+                        icon: <FaLightbulb className="text-[#16A34A]" />,
                       },
                     ].map((skill) => (
                       <span
@@ -376,11 +474,34 @@ export default function HireMePage() {
                       className="w-full p-3 border-2 border-black rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
                       required
                     />
+                    <div className="flex items-center gap-2">
+                      <input
+                        type="checkbox"
+                        id="resumeRequest"
+                        name="isResumeRequest"
+                        checked={formData.isResumeRequest}
+                        onChange={(e) => setFormData({ ...formData, isResumeRequest: e.target.checked })}
+                        className="w-4 h-4 border-2 border-black rounded "
+                      />
+                      <label htmlFor="resumeRequest" className="text-sm">
+                        I would like to request a copy of your resume
+                      </label>
+                    </div>
                     <button
                       type="submit"
-                      className="w-full bg-black text-white font-bold py-3 rounded-lg border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:-translate-x-[2px] hover:-translate-y-[2px] transition-all duration-300"
+                      className="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 rounded-lg border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:-translate-x-[2px] hover:-translate-y-[2px] transition-all duration-300 flex items-center justify-center gap-2"
                     >
-                      Send Message
+                      {formData.isResumeRequest ? (
+                        <>
+                          <FaFileAlt className="text-lg" />
+                          <span>Request Resume</span>
+                        </>
+                      ) : (
+                        <>
+                          <FaEnvelope className="text-lg" />
+                          <span>Send Message</span>
+                        </>
+                      )}
                     </button>
                   </form>
                 </div>

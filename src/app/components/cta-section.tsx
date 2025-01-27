@@ -9,9 +9,10 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
-import { toast, Toaster } from "sonner";
 import { Card } from "@/components/ui/card";
 import { motion } from "framer-motion";
+import { sendEmail } from "@/lib/email";
+import { FaEnvelope } from "react-icons/fa";
 
 export default function CTASection() {
   const [formData, setFormData] = useState({
@@ -32,40 +33,9 @@ export default function CTASection() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    try {
-      const response = await fetch("/api/send-email", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
-
-      if (response.ok) {
-        toast.success("Message sent successfully!", {
-          style: {
-            background: "#4ade80",
-            color: "#ffffff",
-          },
-        });
-        setFormData({ name: "", email: "", message: "" });
-      } else {
-        toast.error("Failed to send message. Please try again.", {
-          style: {
-            background: "#f87171",
-            color: "#ffffff",
-          },
-        });
-      }
-    } catch (error) {
-      console.error("Error:", error);
-      toast.error("An error occurred. Please try again.", {
-        style: {
-          background: "#f87171",
-          color: "#ffffff",
-        },
-      });
-    }
+    await sendEmail(formData, () =>
+      setFormData({ name: "", email: "", message: "" })
+    );
   };
 
   return (
@@ -76,7 +46,8 @@ export default function CTASection() {
       transition={{ duration: 0.8 }}
       className="py-6 font-mono"
     >
-      <Toaster />
+      {/* Remove this line since Toaster is already in layout */}
+      {/* <Toaster /> */}
       <div className="container mx-auto px-6">
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
@@ -116,9 +87,9 @@ export default function CTASection() {
                     Start Your Project
                   </Button>
                 </PopoverTrigger>
-                <PopoverContent className="w-80">
-                  <form className="grid gap-4" onSubmit={handleSubmit}>
-                    <div className="grid gap-2">
+                <PopoverContent className="w-96 p-6 border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+                  <form className="space-y-4" onSubmit={handleSubmit}>
+                    <div className="space-y-2">
                       <Label htmlFor="name">Name</Label>
                       <Input
                         id="name"
@@ -126,10 +97,11 @@ export default function CTASection() {
                         placeholder="Your name"
                         value={formData.name}
                         onChange={handleInputChange}
+                        className="w-full p-3 border-2 border-black rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
                         required
                       />
                     </div>
-                    <div className="grid gap-2">
+                    <div className="space-y-2">
                       <Label htmlFor="email">Email</Label>
                       <Input
                         id="email"
@@ -138,10 +110,11 @@ export default function CTASection() {
                         placeholder="Your email"
                         value={formData.email}
                         onChange={handleInputChange}
+                        className="w-full p-3 border-2 border-black rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
                         required
                       />
                     </div>
-                    <div className="grid gap-2">
+                    <div className="space-y-2">
                       <Label htmlFor="message">Message</Label>
                       <Textarea
                         id="message"
@@ -149,11 +122,16 @@ export default function CTASection() {
                         placeholder="Your message"
                         value={formData.message}
                         onChange={handleInputChange}
+                        className="w-full p-3 border-2 border-black rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
                         required
                       />
                     </div>
-                    <Button type="submit" className="w-full">
-                      Send
+                    <Button 
+                      type="submit" 
+                      className="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 rounded-lg border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:-translate-x-[2px] hover:-translate-y-[2px] transition-all duration-300 flex items-center justify-center gap-2"
+                    >
+                      <FaEnvelope className="text-lg" />
+                      <span>Send Message</span>
                     </Button>
                   </form>
                 </PopoverContent>
