@@ -93,13 +93,13 @@ export default function HeroSection() {
           </p>
 
           {/* CTA Buttons */}
-          <div className="flex flex-row md:flex-row gap-4 w-full md:w-auto">
+          <div className="flex flex-row gap-4 w-full md:w-auto">
             <Link href="/portfolio" className="w-full">
               <Button className="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold px-8 py-4 rounded-lg border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:-translate-x-[2px] hover:-translate-y-[2px] transition-all duration-300 flex items-center justify-center gap-2">
                 View Projects
               </Button>
             </Link>
-            <Link href="/hire-me" className="w-full">
+            <Link href="/hire-me" className="hidden md:block w-full">
               <Button className="w-full bg-pink-500 hover:bg-pink-600 text-white font-bold px-8 py-4 rounded-lg border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:-translate-x-[2px] hover:-translate-y-[2px] transition-all duration-300 flex items-center justify-center gap-2">
                 Contact Me
               </Button>
