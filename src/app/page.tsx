@@ -6,6 +6,8 @@ import ServicesSection from "@/components/services-section";
 import TestimonialsSection from "@/components/testimonials-section";
 import PortfolioSection from "@/app/components/portfolio-section";
 import CTASection from "@/app/components/cta-section";
+
+console.log("Home Page - Psst... I'm a full stack developer, ready to bring your ideas to life!");
 export default function Home() {
   return (
     <>

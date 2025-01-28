@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import PictureProfile from "@/images/profile.jpg";
-import Image from "next/image";
+import Image from "next/legacy/image";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { Star, LightbulbIcon, CodeIcon, SparklesIcon } from "lucide-react";
@@ -122,6 +122,7 @@ export default function HeroSection() {
               layout="fill"
               objectFit="cover"
               className="rounded-2xl shadow-xl transform -rotate-3 transition-transform hover:rotate-0 duration-300"
+              priority
             />
           </div>
         </motion.div>

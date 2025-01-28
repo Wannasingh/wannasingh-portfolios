@@ -10,16 +10,12 @@ const inter = Inter({ subsets: ["latin"] });
 export const metadata: Metadata = {
   title: "Wannasingh Portfolio",
   description: "I design top notch websites",
-  icons: {
-    icon: [
-      {
-        rel: 'icon',
-        url: '/favicon.ico',
-      }
-    ],
-    shortcut: '/favicon.ico',
-    apple: '/apple-touch-icon.png',
-  },
+  icons: [
+    {
+      rel: "icon",
+      url: "/favicon.ico",
+    },
+  ],
 };
 
 export default function RootLayout({
@@ -29,7 +25,6 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <head></head>
       <body className={`${inter.className} min-h-screen text-[#1E1E1E]`}>
         <Header />
         <main className="pt-16">{children}</main>

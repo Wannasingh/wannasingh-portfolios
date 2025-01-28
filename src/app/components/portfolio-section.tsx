@@ -1,11 +1,11 @@
 "use client"
 import { Card } from "@/components/ui/card";
-import Image from "next/image";
+import Image from "next/legacy/image";
 import profileImage from "../../images/profile.jpg";
 import { TbExternalLink, TbBrandGithub } from "react-icons/tb";
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { StaticImageData } from "next/image";
+import { StaticImageData } from "next/legacy/image";
 
 // First, let's add an interface for the portfolio items
 interface PortfolioItem {
