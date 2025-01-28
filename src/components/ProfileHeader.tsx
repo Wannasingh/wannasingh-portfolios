@@ -1,7 +1,7 @@
 "use client";
 import { DynamicHeading } from "@/components/DynamicHeading";
 import { Card } from "@/components/ui/card";
-import Image from "next/image";
+import Image from "next/legacy/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import profilePic from "@/images/profile.jpg";
@@ -9,7 +9,7 @@ import React from "react";
 
 interface ProfileHeaderProps {
   description?: string;
-  pageType: 'about' | 'hire-me' | 'portfolio' | 'home';  // Added 'home' to the union type
+  pageType: 'about' | 'hire-me' | 'portfolio' | 'home';  
   title?: string;
   primaryButton?: {
     text: string;
@@ -23,10 +23,11 @@ interface ProfileHeaderProps {
 
 export const ProfileHeader: React.FC<ProfileHeaderProps> = ({ 
   description = "Hello! My name is Wannasingh. I'm a passionate Full Stack Developer with a knack for crafting robust and user-friendly web applications.",
-  pageType = 'home' as const,  // Added 'as const' to ensure type safety
+  pageType = 'home' as const, 
   title,
   primaryButton = { text: "Hire Me", href: "/hire-me" },
   secondaryButton = { text: "Portfolio", href: "/portfolio" }
+  
 }) => {
   return (
     <motion.div
@@ -35,10 +36,10 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
       transition={{ duration: 0.6 }}
       className="mb-16"
     >
-      <div className={`flex flex-col md:flex-row items-center gap-8 bg-white border-4 border-black p-8 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] relative ${
-        pageType === 'about' ? 'bg-blue-50' : 
-        pageType === 'hire-me' ? 'bg-yellow-50' : 
-        pageType === 'portfolio' ? 'bg-green-50' : 'bg-white'
+      <div className={`flex flex-col md:flex-row items-center gap-8 border-4 border-black p-8 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] relative ${
+        pageType === 'about' ? 'bg-yellow-50' : 
+        pageType === 'hire-me' ? 'bg-green-50' : 
+        pageType === 'portfolio' ? 'bg-blue-50' : ''
       }`}>
         <div className="relative w-48 h-48 md:w-64 md:h-64 shrink-0">
           <Image

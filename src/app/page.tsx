@@ -1,32 +1,64 @@
 "use client";
+import { motion } from "framer-motion";
 import HeroSection from "@/components/hero-section";
 import ToolsSection from "@/components/tools-section";
 import ServicesSection from "@/components/services-section";
 import TestimonialsSection from "@/components/testimonials-section";
 import PortfolioSection from "@/app/components/portfolio-section";
 import CTASection from "@/app/components/cta-section";
-import AnimatedSection from "@/components/AnimatedSection";
+
+console.log("Home Page - Psst... I'm a full stack developer, ready to bring your ideas to life!");
 export default function Home() {
   return (
     <>
-      <AnimatedSection>
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.5 }}
+      >
         <HeroSection />
-      </AnimatedSection>
-      <AnimatedSection>
+      </motion.div>
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.5, delay: 0.2 }}
+      >
         <ToolsSection />
-      </AnimatedSection>
-      <AnimatedSection>
+      </motion.div>
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.5, delay: 0.2 }}
+      >
         <ServicesSection />
-      </AnimatedSection>
-      <AnimatedSection>
+      </motion.div>
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.5, delay: 0.2 }}
+      >
         <PortfolioSection />
-      </AnimatedSection>
-      <AnimatedSection>
+      </motion.div>
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.5, delay: 0.2 }}
+      >
         <TestimonialsSection />
-      </AnimatedSection>
-      <AnimatedSection>
+      </motion.div>
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        transition={{ duration: 0.5, delay: 0.2 }}
+      >
         <CTASection />
-      </AnimatedSection>
+      </motion.div>
     </>
   );
 }

@@ -1,6 +1,6 @@
 import { Card } from "@/components/ui/card";
 import Link from "next/link";
-import Image from "next/image";
+import Image from "next/legacy/image";
 import { Project } from "@/data/projects";
 import { FiGithub, FiExternalLink } from "react-icons/fi";
 import * as Popover from '@radix-ui/react-popover';
