@@ -10,6 +10,12 @@ const nextConfig: NextConfig = {
     EMAIL_TO: process.env.EMAIL_TO,
   },
   output: "standalone",
+  compiler: {
+    removeConsole: process.env.NODE_ENV === "production",
+  },
+  experimental: {
+    optimizeCss: true,
+  },
 };
 
 export default nextConfig;

@@ -55,13 +55,14 @@ export default function Portfolio() {
 
   return (
     <motion.section
+      id="portfolio"
       initial={{ opacity: 0 }}
       whileInView={{ opacity: 1 }}
       viewport={{ once: true }}
       transition={{ duration: 0.8 }}
-      className="container mx-auto px-6 py-2 font-mono"
+      className="container mx-auto px-6 py-20 mt-16 font-mono" // Added mt-16 for proper spacing from navbar
     >
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
@@ -73,7 +74,8 @@ export default function Portfolio() {
           <span className="text-blue-500 ml-2">🌸</span>
         </h2>
         <p className="text-gray-600 max-w-2xl mx-auto">
-          A collection of projects that showcase my skills in web development and design
+          A collection of projects that showcase my skills in web development
+          and design
         </p>
       </motion.div>
 
@@ -97,12 +99,18 @@ export default function Portfolio() {
                 />
                 <div className="absolute inset-0 bg-black bg-opacity-60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center gap-4">
                   {item.liveUrl && (
-                    <Link href={item.liveUrl || '#'} className="bg-blue-500 p-2 rounded-lg border-2 border-white text-white hover:bg-blue-600 transition-colors">
+                    <Link
+                      href={item.liveUrl || "#"}
+                      className="bg-blue-500 p-2 rounded-lg border-2 border-white text-white hover:bg-blue-600 transition-colors"
+                    >
                       <TbExternalLink size={20} />
                     </Link>
                   )}
                   {item.githubUrl && (
-                    <Link href={item.githubUrl || '#'} className="bg-gray-800 p-2 rounded-lg border-2 border-white text-white hover:bg-gray-900 transition-colors">
+                    <Link
+                      href={item.githubUrl || "#"}
+                      className="bg-gray-800 p-2 rounded-lg border-2 border-white text-white hover:bg-gray-900 transition-colors"
+                    >
                       <TbBrandGithub size={20} />
                     </Link>
                   )}
@@ -114,7 +122,7 @@ export default function Portfolio() {
                 {item.tags && (
                   <div className="flex flex-wrap gap-2">
                     {item.tags.map((tag, tagIndex) => (
-                      <span 
+                      <span
                         key={tagIndex}
                         className="bg-gray-100 px-3 py-1 text-sm border-2 border-black rounded-full"
                       >

@@ -45,6 +45,7 @@ export default function CTASection() {
       viewport={{ once: true }}
       transition={{ duration: 0.8 }}
       className=" font-mono "
+      id="contact"
     >
       <div className="container mx-auto px-6">
         <motion.div
@@ -66,7 +67,8 @@ export default function CTASection() {
                 <span className="inline-block ml-2 animate-bounce">🚀</span>
               </h2>
               <p className="text-gray-600 mb-8 max-w-2xl mx-auto text-lg">
-                Ready to bring your vision to life? Let&apos;s collaborate and create something extraordinary together!
+                Ready to bring your vision to life? Let&apos;s collaborate and
+                create something extraordinary together!
               </p>
 
               <Popover>
@@ -78,7 +80,9 @@ export default function CTASection() {
                 <PopoverContent className="w-[400px] p-6 border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] bg-white">
                   <form className="space-y-4" onSubmit={handleSubmit}>
                     <div className="space-y-2">
-                      <Label htmlFor="name" className="font-bold">Name</Label>
+                      <Label htmlFor="name" className="font-bold">
+                        Name
+                      </Label>
                       <Input
                         id="name"
                         name="name"
@@ -90,7 +94,9 @@ export default function CTASection() {
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="email" className="font-bold">Email</Label>
+                      <Label htmlFor="email" className="font-bold">
+                        Email
+                      </Label>
                       <Input
                         id="email"
                         name="email"
@@ -103,7 +109,9 @@ export default function CTASection() {
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="message" className="font-bold">Message</Label>
+                      <Label htmlFor="message" className="font-bold">
+                        Message
+                      </Label>
                       <Textarea
                         id="message"
                         name="message"
@@ -114,8 +122,8 @@ export default function CTASection() {
                         required
                       />
                     </div>
-                    <Button 
-                      type="submit" 
+                    <Button
+                      type="submit"
                       className="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-4 rounded-lg border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:-translate-x-[2px] hover:-translate-y-[2px] transition-all duration-300 flex items-center justify-center gap-2"
                     >
                       <FaEnvelope className="text-xl" />

@@ -7,7 +7,7 @@ import { Star, LightbulbIcon, CodeIcon, SparklesIcon } from "lucide-react";
 
 export default function HeroSection() {
   return (
-    <main className="relative container px-6 py-16 mx-auto md:py-24 font-mono overflow-hidden">
+    <section id="main" className="relative container px-6 py-16 mx-auto md:py-24 font-mono overflow-hidden">
       {/* Decorative Icons */}
       <motion.div 
         animate={{ 
@@ -126,6 +126,6 @@ export default function HeroSection() {
           </div>
         </motion.div>
       </div>
-    </main>
+    </section>
   );
 }

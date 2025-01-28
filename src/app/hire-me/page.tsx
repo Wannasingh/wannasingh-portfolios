@@ -53,7 +53,7 @@ export default function HireMePage() {
   return (
     <div className="relative min-h-screen -mt-20 pt-20 font-mono">
       <div className="absolute inset-0 bg-gradient-to-br from-white via-blue-50/40 to-yellow-50/20" />
-      <div className="container mx-auto px-6 py-8 relative">
+      <div className="container mx-auto px-6 py-16 relative">
         <ProfileHeader
           pageType="hire-me"
           title="Let's Build Something Together"
@@ -412,7 +412,7 @@ export default function HireMePage() {
 
           {/* Right Column - Sticky Contact Form */}
           <div className="lg:w-1/3">
-            <div className="sticky top-24">
+            <div className="sticky top-32">
               <motion.div
                 initial={{ opacity: 0, x: 20 }}
                 animate={{ opacity: 1, x: 0 }}
