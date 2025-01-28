@@ -44,65 +44,59 @@ export default function CTASection() {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.8 }}
-      className="py-6 font-mono"
+      className=" font-mono "
+      id="contact"
     >
-      {/* Remove this line since Toaster is already in layout */}
-      {/* <Toaster /> */}
       <div className="container mx-auto px-6">
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           whileInView={{ opacity: 1, scale: 1 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.2 }}
+          transition={{ duration: 0.6 }}
+          className="max-w-4xl mx-auto"
         >
-          <Card className="p-6 text-center border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
-            <motion.h2
-              initial={{ opacity: 0, y: 10 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.4 }}
-              className="text-2xl font-bold mb-4"
-            >
-              Let&apos;s build your full stack masterpiece 🚀
-            </motion.h2>
-            <motion.p
-              initial={{ opacity: 0, y: 10 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.5 }}
-              className="mb-4"
-            >
-              Ready to bring your full stack vision to life? Let&apos;s
-              collaborate and create something extraordinary!
-            </motion.p>
+          <Card className="p-8 md:p-12 text-center border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] hover:-translate-x-[4px] hover:-translate-y-[4px] transition-all duration-300 bg-white">
             <motion.div
-              initial={{ opacity: 0, y: 10 }}
+              initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: 0.6 }}
+              transition={{ duration: 0.6 }}
             >
+              <h2 className="text-3xl md:text-4xl font-bold mb-6">
+                Let&apos;s build your full stack masterpiece
+                <span className="inline-block ml-2 animate-bounce">🚀</span>
+              </h2>
+              <p className="text-gray-600 mb-8 max-w-2xl mx-auto text-lg">
+                Ready to bring your vision to life? Let&apos;s collaborate and
+                create something extraordinary together!
+              </p>
+
               <Popover>
                 <PopoverTrigger asChild>
-                  <Button className="rounded-full border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] bg-[#EDF3FF] text-[#2563EB] hover:bg-[#D9E5FF] px-6">
+                  <Button className="bg-blue-500 hover:bg-blue-600 text-white font-bold px-8 py-4 rounded-lg border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:-translate-x-[2px] hover:-translate-y-[2px] transition-all duration-300">
                     Start Your Project
                   </Button>
                 </PopoverTrigger>
-                <PopoverContent className="w-96 p-6 border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+                <PopoverContent className="w-[400px] p-6 border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] bg-white">
                   <form className="space-y-4" onSubmit={handleSubmit}>
                     <div className="space-y-2">
-                      <Label htmlFor="name">Name</Label>
+                      <Label htmlFor="name" className="font-bold">
+                        Name
+                      </Label>
                       <Input
                         id="name"
                         name="name"
                         placeholder="Your name"
                         value={formData.name}
                         onChange={handleInputChange}
-                        className="w-full p-3 border-2 border-black rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+                        className="w-full p-3 border-2 border-black rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-200"
                         required
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="email">Email</Label>
+                      <Label htmlFor="email" className="font-bold">
+                        Email
+                      </Label>
                       <Input
                         id="email"
                         name="email"
@@ -110,27 +104,29 @@ export default function CTASection() {
                         placeholder="Your email"
                         value={formData.email}
                         onChange={handleInputChange}
-                        className="w-full p-3 border-2 border-black rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+                        className="w-full p-3 border-2 border-black rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-200"
                         required
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label htmlFor="message">Message</Label>
+                      <Label htmlFor="message" className="font-bold">
+                        Message
+                      </Label>
                       <Textarea
                         id="message"
                         name="message"
-                        placeholder="Your message"
+                        placeholder="Tell me about your project"
                         value={formData.message}
                         onChange={handleInputChange}
-                        className="w-full p-3 border-2 border-black rounded-lg focus:outline-none focus:ring-2 focus:ring-purple-500"
+                        className="w-full p-3 border-2 border-black rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all duration-200 min-h-[120px]"
                         required
                       />
                     </div>
-                    <Button 
-                      type="submit" 
-                      className="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 rounded-lg border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:-translate-x-[2px] hover:-translate-y-[2px] transition-all duration-300 flex items-center justify-center gap-2"
+                    <Button
+                      type="submit"
+                      className="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-4 rounded-lg border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:-translate-x-[2px] hover:-translate-y-[2px] transition-all duration-300 flex items-center justify-center gap-2"
                     >
-                      <FaEnvelope className="text-lg" />
+                      <FaEnvelope className="text-xl" />
                       <span>Send Message</span>
                     </Button>
                   </form>
