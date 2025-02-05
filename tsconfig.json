@@ -22,7 +22,8 @@
       "@/*": ["./src/*"],
       "three/addons/*": ["./node_modules/three/examples/jsm/*"]
     },
-    "types": ["jest", "@testing-library/jest-dom"]
+    "types": ["jest", "@testing-library/jest-dom"],
+    "typeRoots": ["./node_modules/@types", "./src/types"]
   },
   "include": [
     "next-env.d.ts",
