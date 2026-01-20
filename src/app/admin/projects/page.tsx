@@ -25,6 +25,7 @@ export default function AdminProjectsPage() {
         checkAuth();
         fetchProjects();
         fetchTechTags();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     async function checkAuth() {
@@ -102,8 +103,9 @@ export default function AdminProjectsPage() {
             setImageFile(null);
             setImagePreview("");
             fetchProjects();
-        } catch (error: any) {
-            alert("เกิดข้อผิดพลาด: " + error.message);
+        } catch (error) {
+            const errorMessage = error instanceof Error ? error.message : "เกิดข้อผิดพลาด";
+            alert("เกิดข้อผิดพลาด: " + errorMessage);
         } finally {
             setUploading(false);
         }

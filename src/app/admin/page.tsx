@@ -7,12 +7,13 @@ import { Card } from "@/components/ui/card";
 import Link from "next/link";
 
 export default function AdminPage() {
-    const [user, setUser] = useState<any>(null);
+    const [user, setUser] = useState<{ email?: string } | null>(null);
     const [loading, setLoading] = useState(true);
     const router = useRouter();
 
     useEffect(() => {
         checkUser();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     async function checkUser() {

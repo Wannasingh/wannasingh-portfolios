@@ -16,6 +16,7 @@ export default function AdminLoginPage() {
 
     useEffect(() => {
         checkExistingSession();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     async function checkExistingSession() {
@@ -42,7 +43,7 @@ export default function AdminLoginPage() {
         setError("");
 
         try {
-            const { data, error } = await supabaseAdmin.auth.signInWithPassword({
+            const { error } = await supabaseAdmin.auth.signInWithPassword({
                 email,
                 password,
             });
@@ -56,8 +57,9 @@ export default function AdminLoginPage() {
             }
 
             router.push("/admin");
-        } catch (err: any) {
-            setError(err.message || "เกิดข้อผิดพลาดในการเข้าสู่ระบบ");
+        } catch (err) {
+            const errorMessage = err instanceof Error ? err.message : "เกิดข้อผิดพลาดในการเข้าสู่ระบบ";
+            setError(errorMessage);
         } finally {
             setLoading(false);
         }
