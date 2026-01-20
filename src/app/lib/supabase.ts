@@ -44,3 +44,16 @@ export interface Service {
   created_at: string;
   updated_at: string;
 }
+
+// Type สำหรับ Tech Tag
+export interface TechTag {
+  id: string;
+  name: string;
+  category: string;
+  color: string;
+  icon_name?: string;
+  display_order: number;
+  is_active: boolean;
+  created_at: string;
+  updated_at: string;
+}
