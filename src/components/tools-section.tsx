@@ -1,14 +1,13 @@
-import { FaReact, FaDocker, FaNodeJs, } from "react-icons/fa";
-import { SiTypescript } from "react-icons/si";
-import { RiSupabaseFill } from "react-icons/ri";
+import { FaReact, FaNodeJs } from "react-icons/fa";
+import { SiTypescript, SiOracle, SiDotnet } from "react-icons/si";
 
 export default function ToolsSection() {
   const tools = [
     { name: "React", icon: <FaReact /> },
     { name: "Node.js", icon: <FaNodeJs /> },
-    { name: "Supabase", icon: <RiSupabaseFill /> },
+    { name: "Oracle", icon: <SiOracle /> },
     { name: "TypeScript", icon: <SiTypescript /> },
-    { name: "Docker", icon: <FaDocker /> },
+    { name: ".NET", icon: <SiDotnet /> },
   ];
 
   return (
@@ -16,11 +15,10 @@ export default function ToolsSection() {
       <div className="container mx-auto px-4">
         <ul className="grid grid-cols-4 md:flex md:flex-wrap md:justify-between items-center gap-4 md:gap-0">
           {tools.map((tool, index) => (
-            <li 
-              key={tool.name} 
-              className={`text-sm text-gray-500 flex items-center justify-center md:justify-start ${
-                index === 3 ? 'col-span-2 hidden md:flex' : ''
-              }`}
+            <li
+              key={tool.name}
+              className={`text-sm text-gray-500 flex items-center justify-center md:justify-start ${index === 3 ? 'col-span-2 hidden md:flex' : ''
+                }`}
             >
               <span className="mr-2 text-lg md:text-base">{tool.icon}</span>
               <span>{tool.name}</span>

@@ -1,11 +1,22 @@
 "use client";
 import { Card } from "@/components/ui/card";
 import { RiNextjsFill } from "react-icons/ri";
-import { FaReact } from "react-icons/fa";
+import { FaReact, FaNode } from "react-icons/fa";
 import { IoLogoJavascript } from "react-icons/io5";
-import { FaNode } from "react-icons/fa6";
-import { ReactNode } from "react";
+import { SiDotnet, SiOracle } from "react-icons/si";
+import { ReactNode, useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import { supabase, Stat, Service } from "../app/lib/supabase";
+
+// Map icon names to actual icon components
+const iconMap: Record<string, ReactNode> = {
+  FaReact: <FaReact />,
+  RiNextjsFill: <RiNextjsFill />,
+  IoLogoJavascript: <IoLogoJavascript />,
+  FaNode: <FaNode />,
+  SiDotnet: <SiDotnet />,
+  SiOracle: <SiOracle />,
+};
 
 function ServiceCard({
   icon,
@@ -39,37 +50,42 @@ function ServiceCard({
 }
 
 export default function ServicesSection() {
-  const stats = [
-    { number: "10+", label: "Technologies", color: "text-blue-500" },
-    { number: "20+", label: "Personal Projects", color: "text-pink-500" },
-  ];
+  const [stats, setStats] = useState<Stat[]>([]);
+  const [services, setServices] = useState<Service[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const services = [
-    {
-      icon: <FaReact className="text-[#61DAFB]" />,
-      title: "React Development",
-      description:
-        "Crafting responsive and interactive user interfaces with React",
-    },
-    {
-      icon: <RiNextjsFill className="text-black" />,
-      title: "Next.js Applications",
-      description:
-        "Building high-performance server-side rendered and static websites",
-    },
-    {
-      icon: <IoLogoJavascript className="text-[#F7DF1E]" />,
-      title: "Full Stack Integration",
-      description:
-        "Seamlessly connecting front-end with back-end services and databases",
-    },
-    {
-      icon: <FaNode className="text-[#339933]" />,
-      title: "Performance Optimization",
-      description:
-        "Enhancing app speed and efficiency for optimal user experience",
-    },
-  ];
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        // Fetch stats
+        const { data: statsData, error: statsError } = await supabase
+          .from('stats')
+          .select('*')
+          .eq('is_active', true)
+          .order('display_order', { ascending: true });
+
+        if (statsError) throw statsError;
+
+        // Fetch services
+        const { data: servicesData, error: servicesError } = await supabase
+          .from('services')
+          .select('*')
+          .eq('is_active', true)
+          .order('display_order', { ascending: true });
+
+        if (servicesError) throw servicesError;
+
+        setStats(statsData || []);
+        setServices(servicesData || []);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchData();
+  }, []);
 
   return (
     <motion.section
@@ -97,36 +113,61 @@ export default function ServicesSection() {
             <span className="absolute bottom-0 left-0 w-full h-3 bg-yellow-200 -z-10"></span>
           </span>
         </h2>
-        
+
         <div className="flex justify-center gap-12 mt-10">
-          {stats.map((stat) => (
-            <motion.div
-              key={stat.label}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-              className="text-center"
-            >
-              <div className={`text-4xl font-bold ${stat.color} mb-2`}>{stat.number}</div>
-              <div className="text-sm text-gray-600">{stat.label}</div>
-            </motion.div>
-          ))}
+          {loading ? (
+            <p className="text-gray-600">กำลังโหลด...</p>
+          ) : (
+            stats.map((stat) => (
+              <motion.div
+                key={stat.id}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6 }}
+                className="text-center"
+              >
+                <div className={`text-4xl font-bold ${stat.color} mb-2`}>{stat.number}</div>
+                <div className="text-sm text-gray-600">{stat.label}</div>
+              </motion.div>
+            ))
+          )}
         </div>
       </motion.div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        {services.map((service, index) => (
-          <motion.div
-            key={service.title}
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: index * 0.1 }}
-          >
-            <ServiceCard {...service} />
-          </motion.div>
-        ))}
+        {loading ? (
+          <div className="col-span-full text-center py-12">
+            <p className="text-gray-600">กำลังโหลดบริการ...</p>
+          </div>
+        ) : services.length === 0 ? (
+          <div className="col-span-full text-center py-12">
+            <p className="text-gray-600">ยังไม่มีบริการที่แสดง</p>
+          </div>
+        ) : (
+          services.map((service, index) => {
+            const IconComponent = iconMap[service.icon_name];
+            const iconWithColor = IconComponent ? (
+              <span style={{ color: service.icon_color }}>{IconComponent}</span>
+            ) : null;
+
+            return (
+              <motion.div
+                key={service.id}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.6, delay: index * 0.1 }}
+              >
+                <ServiceCard
+                  icon={iconWithColor}
+                  title={service.title}
+                  description={service.description}
+                />
+              </motion.div>
+            );
+          })
+        )}
       </div>
     </motion.section>
   );

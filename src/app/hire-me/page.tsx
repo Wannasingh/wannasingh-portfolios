@@ -38,11 +38,11 @@ export default function HireMePage() {
   });
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-      e.preventDefault();
-      await sendEmail(formData, () => 
-        setFormData({ name: "", email: "", message: "", isResumeRequest: false })
-      );
-    };
+    e.preventDefault();
+    await sendEmail(formData, () =>
+      setFormData({ name: "", email: "", message: "", isResumeRequest: false })
+    );
+  };
 
   const handleChange = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
@@ -400,7 +400,7 @@ export default function HireMePage() {
                       <div className="flex items-center gap-2">
                         <span className="text-yellow-500 text-lg">★</span>
                         <span className="font-medium">
-                          First-Class Honors, Gold Medal
+                          First-Class Honors
                         </span>
                       </div>
                     </div>

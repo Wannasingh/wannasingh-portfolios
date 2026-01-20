@@ -5,53 +5,34 @@ import profileImage from "../../images/profile.jpg";
 import { TbExternalLink, TbBrandGithub } from "react-icons/tb";
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { StaticImageData } from "next/legacy/image";
-
-// First, let's add an interface for the portfolio items
-interface PortfolioItem {
-  image: StaticImageData;
-  title: string;
-  description: string;
-  tags?: string[];
-  liveUrl?: string;
-  githubUrl?: string;
-}
+import { useEffect, useState } from "react";
+import { supabase, Project } from "../lib/supabase";
 
 export default function Portfolio() {
-  const portfolioItems: PortfolioItem[] = [
-    {
-      image: profileImage,
-      title: "Portfolio design",
-      description: "UI design - User research - webflow develop",
-      tags: ["Next.js", "TailwindCSS", "TypeScript"],
-      liveUrl: "https://wannasingh-portfolios.vercel.app/",
-      githubUrl: "https://wannasingh-portfolios.vercel.app/"
-    },
-    {
-      image: profileImage,
-      title: "Portfolio design",
-      description: "UI design - User research - webflow develop",
-      tags: ["Next.js", "TailwindCSS", "TypeScript"],
-      liveUrl: "https://wannasingh-portfolios.vercel.app/",
-      githubUrl: "https://wannasingh-portfolios.vercel.app/",
-    },
-    {
-      image: profileImage,
-      title: "Portfolio design",
-      description: "UI design - User research - webflow develop",
-      tags: ["Next.js", "TailwindCSS", "TypeScript"],
-      liveUrl: "https://wannasingh-portfolios.vercel.app/",
-      githubUrl: "https://wannasingh-portfolios.vercel.app/",
-    },
-    {
-      image: profileImage,
-      title: "Portfolio design",
-      description: "UI design - User research - webflow develop",
-      tags: ["Next.js", "TailwindCSS", "TypeScript"],
-      liveUrl: "https://wannasingh-portfolios.vercel.app/",
-      githubUrl: "https://wannasingh-portfolios.vercel.app/",
-    },
-  ];
+  const [portfolioItems, setPortfolioItems] = useState<Project[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchProjects() {
+      try {
+        const { data, error } = await supabase
+          .from('projects')
+          .select('*')
+          .eq('is_featured', true)
+          .order('display_order', { ascending: true });
+
+        if (error) throw error;
+
+        setPortfolioItems(data || []);
+      } catch (error) {
+        console.error('Error fetching projects:', error);
+      } finally {
+        setLoading(false);
+      }
+    }
+
+    fetchProjects();
+  }, []);
 
   return (
     <motion.section
@@ -80,61 +61,71 @@ export default function Portfolio() {
       </motion.div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        {portfolioItems.map((item, index) => (
-          <motion.div
-            key={index}
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: index * 0.1 }}
-          >
-            <Card className="group overflow-hidden border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:-translate-x-[2px] hover:-translate-y-[2px] transition-all duration-300">
-              <div className="relative">
-                <Image
-                  src={item.image}
-                  alt={item.title}
-                  width={600}
-                  height={400}
-                  className="w-full aspect-video object-cover transition-transform duration-300 group-hover:scale-100"
-                />
-                <div className="absolute inset-0 bg-black bg-opacity-60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center gap-4">
-                  {item.liveUrl && (
-                    <Link
-                      href={item.liveUrl || "#"}
-                      className="bg-blue-500 p-2 rounded-lg border-2 border-white text-white hover:bg-blue-600 transition-colors"
-                    >
-                      <TbExternalLink size={20} />
-                    </Link>
-                  )}
-                  {item.githubUrl && (
-                    <Link
-                      href={item.githubUrl || "#"}
-                      className="bg-gray-800 p-2 rounded-lg border-2 border-white text-white hover:bg-gray-900 transition-colors"
-                    >
-                      <TbBrandGithub size={20} />
-                    </Link>
+        {loading ? (
+          <div className="col-span-full text-center py-12">
+            <p className="text-gray-600">กำลังโหลดโปรเจค...</p>
+          </div>
+        ) : portfolioItems.length === 0 ? (
+          <div className="col-span-full text-center py-12">
+            <p className="text-gray-600">ยังไม่มีโปรเจคที่แสดง</p>
+          </div>
+        ) : (
+          portfolioItems.map((item, index) => (
+            <motion.div
+              key={item.id}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6, delay: index * 0.1 }}
+            >
+              <Card className="group overflow-hidden border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:-translate-x-[2px] hover:-translate-y-[2px] transition-all duration-300">
+                <div className="relative">
+                  <Image
+                    src={item.image_url || profileImage}
+                    alt={item.title}
+                    width={600}
+                    height={400}
+                    className="w-full aspect-video object-cover transition-transform duration-300 group-hover:scale-100"
+                  />
+                  <div className="absolute inset-0 bg-black bg-opacity-60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center gap-4">
+                    {item.live_url && (
+                      <Link
+                        href={item.live_url}
+                        className="bg-blue-500 p-2 rounded-lg border-2 border-white text-white hover:bg-blue-600 transition-colors"
+                      >
+                        <TbExternalLink size={20} />
+                      </Link>
+                    )}
+                    {item.github_url && (
+                      <Link
+                        href={item.github_url}
+                        className="bg-gray-800 p-2 rounded-lg border-2 border-white text-white hover:bg-gray-900 transition-colors"
+                      >
+                        <TbBrandGithub size={20} />
+                      </Link>
+                    )}
+                  </div>
+                </div>
+                <div className="p-6">
+                  <h3 className="text-xl font-bold mb-2">{item.title}</h3>
+                  <p className="text-gray-600 mb-4">{item.description}</p>
+                  {item.tags && item.tags.length > 0 && (
+                    <div className="flex flex-wrap gap-2">
+                      {item.tags.map((tag, tagIndex) => (
+                        <span
+                          key={tagIndex}
+                          className="bg-gray-100 px-3 py-1 text-sm border-2 border-black rounded-full"
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
                   )}
                 </div>
-              </div>
-              <div className="p-6">
-                <h3 className="text-xl font-bold mb-2">{item.title}</h3>
-                <p className="text-gray-600 mb-4">{item.description}</p>
-                {item.tags && (
-                  <div className="flex flex-wrap gap-2">
-                    {item.tags.map((tag, tagIndex) => (
-                      <span
-                        key={tagIndex}
-                        className="bg-gray-100 px-3 py-1 text-sm border-2 border-black rounded-full"
-                      >
-                        {tag}
-                      </span>
-                    ))}
-                  </div>
-                )}
-              </div>
-            </Card>
-          </motion.div>
-        ))}
+              </Card>
+            </motion.div>
+          ))
+        )}
       </div>
     </motion.section>
   );
