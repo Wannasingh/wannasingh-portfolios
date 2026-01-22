@@ -6,32 +6,27 @@ import { ProfileHeader } from "@/components/ProfileHeader";
 
 export default function ProjectPage() {
   return (
-    <div className="relative min-h-screen -mt-20 pt-20">
-      <div className="absolute inset-0 bg-gradient-to-br from-white via-blue-50/40 to-yellow-50/20" />
-      <div className="container mx-auto px-6 py-16 font-mono relative">
-        {/* Header Section */}
+    <div className="min-h-screen bg-background pt-32 pb-20">
+      <div className="container mx-auto px-4 md:px-6 max-w-6xl">
         <ProfileHeader
           pageType="portfolio"
-          title="My Portfolio"
-          description="Welcome to my portfolio! Here you'll find a collection of projects that showcase my skills and experience in full-stack development."
+          title="Engineering Showcase"
+          description="A collection of complex problems I've solved using my hybrid database + full-stack skillset."
           primaryButton={{ text: "Contact Me", href: "/hire-me" }}
           secondaryButton={{ text: "About Me", href: "/about" }}
         />
-        {/* Projects Grid */}
-        <section className="py-4 pb-10">
-          <div className="grid grid-cols-1 gap-12">
-            {projects.map((project, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, x: index % 2 === 0 ? 50 : -50 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.6, delay: index * 0.2 }}
-                className={`hover:scale-[1.02] transition-transform duration-300`}
-              >
-                <ProjectCard project={project} />
-              </motion.div>
-            ))}
-          </div>
+        
+        <section className="space-y-12">
+          {projects.map((project, index) => (
+            <motion.div
+              key={index}
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5, delay: index * 0.1 }}
+            >
+              <ProjectCard project={project} />
+            </motion.div>
+          ))}
         </section>
       </div>
     </div>

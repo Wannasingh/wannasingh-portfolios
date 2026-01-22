@@ -1,11 +1,10 @@
 "use client";
-import { DynamicHeading } from "@/components/DynamicHeading";
-import { Card } from "@/components/ui/card";
+import React from "react";
 import Image from "next/legacy/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import profilePic from "@/images/profile.jpg";
-import React from "react";
+import { ArrowRight } from "lucide-react";
 
 interface ProfileHeaderProps {
   description?: string;
@@ -22,12 +21,10 @@ interface ProfileHeaderProps {
 }
 
 export const ProfileHeader: React.FC<ProfileHeaderProps> = ({ 
-  description = "Hello! My name is Wannasingh. I'm a passionate Full Stack Developer with a knack for crafting robust and user-friendly web applications.",
-  pageType = 'home' as const, 
+  description,
   title,
-  primaryButton = { text: "Hire Me", href: "/hire-me" },
-  secondaryButton = { text: "Portfolio", href: "/portfolio" }
-  
+  primaryButton,
+  secondaryButton
 }) => {
   return (
     <motion.div
@@ -36,48 +33,41 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
       transition={{ duration: 0.6 }}
       className="mb-16"
     >
-      <div className={`flex flex-col md:flex-row items-center gap-8 border-4 border-black p-8 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)] relative ${
-        pageType === 'about' ? 'bg-yellow-50' : 
-        pageType === 'hire-me' ? 'bg-green-50' : 
-        pageType === 'portfolio' ? 'bg-blue-50' : ''
-      }`}>
-        <div className="relative w-48 h-48 md:w-64 md:h-64 shrink-0">
+      <div className="flex flex-col md:flex-row items-center gap-10">
+        <div className="relative w-40 h-40 md:w-56 md:h-56 shrink-0 rounded-full overflow-hidden border-4 border-background shadow-2xl ring-1 ring-border">
           <Image
             src={profilePic}
             alt="Profile Picture"
             layout="fill"
             objectFit="cover"
-            className="rounded-sm border-4 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]"
+            className="rounded-full hover:scale-105 transition-transform duration-500"
           />
         </div>
-        <div className="flex-1 space-y-6">
-          <DynamicHeading customTitle={title} pageType={pageType} />
-          <Card className="border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] p-6 hover:transform hover:-translate-y-1 transition-all duration-200">
-            <p className="text-lg">{description}</p>
-          </Card>
-          <div className="flex gap-4 justify-start">
+        
+        <div className="flex-1 space-y-6 text-center md:text-left">
+          <div className="space-y-2">
+            <h1 className="text-4xl md:text-5xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-foreground to-foreground/70 pb-2">
+              {title || "Hello, I'm Wannasingh"}
+            </h1>
+            <p className="text-xl text-muted-foreground leading-relaxed max-w-2xl">
+              {description}
+            </p>
+          </div>
+          
+          <div className="flex flex-wrap gap-4 justify-center md:justify-start">
             {primaryButton && (
               <Link
                 href={primaryButton.href}
-                className={`${
-                  pageType === 'about' ? 'bg-blue-300 hover:bg-blue-400 border-blue-500 hover:border-blue-600' :
-                  pageType === 'hire-me' ? 'bg-yellow-300 hover:bg-yellow-400 border-yellow-500 hover:border-yellow-600' :
-                  pageType === 'portfolio' ? 'bg-green-300 hover:bg-green-400 border-green-500 hover:border-green-600' :
-                  'bg-yellow-300 hover:bg-yellow-400 border-yellow-500 hover:border-yellow-600'
-                } text-black font-bold py-2 px-6 border-b-4 rounded transform hover:-translate-y-1 transition-all duration-200 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] inline-block`}
+                className="inline-flex h-11 items-center justify-center rounded-md bg-primary px-8 text-sm font-medium text-primary-foreground shadow transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
               >
                 {primaryButton.text}
+                <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
             )}
             {secondaryButton && (
               <Link
                 href={secondaryButton.href}
-                className={`${
-                  pageType === 'about' ? 'bg-green-300 hover:bg-green-400 border-green-500 hover:border-green-600' :
-                  pageType === 'hire-me' ? 'bg-blue-300 hover:bg-blue-400 border-blue-500 hover:border-blue-600' :
-                  pageType === 'portfolio' ? 'bg-yellow-300 hover:bg-yellow-400 border-yellow-500 hover:border-yellow-600' :
-                  'bg-blue-300 hover:bg-blue-400 border-blue-500 hover:border-blue-600'
-                } text-black font-bold py-2 px-6 border-b-4 rounded transform hover:-translate-y-1 transition-all duration-200 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] inline-block`}
+                className="inline-flex h-11 items-center justify-center rounded-md border border-input bg-background px-8 text-sm font-medium shadow-sm transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
               >
                 {secondaryButton.text}
               </Link>
