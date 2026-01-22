@@ -11,6 +11,13 @@ import { Label } from "@/components/ui/label";
 import { Loader2, Plus, Pencil, Trash2, ArrowLeft, ChevronDown, ChevronRight } from "lucide-react";
 import Link from "next/link";
 import { toast } from "sonner";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "@/components/ui/dialog";
 const AVAILABLE_ICONS = [
   "SiOracle", "SiPostgresql", "SiDatabricks", "SiApachespark", "SiVeritas", 
   "SiNodedotjs", "SiDotnet", "SiOpenapiinitiative", "SiGraphql", "SiRedis", "SiDocker",

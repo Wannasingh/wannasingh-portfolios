@@ -116,7 +116,7 @@ export default function HeroSectionNew() {
                   <div className="flex gap-4">
                     <div className="w-8 text-right text-slate-500 select-none">2</div>
                     <div className="pl-4">
-                      <span className="text-slate-500">// Backend & Database Optimization</span>
+                      <span className="text-slate-500">{"// Backend & Database Optimization"}</span>
                     </div>
                   </div>
                   
@@ -144,7 +144,7 @@ export default function HeroSectionNew() {
                   <div className="flex gap-4">
                     <div className="w-8 text-right text-slate-500 select-none">6</div>
                     <div className="pl-4">
-                       <span className="text-slate-500">// Modern UI Implementation</span>
+                       <span className="text-slate-500">{"// Modern UI Implementation"}</span>
                     </div>
                   </div>
 
