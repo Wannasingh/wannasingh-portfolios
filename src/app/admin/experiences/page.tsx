@@ -9,7 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
-import { Loader2, Plus, Pencil, Trash2, ArrowLeft, Save, X } from "lucide-react";
+import { Loader2, Plus, Pencil, Trash2, ArrowLeft, Save } from "lucide-react";
 import Link from "next/link";
 import { toast } from "sonner";
 import {
@@ -20,12 +20,6 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 
-// ... (some lines skipped, removing Select imports)
-
-// ...
-
-// On line 219 approx:
-                                onChange={(e) => setCurrentExp({...currentExp, type: e.target.value as 'work' | 'education' | 'other'})}
 
 export default function AdminExperiencesPage() {
   const [experiences, setExperiences] = useState<Experience[]>([]);

@@ -9,9 +9,15 @@ import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Loader2, Plus, Pencil, Trash2, ArrowLeft, ChevronDown, ChevronRight } from "lucide-react";
-// Removed unused icons imports
-
-// Simple mapping for demonstration of available icons
+import Link from "next/link";
+import { toast } from "sonner";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "@/components/ui/dialog";
 const AVAILABLE_ICONS = [
   "SiOracle", "SiPostgresql", "SiDatabricks", "SiApachespark", "SiVeritas", 
   "SiNodedotjs", "SiDotnet", "SiOpenapiinitiative", "SiGraphql", "SiRedis", "SiDocker",
@@ -59,9 +65,9 @@ export default function AdminSkillsPage() {
        toast.error("Failed to load skills");
     } else {
        // Sort skills
-       const sorted = data?.map((cat: any) => ({
+       const sorted = data?.map((cat: SkillCategory) => ({
            ...cat,
-           skills: cat.skills.sort((a: any, b: any) => a.display_order - b.display_order)
+           skills: cat.skills.sort((a: Skill, b: Skill) => a.display_order - b.display_order)
        })) || [];
        setCategories(sorted);
     }
