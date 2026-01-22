@@ -1,9 +1,35 @@
 "use client";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { ArrowRight, Database, Layout, Terminal } from "lucide-react";
+import { ArrowRight, Database, Layout, Terminal, Loader2 } from "lucide-react";
 import Link from "next/link";
+import { supabase, Profile } from "@/app/lib/supabase";
 
 export default function HeroSectionNew() {
+  const [profile, setProfile] = useState<Profile | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchProfile() {
+      const { data, error } = await supabase
+        .from('profile')
+        .select('*')
+        .single();
+      
+      if (data) setProfile(data);
+      setLoading(false);
+    }
+    fetchProfile();
+  }, []);
+
+  if (loading) {
+     return (
+        <section className="relative min-h-[100dvh] flex items-center justify-center overflow-hidden bg-background pt-20">
+             <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        </section>
+     );
+  }
+
   return (
     <section className="relative min-h-[100dvh] flex items-center justify-center overflow-hidden bg-background pt-20">
       {/* Background Decor: Data/Grid lines */}
@@ -22,17 +48,25 @@ export default function HeroSectionNew() {
           >
             <div className="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent bg-secondary text-secondary-foreground hover:bg-secondary/80 w-fit">
               <Database className="mr-2 h-3 w-3" />
-              <span>Full Stack Developer + Oracle DBA</span>
+              <span>{profile?.role || "Full Stack Developer + Oracle DBA"}</span>
             </div>
             
             <h1 className="text-3xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none bg-clip-text text-transparent bg-gradient-to-r from-foreground to-foreground/70">
-              Architecting Robust Data. <br />
-              Building Modern Apps.
+              {profile?.tagline ? profile.tagline.split('. ').map((part, i, arr) => (
+                  <span key={i}>
+                      {part}{i < arr.length - 1 ? '.' : ''}
+                      {i < arr.length - 1 && <br />}
+                  </span>
+              )) : (
+                  <>
+                  Architecting Robust Data. <br />
+                  Building Modern Apps.
+                  </>
+              )}
             </h1>
             
             <p className="max-w-[600px] text-muted-foreground md:text-xl">
-              I don&apos;t just write code; I design the infrastructure that powers it. 
-              Bridging the gap between complex Oracle database tuning and responsive React interfaces.
+              {profile?.bio_short || "I don't just write code; I design the infrastructure that powers it. Bridging the gap between complex Oracle database tuning and responsive React interfaces."}
             </p>
             
             <div className="flex flex-col gap-2 min-[400px]:flex-row">
@@ -44,7 +78,7 @@ export default function HeroSectionNew() {
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
               <Link
-                href="#contact"
+                href="/hire-me"
                 className="inline-flex h-10 items-center justify-center rounded-md border border-input bg-background px-8 text-sm font-medium shadow-sm transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50"
               >
                 Contact Me

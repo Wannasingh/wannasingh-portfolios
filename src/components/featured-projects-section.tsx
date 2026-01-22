@@ -1,41 +1,43 @@
 "use client";
+import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { ExternalLink, Github, ArrowUpRight } from "lucide-react";
+import { ExternalLink, Github } from "lucide-react";
 import Link from "next/link";
-
-// Actually, to be safe I will use standard standard Tailwind classes for badges to avoid dependency issues if Badge isn't there.
-
-const projects = [
-  {
-    title: "Financial Data Warehouse Migration",
-    category: "Enterprise System",
-    problem: "Legacy reporting took 20+ minutes to generate, causing business delays.",
-    solution: "Redesigned Oracle schema with partitioning, implemented materialized views, and built a Next.js dashboard with cached API routes.",
-    impact: "95% reduction in report generation time (20m → 45s).",
-    stack: ["Oracle 19c", "PL/SQL", "Next.js", "Node.js"],
-    links: { demo: "#", github: "#" }
-  },
-  {
-    title: "Real-time Logistics Tracker",
-    category: "Full Stack App",
-    problem: "Delivery drivers faced sync issues in low-connectivity areas, corrupting database records.",
-    solution: "Implemented an offline-first architecture with local SQLite sync to a central Postgres DB, handled via a robust Node.js API.",
-    impact: "Zero data loss during beta testing with 50+ drivers.",
-    stack: ["React Native", "Postgres", "Node.js", "Redis"],
-    links: { demo: "#", github: "#" }
-  },
-  {
-    title: "E-Commerce Inventory Sync",
-    category: "API Integration",
-    problem: "Overselling items due to race conditions in the checkout flow.",
-    solution: "Utilized database row-level locking and transaction isolation levels to Ensure consistency.",
-    impact: "Eliminated overselling incidents completely during Black Friday traffic.",
-    stack: ["Next.js", "Oracle Cloud", "Stripe API", "C# .NET"],
-    links: { demo: "#", github: "#" }
-  }
-];
+import { supabase, Project } from "@/app/lib/supabase";
+import { Loader2 } from "lucide-react";
 
 export default function FeaturedProjectsSection() {
+  const [featuredProjects, setFeaturedProjects] = useState<Project[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchFeatured() {
+        const { data, error } = await supabase
+            .from('projects')
+            .select('*')
+            .eq('is_featured', true)
+            .order('created_at', { ascending: false }); // or display_order if I added it, but created_at is fine for now
+
+        if (error) {
+            console.error("Error fetching featured projects:", error);
+        } else {
+            setFeaturedProjects(data || []);
+        }
+        setLoading(false);
+    }
+    fetchFeatured();
+  }, []);
+
+  if (loading) {
+      return (
+          <section className="py-24 bg-background" id="projects">
+              <div className="container mx-auto px-4 md:px-6 flex justify-center">
+                  <Loader2 className="h-8 w-8 animate-spin text-primary" />
+              </div>
+          </section>
+      );
+  }
+
   return (
     <section className="py-24 bg-background" id="projects">
       <div className="container mx-auto px-4 md:px-6">
@@ -52,9 +54,9 @@ export default function FeaturedProjectsSection() {
         </div>
 
         <div className="grid gap-12 max-w-5xl mx-auto">
-          {projects.map((project, index) => (
+          {featuredProjects.map((project, index) => (
             <motion.div
-              key={index}
+              key={project.id || index}
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
@@ -85,7 +87,7 @@ export default function FeaturedProjectsSection() {
                 </div>
 
                 <div className="flex flex-wrap gap-2 pt-2">
-                  {project.stack.map((tech) => (
+                  {project.tech_stack?.map((tech) => (
                     <span 
                       key={tech} 
                       className="inline-flex items-center rounded-md bg-secondary px-2.5 py-0.5 text-xs font-medium text-secondary-foreground"
@@ -102,12 +104,22 @@ export default function FeaturedProjectsSection() {
                     &quot;Leveraging deep database knowledge to solve frontend latency.&quot;
                 </p>
                 <div className="flex gap-4 md:flex-col mt-auto">
-                    <Link href={project.links.demo} className="flex items-center text-sm font-medium hover:text-primary">
-                        <ExternalLink className="mr-2 h-4 w-4" /> Live Demo
-                    </Link>
-                    <Link href={project.links.github} className="flex items-center text-sm font-medium hover:text-primary">
-                        <Github className="mr-2 h-4 w-4" /> View Code
-                    </Link>
+                    {project.demo_link && project.demo_link !== '#' && (
+                        <Link href={project.demo_link} className="flex items-center text-sm font-medium hover:text-primary">
+                            <ExternalLink className="mr-2 h-4 w-4" /> Live Demo
+                        </Link>
+                    )}
+                    {project.github_link && project.github_link !== '#' && (
+                        <Link href={project.github_link} className="flex items-center text-sm font-medium hover:text-primary">
+                            <Github className="mr-2 h-4 w-4" /> View Code
+                        </Link>
+                    )}
+                     {/* Handling placeholders if links are '#' or empty */}
+                     {(project.demo_link === '#' || !project.demo_link) && (
+                         <span className="flex items-center text-sm font-medium text-muted-foreground/50 cursor-not-allowed">
+                            <ExternalLink className="mr-2 h-4 w-4" /> Live Demo (Private)
+                         </span>
+                     )}
                 </div>
               </div>
             </motion.div>

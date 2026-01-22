@@ -1,14 +1,15 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { ProfileHeader } from "@/components/ProfileHeader";
-import { Github, Linkedin, Mail, FileText, Send } from "lucide-react";
+import { Github, Linkedin, Mail, FileText, Send, Loader2 } from "lucide-react";
 import { motion } from "framer-motion";
 import { sendEmail } from "@/lib/email";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea"; 
 import { Button } from "@/components/ui/button";
+import { supabase, Availability, Profile } from "@/app/lib/supabase";
 
 export default function HireMePage() {
   const [formData, setFormData] = useState({
@@ -17,6 +18,24 @@ export default function HireMePage() {
     message: "",
     isResumeRequest: false,
   });
+
+  const [availability, setAvailability] = useState<Availability[]>([]);
+  const [profile, setProfile] = useState<Profile | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchData() {
+        const [availResult, profileResult] = await Promise.all([
+            supabase.from('availability').select('*').order('display_order', { ascending: true }),
+            supabase.from('profile').select('*').single()
+        ]);
+        
+        if (availResult.data) setAvailability(availResult.data);
+        if (profileResult.data) setProfile(profileResult.data);
+        setLoading(false);
+    }
+    fetchData();
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -31,14 +50,22 @@ export default function HireMePage() {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
+  if (loading) {
+      return (
+          <div className="min-h-screen bg-background pt-32 pb-20 flex justify-center items-center">
+              <Loader2 className="h-8 w-8 animate-spin text-primary" />
+          </div>
+      );
+  }
+
   return (
     <div className="min-h-screen bg-background pt-32 pb-20">
       <div className="container mx-auto px-4 md:px-6 max-w-5xl">
         <ProfileHeader
           pageType="hire-me"
           title="Let's Build Something Scalable"
-          description="Ready to bring database-level optimization to your full-stack project? I'm currently available for freelance and full-time opportunities."
-          primaryButton={{ text: "Email Me", href: "mailto:wannasingh.khan@gmail.com" }}
+          description={profile?.bio_short || "Ready to bring database-level optimization to your full-stack project? I'm currently available for freelance and full-time opportunities."}
+          primaryButton={{ text: "Email Me", href: `mailto:${profile?.email || 'wannasingh.khan@gmail.com'}` }}
           secondaryButton={{ text: "View Portfolio", href: "/portfolio" }}
         />
 
@@ -48,15 +75,19 @@ export default function HireMePage() {
             <div className="space-y-4">
               <h3 className="text-lg font-semibold">Connect & Profile</h3>
               <div className="flex flex-col gap-3">
-                 <a href="mailto:wannasingh.khan@gmail.com" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
-                    <Mail className="h-4 w-4" /> wannasingh.khan@gmail.com
+                 <a href={`mailto:${profile?.email || 'wannasingh.khan@gmail.com'}`} className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
+                    <Mail className="h-4 w-4" /> {profile?.email || 'wannasingh.khan@gmail.com'}
                  </a>
-                 <a href="https://github.com/Wannasingh" target="_blank" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
-                    <Github className="h-4 w-4" /> GitHub Profile
-                 </a>
-                 <a href="https://linkedin.com/in/wannasingh" target="_blank" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
-                    <Linkedin className="h-4 w-4" /> LinkedIn Profile
-                 </a>
+                 {profile?.github_link && (
+                    <a href={profile.github_link} target="_blank" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
+                        <Github className="h-4 w-4" /> GitHub Profile
+                    </a>
+                 )}
+                 {profile?.linkedin_link && (
+                    <a href={profile.linkedin_link} target="_blank" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
+                        <Linkedin className="h-4 w-4" /> LinkedIn Profile
+                    </a>
+                 )}
               </div>
             </div>
 
@@ -66,9 +97,9 @@ export default function HireMePage() {
                   I typically respond within 24 hours. I am open to discussing:
                </p>
                <ul className="list-disc list-inside text-sm text-muted-foreground space-y-1">
-                  <li>Full-time Frontend / Full Stack roles</li>
-                  <li>Database Migration & Optimization Consulting</li>
-                  <li>Complex Web Application Development</li>
+                  {availability.map((item, index) => (
+                      <li key={item.id || index}>{item.item_text}</li>
+                  ))}
                </ul>
             </div>
           </div>
