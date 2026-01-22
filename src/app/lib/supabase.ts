@@ -68,3 +68,21 @@ export interface Availability {
   item_text: string;
   display_order: number;
 }
+
+export interface Stat {
+  id: string;
+  number: string;
+  label: string;
+  color: string;
+  display_order: number;
+  is_active: boolean;
+}
+
+export interface TechTag {
+  id: string;
+  name: string;
+  category: string;
+  color: string;
+  display_order: number;
+  is_active: boolean;
+}

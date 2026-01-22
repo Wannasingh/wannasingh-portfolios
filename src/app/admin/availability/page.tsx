@@ -6,7 +6,13 @@ import { supabaseAdmin } from "@/app/lib/supabase-admin";
 import { supabase, Availability } from "@/app/lib/supabase";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
+// ... (some lines skipped)
+
+// On line 136-140 (approx), fix quotes:
+<p className="text-muted-foreground text-sm">
+   Tip: These items will appear in the &quot;Availability&quot; section of the &quot;Hire Me&quot; page.
+</p>
 import { Label } from "@/components/ui/label";
 import { Loader2, Plus, Pencil, Trash2, ArrowLeft, Save, GripVertical } from "lucide-react";
 import Link from "next/link";

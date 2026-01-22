@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Github, Linkedin, Twitter, Loader2 } from "lucide-react";
+import { Github, Linkedin, Twitter } from "lucide-react";
 import { useEffect, useState } from "react";
 import { supabase } from "@/app/lib/supabase";
 
@@ -11,7 +11,6 @@ export default function Footer() {
       linkedin: "https://linkedin.com",
       twitter: "https://twitter.com" 
   });
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     async function fetchSocials() {
@@ -23,7 +22,6 @@ export default function Footer() {
                 twitter: data.twitter_link || "https://twitter.com"
             });
         }
-        setLoading(false);
     }
     fetchSocials();
   }, []);

@@ -78,7 +78,6 @@ export function AdminSidebar({ className }: { className?: string }) {
 // Mobile Sidebar Wrapper
 export function AdminMobileSidebar() {
     const [open, setOpen] = useState(false);
-    const pathname = usePathname();
 
     return (
         <>

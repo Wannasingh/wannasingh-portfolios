@@ -9,7 +9,7 @@ export default function NotFound() {
       </div>
       <h1 className="text-4xl font-bold tracking-tight mb-2">Page Not Found</h1>
       <p className="text-muted-foreground mb-8 max-w-md">
-        The query returned no rows. It's possible this page has been dropped or never existed.
+        The query returned no rows. It&apos;s possible this page has been dropped or never existed.
       </p>
       <Link
         href="/"

@@ -6,23 +6,10 @@ import { supabaseAdmin } from "@/app/lib/supabase-admin";
 import { supabase, SkillCategory, Skill } from "@/app/lib/supabase";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
-import { Loader2, Plus, Pencil, Trash2, ArrowLeft, Save, ChevronDown, ChevronRight, Code2 } from "lucide-react";
-import Link from "next/link";
-import { toast } from "sonner";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogFooter,
-} from "@/components/ui/dialog";
-import { 
-  SiOracle, SiPostgresql, SiDatabricks, SiApachespark, SiVeritas, 
-  SiNodedotjs, SiDotnet, SiOpenapiinitiative, SiGraphql, SiRedis, SiDocker,
-  SiReact, SiNextdotjs, SiTypescript, SiFramer, SiRedux, SiTailwindcss
-} from "react-icons/si";
+import { Loader2, Plus, Pencil, Trash2, ArrowLeft, ChevronDown, ChevronRight } from "lucide-react";
+// Removed unused icons imports
 
 // Simple mapping for demonstration of available icons
 const AVAILABLE_ICONS = [

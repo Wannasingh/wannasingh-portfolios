@@ -17,11 +17,15 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
   DialogFooter,
-  DialogClose
 } from "@/components/ui/dialog";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"; // You might need to check if Select component exists or use native select
+
+// ... (some lines skipped, removing Select imports)
+
+// ...
+
+// On line 219 approx:
+                                onChange={(e) => setCurrentExp({...currentExp, type: e.target.value as 'work' | 'education' | 'other'})}
 
 export default function AdminExperiencesPage() {
   const [experiences, setExperiences] = useState<Experience[]>([]);

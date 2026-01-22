@@ -12,6 +12,7 @@ import {
 import { MdSecurity } from "react-icons/md"; // Using Material design shield for Data Guard if SiShield not available
 
 // Helper to map icon string name to Lucide component (for Categories)
+/* eslint-disable-next-line @typescript-eslint/no-explicit-any */
 const CategoryIconMap: { [key: string]: any } = {
   Database: Database,
   Server: Server,
@@ -24,6 +25,7 @@ const CategoryIconMap: { [key: string]: any } = {
 
 // Helper to map string keys to React Icons (for Skills)
 // We use a fallback if the key isn't found
+/* eslint-disable-next-line @typescript-eslint/no-explicit-any */
 const SkillIconMap: { [key: string]: any } = {
   SiOracle: SiOracle,
   SiPostgresql: SiPostgresql,
@@ -64,7 +66,7 @@ export default function TechStackSection() {
         console.error("Error fetching skills:", error);
       } else {
         // Sort individual skills within categories locally just to be safe/easy
-        const sortedData = data?.map((cat: any) => ({
+        const sortedData = data?.map((cat: SkillCategory) => ({
             ...cat,
             skills: cat.skills.sort((a: Skill, b: Skill) => a.display_order - b.display_order)
         })) || [];

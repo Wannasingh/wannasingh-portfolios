@@ -141,7 +141,8 @@ export default function AdminProjectsPage() {
       };
       
       // Remove id from payload if creating
-      const { id, created_at, ...updateData } = payload as any;
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { id, created_at, ...updateData } = payload;
 
       let error;
       if (currentProject.id) {
@@ -193,6 +194,7 @@ export default function AdminProjectsPage() {
                     <Card key={project.id} className="flex flex-col h-full border hover:border-primary/50 transition-colors">
                         <div className="relative h-48 w-full bg-muted overflow-hidden rounded-t-lg">
                             {project.image_path ? (
+                                /* eslint-disable-next-line @next/next/no-img-element */
                                 <img src={project.image_path} alt={project.title} className="w-full h-full object-cover" />
                             ) : (
                                 <div className="flex items-center justify-center h-full text-muted-foreground">
@@ -269,7 +271,8 @@ export default function AdminProjectsPage() {
                              <div className="flex items-center gap-4">
                                 {currentProject.image_path ? (
                                     <div className="relative w-32 h-20 rounded border overflow-hidden">
-                                        <img src={currentProject.image_path} alt="Preview" className="w-full h-full object-cover" />
+                                        /* eslint-disable-next-line @next/next/no-img-element */
+                                    <img src={currentProject.image_path} alt="Preview" className="w-full h-full object-cover" />
                                         <button 
                                             type="button"
                                             onClick={() => setCurrentProject(p => ({...p, image_path: ""}))}

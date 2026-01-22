@@ -43,7 +43,7 @@ export default function HybridAdvantageSection() {
               </li>
               <li className="flex items-start gap-3 text-muted-foreground">
                 <Layers className="w-5 h-5 mt-0.5 shrink-0" />
-                <span>Treats the database as a "black box"</span>
+                <span>Treats the database as a &quot;black box&quot;</span>
               </li>
             </ul>
             
