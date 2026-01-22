@@ -20,12 +20,6 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 
-// ... (some lines skipped, removing Select imports)
-
-// ...
-
-// On line 219 approx:
-                                onChange={(e) => setCurrentExp({...currentExp, type: e.target.value as 'work' | 'education' | 'other'})}
 
 export default function AdminExperiencesPage() {
   const [experiences, setExperiences] = useState<Experience[]>([]);
