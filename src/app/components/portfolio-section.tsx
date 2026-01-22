@@ -81,24 +81,24 @@ export default function Portfolio() {
               <Card className="group overflow-hidden border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:-translate-x-[2px] hover:-translate-y-[2px] transition-all duration-300">
                 <div className="relative">
                   <Image
-                    src={item.image_url || profileImage}
+                    src={item.image_path || profileImage}
                     alt={item.title}
                     width={600}
                     height={400}
                     className="w-full aspect-video object-cover transition-transform duration-300 group-hover:scale-100"
                   />
                   <div className="absolute inset-0 bg-black bg-opacity-60 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center gap-4">
-                    {item.live_url && (
+                    {item.demo_link && (
                       <Link
-                        href={item.live_url}
+                        href={item.demo_link}
                         className="bg-blue-500 p-2 rounded-lg border-2 border-white text-white hover:bg-blue-600 transition-colors"
                       >
                         <TbExternalLink size={20} />
                       </Link>
                     )}
-                    {item.github_url && (
+                    {item.github_link && (
                       <Link
-                        href={item.github_url}
+                        href={item.github_link}
                         className="bg-gray-800 p-2 rounded-lg border-2 border-white text-white hover:bg-gray-900 transition-colors"
                       >
                         <TbBrandGithub size={20} />
@@ -108,10 +108,10 @@ export default function Portfolio() {
                 </div>
                 <div className="p-6">
                   <h3 className="text-xl font-bold mb-2">{item.title}</h3>
-                  <p className="text-gray-600 mb-4">{item.description}</p>
-                  {item.tags && item.tags.length > 0 && (
+                  <p className="text-gray-600 mb-4">{item.overview}</p>
+                  {item.tech_stack && item.tech_stack.length > 0 && (
                     <div className="flex flex-wrap gap-2">
-                      {item.tags.map((tag, tagIndex) => (
+                      {item.tech_stack.map((tag, tagIndex) => (
                         <span
                           key={tagIndex}
                           className="bg-gray-100 px-3 py-1 text-sm border-2 border-black rounded-full"
