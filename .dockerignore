@@ -1,5 +1,12 @@
 node_modules
 .next
 .git
-.gitignore
+.github
+.env.local
+.env
 README.md
+Dockerfile
+.dockerignore
+SUPABASE_RLS_FIX.sql
+SUPABASE_SETTINGS_SETUP.sql
+src/__tests__

@@ -1,451 +1,443 @@
 "use client";
+
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { supabaseAdmin } from "../../lib/supabase-admin";
+import { supabaseAdmin } from "@/app/lib/supabase-admin";
+import { supabase, Project } from "@/app/lib/supabase";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Card, CardHeader, CardTitle, CardContent, CardFooter } from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
+import { Loader2, Plus, Pencil, Trash2, ArrowLeft, Save, Star, ExternalLink, Github, Upload, Image as ImageIcon } from "lucide-react";
 import Link from "next/link";
-import { Project, TechTag } from "../../lib/supabase";
-import { uploadImage, deleteImage, isSupabaseStorageUrl } from "../../lib/storage-utils";
-import Image from "next/image";
+import { toast } from "sonner";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "@/components/ui/dialog";
 
 export default function AdminProjectsPage() {
-    const [projects, setProjects] = useState<Project[]>([]);
-    const [techTags, setTechTags] = useState<TechTag[]>([]);
-    const [loading, setLoading] = useState(true);
-    const [editingId, setEditingId] = useState<string | null>(null);
-    const [formData, setFormData] = useState<Partial<Project>>({});
-    const [uploading, setUploading] = useState(false);
-    const [imageFile, setImageFile] = useState<File | null>(null);
-    const [imagePreview, setImagePreview] = useState<string>("");
-    const [selectedTags, setSelectedTags] = useState<string[]>([]);
-    const router = useRouter();
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [currentProject, setCurrentProject] = useState<Partial<Project>>({});
+  const [saving, setSaving] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const router = useRouter();
 
-    useEffect(() => {
-        checkAuth();
-        fetchProjects();
-        fetchTechTags();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+  // Temporary state for array inputs as text strings (comma separated)
+  const [techStackStr, setTechStackStr] = useState("");
+  const [keyFeaturesStr, setKeyFeaturesStr] = useState("");
 
-    async function checkAuth() {
-        const { data: { user } } = await supabaseAdmin.auth.getUser();
-        if (!user) router.push("/admin/login");
+  useEffect(() => {
+    fetchData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  async function fetchData() {
+    const { data: { user } } = await supabaseAdmin.auth.getUser();
+    if (!user) {
+      router.push("/admin/login");
+      return;
     }
 
-    async function fetchProjects() {
-        const { data, error } = await supabaseAdmin
-            .from("projects")
-            .select("*")
-            .order("display_order", { ascending: true });
+    const { data, error } = await supabase
+      .from('projects')
+      .select('*')
+      .order('created_at', { ascending: false });
 
-        if (!error) setProjects(data || []);
-        setLoading(false);
+    if (error) {
+       toast.error("Failed to load projects");
+    } else {
+       setProjects(data || []);
     }
+    setLoading(false);
+  }
 
-    async function fetchTechTags() {
-        const { data, error } = await supabaseAdmin
-            .from("tech_tags")
-            .select("*")
-            .eq("is_active", true)
-            .order("category", { ascending: true })
-            .order("display_order", { ascending: true });
+  const handleEdit = (project: Project) => {
+      setCurrentProject(project);
+      setTechStackStr(project.tech_stack?.join(", ") || "");
+      setKeyFeaturesStr(project.key_features?.join("\n") || "");
+      setIsDialogOpen(true);
+  };
 
-        if (!error) setTechTags(data || []);
-    }
+  const handleAddNew = () => {
+      setCurrentProject({
+          title: "",
+          is_featured: false,
+          tech_stack: [],
+          key_features: [],
+          image_path: ""
+      });
+      setTechStackStr("");
+      setKeyFeaturesStr("");
+      setIsDialogOpen(true);
+  }
 
-    async function handleDelete(id: string) {
-        if (!confirm("คุณแน่ใจหรือไม่ที่จะลบโปรเจคนี้?")) return;
+  const handleDelete = async (id: string) => {
+      if(!confirm("Are you sure? This action cannot be undone.")) return;
 
-        const project = projects.find((p) => p.id === id);
+      const { error } = await supabaseAdmin.from('projects').delete().eq('id', id);
+      if(error) {
+          toast.error("Failed to delete project");
+      } else {
+          toast.success("Project deleted");
+          fetchData();
+      }
+  }
 
-        // ลบรูปภาพถ้าเป็น Supabase Storage URL
-        if (project?.image_url && isSupabaseStorageUrl(project.image_url)) {
-            await deleteImage(project.image_url);
+  const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+      if (!e.target.files || e.target.files.length === 0) {
+          return;
+      }
+      const file = e.target.files[0];
+      setUploading(true);
+      
+      try {
+        const fileExt = file.name.split('.').pop();
+        const fileName = `${Math.random().toString(36).substring(2, 15)}.${fileExt}`;
+        const filePath = `${fileName}`;
+
+        const { error: uploadError } = await supabase.storage
+            .from('portfolio-assets')
+            .upload(filePath, file);
+
+        if (uploadError) {
+             console.error("Upload error details:", uploadError);
+             throw uploadError;
         }
+        
+        // Get Public URL
+        const { data: { publicUrl } } = supabase.storage
+            .from('portfolio-assets')
+            .getPublicUrl(filePath);
 
-        const { error } = await supabaseAdmin.from("projects").delete().eq("id", id);
-        if (!error) fetchProjects();
-        else alert("เกิดข้อผิดพลาด: " + error.message);
-    }
+        setCurrentProject(prev => ({ ...prev, image_path: publicUrl }));
+        toast.success("Image uploaded successfully");
 
-    async function handleSave() {
-        setUploading(true);
-        try {
-            let imageUrl = formData.image_url;
+      } catch (error: any) {
+          console.error("Error uploading image:", error);
+          toast.error(`Upload failed: ${error.message || "Unknown error"}. Check console.`);
+      } finally {
+          setUploading(false);
+      }
+  };
 
-            // อัพโหลดรูปภาพใหม่ถ้ามี
-            if (imageFile) {
-                imageUrl = await uploadImage(imageFile, "projects");
+  const handleSave = async (e: React.FormEvent) => {
+      e.preventDefault();
+      setSaving(true);
+      
+      const techStackArray = techStackStr.split(',').map(s => s.trim()).filter(s => s.length > 0);
+      const keyFeaturesArray = keyFeaturesStr.split('\n').map(s => s.trim()).filter(s => s.length > 0);
 
-                // ลบรูปเก่าถ้ามี
-                if (formData.image_url && isSupabaseStorageUrl(formData.image_url)) {
-                    await deleteImage(formData.image_url);
-                }
-            }
+      const payload = {
+          ...currentProject,
+          tech_stack: techStackArray,
+          key_features: keyFeaturesArray,
+      };
+      
+      // Remove id from payload if creating
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      const { id, created_at, ...updateData } = payload;
 
-            const dataToSave = { ...formData, tags: selectedTags, image_url: imageUrl };
+      let error;
+      if (currentProject.id) {
+         const res = await supabaseAdmin.from('projects').update(updateData).eq('id', currentProject.id);
+         error = res.error;
+      } else {
+         const res = await supabaseAdmin.from('projects').insert([updateData]);
+         error = res.error;
+      }
 
-            if (!editingId || editingId === "new") {
-                const { error } = await supabaseAdmin.from("projects").insert([dataToSave]);
-                if (error) throw error;
-            } else {
-                const { error } = await supabaseAdmin
-                    .from("projects")
-                    .update(dataToSave)
-                    .eq("id", editingId);
-                if (error) throw error;
-            }
+      if (error) {
+          console.error(error);
+          toast.error("Failed to save project");
+      } else {
+          toast.success("Project saved successfully");
+          setIsDialogOpen(false);
+          fetchData();
+      }
+      setSaving(false);
+  }
 
-            setEditingId(null);
-            setFormData({});
-            setSelectedTags([]);
-            setImageFile(null);
-            setImagePreview("");
-            fetchProjects();
-        } catch (error) {
-            const errorMessage = error instanceof Error ? error.message : "เกิดข้อผิดพลาด";
-            alert("เกิดข้อผิดพลาด: " + errorMessage);
-        } finally {
-            setUploading(false);
-        }
-    }
+  if (loading) {
+      return (
+          <div className="min-h-screen flex items-center justify-center bg-background">
+              <Loader2 className="h-8 w-8 animate-spin text-primary" />
+          </div>
+      );
+  }
 
-    function handleEdit(project: Project) {
-        setEditingId(project.id);
-        setFormData(project);
-        setSelectedTags(project.tags || []);
-        setImagePreview(project.image_url || "");
-        setImageFile(null);
-    }
-
-    function handleNew() {
-        setEditingId("new");
-        setSelectedTags([]);
-        setFormData({
-            title: "",
-            description: "",
-            image_url: "",
-            tags: [],
-            live_url: "",
-            github_url: "",
-            is_featured: true,
-            display_order: projects.length + 1,
-        });
-        setImagePreview("");
-        setImageFile(null);
-    }
-
-    function handleImageChange(e: React.ChangeEvent<HTMLInputElement>) {
-        const file = e.target.files?.[0];
-        if (file) {
-            setImageFile(file);
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                setImagePreview(reader.result as string);
-            };
-            reader.readAsDataURL(file);
-        }
-    }
-
-    if (loading) {
-        return <div className="min-h-screen flex items-center justify-center">กำลังโหลด...</div>;
-    }
-
-    return (
-        <div className="min-h-screen bg-gray-50 font-mono">
-            <div className="container mx-auto px-6 py-12">
-                <div className="flex justify-between items-center mb-8">
-                    <h1 className="text-4xl font-bold">จัดการ Projects</h1>
-                    <div className="flex gap-4">
-                        <Button onClick={handleNew} className="bg-green-500 hover:bg-green-600 text-white">
-                            + เพิ่มโปรเจคใหม่
+  return (
+    <div className="min-h-screen bg-background p-4 md:p-8">
+        <div className="container mx-auto">
+            <div className="flex items-center justify-between mb-8">
+                <div className="flex items-center">
+                    <Link href="/admin">
+                        <Button variant="ghost" size="icon" className="mr-2">
+                            <ArrowLeft className="h-4 w-4" />
                         </Button>
-                        <Link href="/admin">
-                            <Button className="bg-gray-500 hover:bg-gray-600 text-white">← กลับ</Button>
-                        </Link>
-                    </div>
+                    </Link>
+                    <h1 className="text-2xl font-bold">Projects Showcase</h1>
                 </div>
+                <Button onClick={handleAddNew}>
+                    <Plus className="mr-2 h-4 w-4" /> Add Project
+                </Button>
+            </div>
 
-                {editingId && (
-                    <Card className="p-6 mb-8 border-2 border-black">
-                        <h2 className="text-2xl font-bold mb-4">
-                            {editingId === "new" ? "เพิ่มโปรเจคใหม่" : "แก้ไขโปรเจค"}
-                        </h2>
-                        <div className="space-y-4">
-                            <div>
-                                <label className="block font-bold mb-2">ชื่อโปรเจค</label>
-                                <input
-                                    type="text"
-                                    value={formData.title || ""}
-                                    onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                                    className="w-full px-4 py-2 border-2 border-black rounded"
-                                />
-                            </div>
-
-                            <div>
-                                <label className="block font-bold mb-2">คำอธิบาย</label>
-                                <textarea
-                                    value={formData.description || ""}
-                                    onChange={(e) => setFormData({ ...formData, description: e.target.value })}
-                                    className="w-full px-4 py-2 border-2 border-black rounded"
-                                    rows={3}
-                                />
-                            </div>
-
-                            <div>
-                                <label className="block font-bold mb-2">รูปภาพ</label>
-
-                                {/* Tab เลือกระหว่าง Upload หรือ URL */}
-                                <div className="flex gap-2 mb-4">
-                                    <button
-                                        type="button"
-                                        onClick={() => {
-                                            setImageFile(null);
-                                            setImagePreview(formData.image_url || "");
-                                        }}
-                                        className={`px-4 py-2 rounded border-2 border-black ${!imageFile ? "bg-blue-500 text-white" : "bg-white"
-                                            }`}
-                                    >
-                                        ใส่ URL
-                                    </button>
-                                    <button
-                                        type="button"
-                                        onClick={() => {
-                                            setFormData({ ...formData, image_url: "" });
-                                        }}
-                                        className={`px-4 py-2 rounded border-2 border-black ${imageFile ? "bg-blue-500 text-white" : "bg-white"
-                                            }`}
-                                    >
-                                        อัพโหลดไฟล์
-                                    </button>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                {projects.map((project) => (
+                    <Card key={project.id} className="flex flex-col h-full border hover:border-primary/50 transition-colors">
+                        <div className="relative h-48 w-full bg-muted overflow-hidden rounded-t-lg">
+                            {project.image_path ? (
+                                /* eslint-disable-next-line @next/next/no-img-element */
+                                <img src={project.image_path} alt={project.title} className="w-full h-full object-cover" />
+                            ) : (
+                                <div className="flex items-center justify-center h-full text-muted-foreground">
+                                    <ImageIcon className="h-10 w-10 opacity-20" />
                                 </div>
+                            )}
+                            {project.is_featured && (
+                                <span className="absolute top-2 right-2 text-xs bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full flex items-center gap-1 font-bold shadow-sm">
+                                    <Star className="h-3 w-3 fill-current" /> Featured
+                                </span>
+                            )}
+                        </div>
+                        <CardHeader>
+                            <div className="flex justify-between items-start">
+                                <div>
+                                    <div className="flex items-center gap-2 mb-2">
+                                        <span className="text-xs font-mono uppercase text-muted-foreground border px-1 rounded">{project.category || "Uncategorized"}</span>
+                                    </div>
+                                    <CardTitle>{project.title}</CardTitle>
+                                </div>
+                                <div className="flex gap-1">
+                                    <Button variant="ghost" size="icon" onClick={() => handleEdit(project)}>
+                                        <Pencil className="h-4 w-4" />
+                                    </Button>
+                                    <Button variant="ghost" size="icon" className="text-destructive hover:bg-destructive/10" onClick={() => handleDelete(project.id)}>
+                                        <Trash2 className="h-4 w-4" />
+                                    </Button>
+                                </div>
+                            </div>
+                        </CardHeader>
+                        <CardContent className="flex-grow space-y-4">
+                            <p className="text-sm text-muted-foreground line-clamp-2">{project.overview || project.problem}</p>
+                            
+                            <div className="flex flex-wrap gap-1">
+                                {project.tech_stack?.slice(0, 5).map(tech => (
+                                    <span key={tech} className="text-xs bg-secondary px-2 py-0.5 rounded text-secondary-foreground">{tech}</span>
+                                ))}
+                                {project.tech_stack && project.tech_stack.length > 5 && (
+                                    <span className="text-xs text-muted-foreground px-1">+{project.tech_stack.length - 5} more</span>
+                                )}
+                            </div>
+                        </CardContent>
+                        <CardFooter className="border-t pt-4 text-xs text-muted-foreground flex justify-between">
+                            <div className="flex gap-3">
+                                {project.demo_link && (
+                                    <a href={project.demo_link} target="_blank" className="flex items-center hover:text-primary">
+                                        <ExternalLink className="h-3 w-3 mr-1"/> Demo
+                                    </a>
+                                )}
+                                {project.github_link && (
+                                    <a href={project.github_link} target="_blank" className="flex items-center hover:text-primary">
+                                        <Github className="h-3 w-3 mr-1"/> Code
+                                    </a>
+                                )}
+                            </div>
+                            <div>
+                                {new Date(project.created_at).toLocaleDateString()}
+                            </div>
+                        </CardFooter>
+                    </Card>
+                ))}
+            </div>
 
-                                {/* แสดง input ตามที่เลือก */}
-                                {!imageFile ? (
-                                    <div>
-                                        <input
-                                            type="text"
-                                            value={formData.image_url || ""}
-                                            onChange={(e) => {
-                                                setFormData({ ...formData, image_url: e.target.value });
-                                                setImagePreview(e.target.value);
-                                                setImageFile(null);
-                                            }}
-                                            className="w-full px-4 py-2 border-2 border-black rounded"
-                                            placeholder="https://example.com/image.jpg"
-                                        />
-                                        <p className="text-sm text-gray-600 mt-2">
-                                            ใส่ URL รูปภาพจากภายนอก
-                                        </p>
+            <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+                <DialogContent className="sm:max-w-3xl max-h-[90vh] overflow-y-auto">
+                    <DialogHeader>
+                        <DialogTitle>{currentProject.id ? "Edit Project" : "New Project"}</DialogTitle>
+                    </DialogHeader>
+                    <form onSubmit={handleSave} className="space-y-6 py-4">
+                         
+                        {/* Image Upload Section */}
+                        <div className="space-y-2">
+                             <Label>Project Image</Label>
+                             <div className="flex items-center gap-4">
+                                {currentProject.image_path ? (
+                                    <div className="relative w-32 h-20 rounded border overflow-hidden">
+                                        /* eslint-disable-next-line @next/next/no-img-element */
+                                    <img src={currentProject.image_path} alt="Preview" className="w-full h-full object-cover" />
+                                        <button 
+                                            type="button"
+                                            onClick={() => setCurrentProject(p => ({...p, image_path: ""}))}
+                                            className="absolute top-0 right-0 bg-destructive text-white p-1 rounded-bl"
+                                        >
+                                            <Trash2 className="h-3 w-3" />
+                                        </button>
                                     </div>
                                 ) : (
-                                    <div>
-                                        <input
-                                            type="file"
-                                            accept="image/*"
-                                            onChange={handleImageChange}
-                                            className="w-full px-4 py-2 border-2 border-black rounded"
-                                        />
-                                        <p className="text-sm text-gray-600 mt-2">
-                                            อัพโหลดรูปภาพไปยัง Supabase Storage
-                                        </p>
-                                    </div>
-                                )}
-
-                                {/* Preview รูปภาพ */}
-                                {imagePreview && (
-                                    <div className="mt-4 relative w-full h-48">
-                                        <Image
-                                            src={imagePreview}
-                                            alt="Preview"
-                                            fill
-                                            className="object-cover rounded border-2 border-black"
-                                        />
-                                    </div>
-                                )}
-                            </div>
-
-                            <div>
-                                <label className="block font-bold mb-2">Tags</label>
-
-                                {/* แสดง tags ที่เลือกแล้ว */}
-                                <div className="flex flex-wrap gap-2 mb-4 p-4 border-2 border-black rounded min-h-[60px]">
-                                    {selectedTags.length === 0 ? (
-                                        <span className="text-gray-400">เลือก tags...</span>
-                                    ) : (
-                                        selectedTags.map((tag) => (
-                                            <span
-                                                key={tag}
-                                                className="bg-blue-100 px-3 py-1 text-sm border-2 border-black rounded-full flex items-center gap-2"
-                                            >
-                                                {tag}
-                                                <button
-                                                    type="button"
-                                                    onClick={() => setSelectedTags(selectedTags.filter((t) => t !== tag))}
-                                                    className="text-red-500 hover:text-red-700 font-bold"
-                                                >
-                                                    ×
-                                                </button>
-                                            </span>
-                                        ))
-                                    )}
-                                </div>
-
-                                {/* แสดง tags ที่สามารถเลือกได้ แบ่งตาม category */}
-                                <div className="space-y-4 max-h-[400px] overflow-y-auto border-2 border-black rounded p-4">
-                                    {Object.entries(
-                                        techTags.reduce((acc, tag) => {
-                                            if (!acc[tag.category]) acc[tag.category] = [];
-                                            acc[tag.category].push(tag);
-                                            return acc;
-                                        }, {} as Record<string, TechTag[]>)
-                                    ).map(([category, tags]) => (
-                                        <div key={category}>
-                                            <h4 className="font-bold mb-2 text-sm text-gray-700">{category}</h4>
-                                            <div className="flex flex-wrap gap-2">
-                                                {tags.map((tag) => (
-                                                    <button
-                                                        key={tag.id}
-                                                        type="button"
-                                                        onClick={() => {
-                                                            if (selectedTags.includes(tag.name)) {
-                                                                setSelectedTags(selectedTags.filter((t) => t !== tag.name));
-                                                            } else {
-                                                                setSelectedTags([...selectedTags, tag.name]);
-                                                            }
-                                                        }}
-                                                        className={`px-3 py-1 text-sm border-2 border-black rounded-full transition-colors ${selectedTags.includes(tag.name)
-                                                            ? "bg-blue-500 text-white"
-                                                            : "bg-white hover:bg-gray-100"
-                                                            }`}
-                                                    >
-                                                        {tag.name}
-                                                    </button>
-                                                ))}
-                                            </div>
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
-
-                            <div className="grid grid-cols-2 gap-4">
-                                <div>
-                                    <label className="block font-bold mb-2">Live URL</label>
-                                    <input
-                                        type="text"
-                                        value={formData.live_url || ""}
-                                        onChange={(e) => setFormData({ ...formData, live_url: e.target.value })}
-                                        className="w-full px-4 py-2 border-2 border-black rounded"
-                                    />
-                                </div>
-                                <div>
-                                    <label className="block font-bold mb-2">GitHub URL</label>
-                                    <input
-                                        type="text"
-                                        value={formData.github_url || ""}
-                                        onChange={(e) => setFormData({ ...formData, github_url: e.target.value })}
-                                        className="w-full px-4 py-2 border-2 border-black rounded"
-                                    />
-                                </div>
-                            </div>
-
-                            <div className="grid grid-cols-2 gap-4">
-                                <div>
-                                    <label className="block font-bold mb-2">ลำดับการแสดง</label>
-                                    <input
-                                        type="number"
-                                        value={formData.display_order || 0}
-                                        onChange={(e) =>
-                                            setFormData({ ...formData, display_order: parseInt(e.target.value) })
-                                        }
-                                        className="w-full px-4 py-2 border-2 border-black rounded"
-                                    />
-                                </div>
-                                <div>
-                                    <label className="flex items-center gap-2 mt-8">
-                                        <input
-                                            type="checkbox"
-                                            checked={formData.is_featured || false}
-                                            onChange={(e) => setFormData({ ...formData, is_featured: e.target.checked })}
-                                            className="w-5 h-5"
-                                        />
-                                        <span className="font-bold">แสดงในหน้าแรก</span>
-                                    </label>
-                                </div>
-                            </div>
-
-                            <div className="flex gap-4">
-                                <Button
-                                    onClick={handleSave}
-                                    disabled={uploading}
-                                    className="bg-blue-500 hover:bg-blue-600 text-white"
-                                >
-                                    {uploading ? "กำลังบันทึก..." : "บันทึก"}
-                                </Button>
-                                <Button
-                                    onClick={() => {
-                                        setEditingId(null);
-                                        setFormData({});
-                                        setImageFile(null);
-                                        setImagePreview("");
-                                    }}
-                                    className="bg-gray-500 hover:bg-gray-600 text-white"
-                                >
-                                    ยกเลิก
-                                </Button>
-                            </div>
-                        </div>
-                    </Card>
-                )}
-
-                <div className="grid gap-4">
-                    {projects.map((project) => (
-                        <Card key={project.id} className="p-6 border-2 border-black">
-                            <div className="flex gap-4">
-                                {project.image_url && (
-                                    <div className="relative w-32 h-32 flex-shrink-0">
-                                        <Image
-                                            src={project.image_url}
-                                            alt={project.title}
-                                            fill
-                                            className="object-cover rounded"
-                                        />
+                                    <div className="w-32 h-20 rounded border border-dashed flex items-center justify-center bg-muted/50">
+                                        <ImageIcon className="h-6 w-6 text-muted-foreground" />
                                     </div>
                                 )}
                                 <div className="flex-1">
-                                    <h3 className="text-xl font-bold mb-2">{project.title}</h3>
-                                    <p className="text-gray-600 mb-2">{project.description}</p>
-                                    <div className="flex flex-wrap gap-2 mb-2">
-                                        {project.tags?.map((tag, i) => (
-                                            <span key={i} className="bg-blue-100 px-2 py-1 text-sm rounded">
-                                                {tag}
-                                            </span>
-                                        ))}
-                                    </div>
-                                    <p className="text-sm text-gray-500">
-                                        ลำดับ: {project.display_order} | Featured: {project.is_featured ? "✓" : "✗"}
+                                    <Label htmlFor="image-upload" className="cursor-pointer inline-flex h-9 items-center justify-center rounded-md bg-secondary px-4 py-2 text-sm font-medium shadow-sm hover:bg-secondary/80">
+                                        {uploading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Upload className="mr-2 h-4 w-4" />}
+                                        {uploading ? "Uploading..." : "Upload Image"}
+                                    </Label>
+                                    <Input 
+                                        id="image-upload" 
+                                        type="file" 
+                                        accept="image/*" 
+                                        className="hidden" 
+                                        onChange={handleFileUpload}
+                                        disabled={uploading}
+                                    />
+                                    <p className="text-xs text-muted-foreground mt-1">
+                                        Recommended: 16:9 aspect ratio.
                                     </p>
+                                    {/* Fallback text input for manual URL */}
+                                    <Input 
+                                        value={currentProject.image_path || ""}
+                                        onChange={(e) => setCurrentProject(p => ({...p, image_path: e.target.value}))}
+                                        placeholder="Or paste image URL directly"
+                                        className="mt-2 h-8 text-xs font-mono"
+                                    />
                                 </div>
-                                <div className="flex gap-2 items-start">
-                                    <Button
-                                        onClick={() => handleEdit(project)}
-                                        className="bg-yellow-500 hover:bg-yellow-600 text-white"
-                                    >
-                                        แก้ไข
-                                    </Button>
-                                    <Button
-                                        onClick={() => handleDelete(project.id)}
-                                        className="bg-red-500 hover:bg-red-600 text-white"
-                                    >
-                                        ลบ
-                                    </Button>
-                                </div>
+                             </div>
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-4">
+                             <div className="space-y-2">
+                                <Label htmlFor="title">Project Title</Label>
+                                <Input 
+                                    id="title" 
+                                    value={currentProject.title || ''} 
+                                    onChange={(e) => setCurrentProject({...currentProject, title: e.target.value})}
+                                    required
+                                />
                             </div>
-                        </Card>
-                    ))}
-                </div>
-            </div>
-        </div >
-    );
+                            <div className="space-y-2">
+                                <Label htmlFor="category">Category</Label>
+                                <Input 
+                                    id="category" 
+                                    value={currentProject.category || ''} 
+                                    onChange={(e) => setCurrentProject({...currentProject, category: e.target.value})}
+                                    placeholder="e.g. Full Stack App"
+                                />
+                            </div>
+                        </div>
+                        
+                        <div className="space-y-2">
+                            <Label htmlFor="overview">Overview</Label>
+                            <Textarea 
+                                id="overview" 
+                                value={currentProject.overview || ''} 
+                                onChange={(e) => setCurrentProject({...currentProject, overview: e.target.value})}
+                                placeholder="Short description of the project"
+                            />
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-4">
+                             <div className="space-y-2">
+                                <Label htmlFor="problem">Problem</Label>
+                                <Textarea 
+                                    id="problem" 
+                                    value={currentProject.problem || ''} 
+                                    onChange={(e) => setCurrentProject({...currentProject, problem: e.target.value})}
+                                    rows={2}
+                                />
+                            </div>
+                            <div className="space-y-2">
+                                <Label htmlFor="solution">Solution</Label>
+                                <Textarea 
+                                    id="solution" 
+                                    value={currentProject.solution || ''} 
+                                    onChange={(e) => setCurrentProject({...currentProject, solution: e.target.value})}
+                                    rows={2}
+                                />
+                            </div>
+                        </div>
+                        
+                        <div className="space-y-2">
+                            <Label htmlFor="impact">Impact</Label>
+                            <Input 
+                                id="impact" 
+                                value={currentProject.impact || ''} 
+                                onChange={(e) => setCurrentProject({...currentProject, impact: e.target.value})}
+                                placeholder="e.g. Reduced latency by 50%"
+                            />
+                        </div>
+
+                        <div className="space-y-2">
+                             <Label>Tech Stack (comma separated)</Label>
+                             <Input 
+                                value={techStackStr}
+                                onChange={(e) => setTechStackStr(e.target.value)}
+                                placeholder="React, Node.js, Postgres, Redis"
+                             />
+                        </div>
+
+                        <div className="space-y-2">
+                             <Label>Key Features (one per line)</Label>
+                             <Textarea 
+                                value={keyFeaturesStr}
+                                onChange={(e) => setKeyFeaturesStr(e.target.value)}
+                                placeholder="Real-time updates&#10;Offline mode&#10;User auth"
+                                rows={4}
+                             />
+                        </div>
+
+                        <div className="grid grid-cols-2 gap-4">
+                            <div className="space-y-2">
+                                <Label htmlFor="demo_link">Live Demo URL</Label>
+                                <Input 
+                                    id="demo_link" 
+                                    value={currentProject.demo_link || ''} 
+                                    onChange={(e) => setCurrentProject({...currentProject, demo_link: e.target.value})}
+                                />
+                            </div>
+                            <div className="space-y-2">
+                                <Label htmlFor="github_link">GitHub URL</Label>
+                                <Input 
+                                    id="github_link" 
+                                    value={currentProject.github_link || ''} 
+                                    onChange={(e) => setCurrentProject({...currentProject, github_link: e.target.value})}
+                                />
+                            </div>
+                        </div>
+
+                        <div className="flex items-center space-x-2 border p-4 rounded-lg bg-secondary/10">
+                            <input 
+                                type="checkbox" 
+                                id="is_featured"
+                                className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
+                                checked={currentProject.is_featured || false}
+                                onChange={(e) => setCurrentProject({...currentProject, is_featured: e.target.checked})}
+                            />
+                            <div className="flex flex-col">
+                                <Label htmlFor="is_featured" className="cursor-pointer font-bold">Featured Project</Label>
+                                <span className="text-xs text-muted-foreground">Featured projects appear on the homepage.</span>
+                            </div>
+                        </div>
+
+                        <DialogFooter>
+                            <Button type="button" variant="outline" onClick={() => setIsDialogOpen(false)}>Cancel</Button>
+                            <Button type="submit" disabled={saving}>
+                                {saving ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Save className="mr-2 h-4 w-4" />}
+                                Save Project
+                            </Button>
+                        </DialogFooter>
+                    </form>
+                </DialogContent>
+            </Dialog>
+        </div>
+    </div>
+  );
 }

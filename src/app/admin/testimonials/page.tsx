@@ -27,7 +27,7 @@ export default function AdminTestimonialsPage() {
     useEffect(() => {
         checkAuth();
         fetchTestimonials();
-    }, []); // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
     async function checkAuth() {
         const { data: { user } } = await supabaseAdmin.auth.getUser();

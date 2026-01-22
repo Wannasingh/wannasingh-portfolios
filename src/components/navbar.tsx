@@ -1,107 +1,90 @@
 "use client";
 import Link from "next/link";
-import { TbCodeVariable } from "react-icons/tb";
+import { Terminal, Menu, X } from "lucide-react";
 import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { ModeToggle } from "@/components/mode-toggle";
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  const handleLinkClick = () => {
-    setIsMenuOpen(false);
-  };
+
+
+  const navLinks = [
+    { name: "Home", href: "/" },
+    { name: "About", href: "/about" },
+    { name: "Portfolio", href: "/portfolio" },
+    { name: "Contact", href: "/hire-me" },
+  ];
 
   return (
-    <header className="container mx-auto fixed top-0 left-0 right-0 z-50 p-4 lg:p-6">
-      {/* Desktop Navigation */}
-      <nav className="bg-white/90 backdrop-blur-md hidden md:flex items-center justify-between rounded-3xl px-8 py-3 border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-1 transition-all duration-300">
-        <Link href="/" className="flex items-center space-x-3 group">
-          <div className="bg-gradient-to-br from-emerald-400 to-blue-500 p-2.5 rounded-xl transform transition-all duration-300 group-hover:scale-110 group-hover:rotate-6">
-            <TbCodeVariable size={22} className="text-white" />
+    <header className="fixed top-0 left-0 right-0 z-50 border-b bg-background/80 backdrop-blur-md">
+      <nav className="container mx-auto px-4 md:px-6 h-16 flex items-center justify-between">
+        <Link href="/" className="flex items-center gap-2 group">
+          <div className="bg-primary/10 p-2 rounded-lg group-hover:bg-primary/20 transition-colors">
+            <Terminal className="h-5 w-5 text-primary" />
           </div>
-          <span className="text-xl font-mono font-bold bg-gradient-to-r from-emerald-400 to-blue-500 bg-clip-text text-transparent">
-            {`<Wannasingh />`}
-          </span>
-        </Link>
-
-        {/* Code-themed divider */}
-        <div className="hidden md:flex items-center space-x-2 text-zinc-600">
-          <span className="font-mono">{`{`}</span>
-          <div className="h-6 w-px bg-zinc-700"></div>
-          <span className="font-mono">{`}`}</span>
-        </div>
-
-        <div className="flex items-center space-x-3">
-          <Link
-            href="/about"
-            className="px-6 py-2.5 rounded-xl text-zinc-800 border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-0.5 hover:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] transition-all duration-200 font-mono"
-          >
-            about()
-          </Link>
-          <Link
-            href="/portfolio"
-            className="px-6 py-2.5 rounded-xl bg-gradient-to-r from-emerald-400 to-blue-500 text-white border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-0.5 hover:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] transition-all duration-200 font-mono"
-          >
-            portfolio()
-          </Link>
-          <Link
-            href="/hire-me"
-            className="px-6 py-2.5 rounded-xl border-2 border-black shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-0.5 hover:shadow-[1px_1px_0px_0px_rgba(0,0,0,1)] transition-all duration-200 font-mono"
-          >
-            contact()
-          </Link>
-        </div>
-      </nav>
-
-      {/* Mobile Navigation */}
-      <nav className="bg-white/90 backdrop-blur-md md:hidden flex items-center justify-between rounded-2xl px-5 py-4 border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:-translate-y-1 transition-all duration-300">
-        <Link href="/" className="flex items-center space-x-2.5">
-          <div className="bg-gradient-to-br from-emerald-400 to-blue-500 p-2 rounded-lg">
-            <TbCodeVariable size={20} className="text-white" />
-          </div>
-          <span className="text-lg font-mono font-bold text-zinc-800">
-            {`<ws/>`}
+          <span className="text-lg font-bold tracking-tight">
+            wannasingh<span className="text-primary">.dev</span>
           </span>
         </Link>
         
-        <button
-          onClick={() => setIsMenuOpen(!isMenuOpen)}
-          className="p-2 hover:bg-gray-50 rounded-lg transition-all duration-200"
-          aria-label="Toggle menu"
-        >
-          <div className="w-6 h-5 flex flex-col justify-between">
-            <span className="w-full h-0.5 bg-zinc-800 transition-all duration-300"></span>
-            <span className="w-full h-0.5 bg-zinc-800 transition-opacity duration-300"></span>
-            <span className="w-full h-0.5 bg-zinc-800 transition-all duration-300"></span>
-          </div>
-        </button>
-      </nav>
-
-      {/* Mobile Menu Dropdown */}
-      <div className={`md:hidden absolute top-full left-0 right-0 mt-2 transition-all duration-300 ${isMenuOpen ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4 pointer-events-none'}`}>
-        <div className="bg-white/90 backdrop-blur-md mx-4 rounded-2xl border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
+        {/* Desktop Nav */}
+        <div className="hidden md:flex items-center gap-8">
+          {navLinks.map((link) => (
+            <Link
+              key={link.name}
+              href={link.href}
+              className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors hover:underline underline-offset-4"
+            >
+              {link.name}
+            </Link>
+          ))}
+          <ModeToggle />
           <Link
-            href="/about"
-            className="block px-6 py-4 text-zinc-800 hover:bg-zinc-100 rounded-t-2xl transition-all duration-200 font-mono"
-            onClick={handleLinkClick}
+             href="/hire-me"
+             className="inline-flex h-9 items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
           >
-            about()
-          </Link>
-          <Link
-            href="/portfolio"
-            className="block px-6 py-4 text-zinc-800 hover:bg-zinc-100 transition-all duration-200 font-mono"
-            onClick={handleLinkClick}
-          >
-            portfolio()
-          </Link>
-          <Link
-            href="/hire-me"
-            className="block px-6 py-4 text-zinc-800 hover:bg-zinc-100 rounded-b-2xl transition-all duration-200 font-mono"
-            onClick={handleLinkClick}
-          >
-            contact()
+             Hire Me
           </Link>
         </div>
-      </div>
+
+        {/* Mobile Nav Toggle */}
+        <div className="flex items-center gap-4 md:hidden">
+            <ModeToggle />
+            <button
+            className="p-2 text-muted-foreground hover:text-foreground"
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            >
+            {isMenuOpen ? <X /> : <Menu />}
+            </button>
+        </div>
+      </nav>
+
+      {/* Mobile Menu */}
+      <AnimatePresence>
+        {isMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            className="md:hidden border-b bg-background"
+          >
+            <div className="container py-4 flex flex-col gap-4">
+              {navLinks.map((link) => (
+                <Link
+                  key={link.name}
+                  href={link.href}
+                  className="text-sm font-medium p-2 hover:bg-muted rounded-md"
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  {link.name}
+                </Link>
+              ))}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </header>
   );
 }
