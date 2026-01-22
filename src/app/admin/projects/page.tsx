@@ -119,9 +119,10 @@ export default function AdminProjectsPage() {
         setCurrentProject(prev => ({ ...prev, image_path: publicUrl }));
         toast.success("Image uploaded successfully");
 
-      } catch (error: any) {
-          console.error("Error uploading image:", error);
-          toast.error(`Upload failed: ${error.message || "Unknown error"}. Check console.`);
+      } catch (error: unknown) {
+          const err = error as Error;
+          console.error("Error uploading image:", err);
+          toast.error(`Upload failed: ${err.message || "Unknown error"}. Check console.`);
       } finally {
           setUploading(false);
       }
@@ -271,7 +272,7 @@ export default function AdminProjectsPage() {
                              <div className="flex items-center gap-4">
                                 {currentProject.image_path ? (
                                     <div className="relative w-32 h-20 rounded border overflow-hidden">
-                                        /* eslint-disable-next-line @next/next/no-img-element */
+                                        {/* eslint-disable-next-line @next/next/no-img-element */}
                                     <img src={currentProject.image_path} alt="Preview" className="w-full h-full object-cover" />
                                         <button 
                                             type="button"

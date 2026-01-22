@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { ArrowRight, Database, Layout, Terminal, Loader2 } from "lucide-react";
+import { ArrowRight, Database, Layout, Loader2 } from "lucide-react";
 import Link from "next/link";
 import { supabase, Profile } from "@/app/lib/supabase";
 
@@ -11,7 +11,7 @@ export default function HeroSectionNew() {
 
   useEffect(() => {
     async function fetchProfile() {
-      const { data, error } = await supabase
+      const { data } = await supabase
         .from('profile')
         .select('*')
         .single();

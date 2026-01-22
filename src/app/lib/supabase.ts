@@ -86,3 +86,13 @@ export interface TechTag {
   display_order: number;
   is_active: boolean;
 }
+
+export interface Service {
+  id: string;
+  title: string;
+  description: string;
+  icon_name: string;
+  icon_color: string;
+  display_order: number;
+  is_active: boolean;
+}

@@ -139,7 +139,7 @@ export default function AdminAvailabilityPage() {
 
             <div className="space-y-4">
                 <p className="text-sm text-muted-foreground mb-4">
-                    These items appear on the "Hire Me" page under "I am open to discussing:".
+                    These items appear on the &quot;Hire Me&quot; page under &quot;I am open to discussing:&quot;.
                 </p>
                 {items.map((item) => (
                     <Card key={item.id} className="flex items-center p-4 gap-4">

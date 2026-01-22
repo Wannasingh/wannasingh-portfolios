@@ -106,7 +106,7 @@ export default function AdminSettingsPage() {
             setSettings(prev => prev ? ({ ...prev, resume_url: publicUrl }) : null);
             toast.success("Resume uploaded successfully");
 
-        } catch (error: any) {
+        } catch (error: unknown) {
             console.error("Upload error:", error);
             toast.error("Failed to upload resume. Ensure bucket exists.");
         } finally {
