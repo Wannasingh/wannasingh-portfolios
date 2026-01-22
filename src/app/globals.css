@@ -68,7 +68,12 @@
     overflow-x: hidden;
   }
   html {
-  scroll-behavior: smooth;
+    scroll-behavior: smooth;
+  }
+  
+  /* Ensure inputs are selectable even when body is not */
+  input, textarea {
+    user-select: text;
+    -webkit-user-select: text;
+  }
 }
-}
-

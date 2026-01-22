@@ -4,7 +4,10 @@ import { useRouter } from "next/navigation";
 import { supabaseAdmin } from "../../lib/supabase-admin";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 import Link from "next/link";
+import { Loader2, Lock, Terminal } from "lucide-react";
+import { motion } from "framer-motion";
 
 export default function AdminLoginPage() {
     const [email, setEmail] = useState("");
@@ -53,12 +56,12 @@ export default function AdminLoginPage() {
             const adminEmails = ['wannasingh.khan@gmail.com', 'sarankhtn@gmail.com'];
             if (!adminEmails.includes(email)) {
                 await supabaseAdmin.auth.signOut();
-                throw new Error("คุณไม่มีสิทธิ์เข้าถึงหน้านี้");
+                throw new Error("Unauthorized Access Detected");
             }
 
             router.push("/admin");
         } catch (err) {
-            const errorMessage = err instanceof Error ? err.message : "เกิดข้อผิดพลาดในการเข้าสู่ระบบ";
+            const errorMessage = err instanceof Error ? err.message : "Authentication Failed";
             setError(errorMessage);
         } finally {
             setLoading(false);
@@ -67,66 +70,82 @@ export default function AdminLoginPage() {
 
     if (checkingSession) {
         return (
-            <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-                <div className="text-center">
-                    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto mb-4"></div>
-                    <p className="text-gray-600 font-mono">กำลังตรวจสอบ...</p>
-                </div>
+            <div className="min-h-screen bg-background flex items-center justify-center">
+                <Loader2 className="h-8 w-8 animate-spin text-primary" />
             </div>
         );
     }
 
     return (
-        <div className="min-h-screen bg-gray-50 flex items-center justify-center font-mono px-6">
-            <Card className="w-full max-w-md p-8 border-2 border-black shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
-                <h1 className="text-3xl font-bold mb-6 text-center">Admin Login</h1>
+        <div className="relative min-h-screen flex items-center justify-center bg-background overflow-hidden p-4">
+             {/* Background Decor */}
+            <div className="absolute inset-0 w-full h-full bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]"></div>
+            <div className="absolute left-0 right-0 top-0 -z-10 m-auto h-[310px] w-[310px] rounded-full bg-primary/20 opacity-20 blur-[100px]"></div>
 
-                {error && (
-                    <div className="bg-red-100 border-2 border-red-500 text-red-700 px-4 py-3 rounded mb-4">
-                        {error}
+            <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+                className="w-full max-w-md relative z-10"
+            >
+                <div className="text-center mb-8">
+                    <div className="inline-flex items-center justify-center p-3 rounded-xl bg-primary/10 mb-4">
+                        <Terminal className="h-8 w-8 text-primary" />
                     </div>
-                )}
-
-                <form onSubmit={handleLogin} className="space-y-4">
-                    <div>
-                        <label className="block text-sm font-bold mb-2">Email</label>
-                        <input
-                            type="email"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            className="w-full px-4 py-2 border-2 border-black rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            placeholder="admin@example.com"
-                            required
-                        />
-                    </div>
-
-                    <div>
-                        <label className="block text-sm font-bold mb-2">Password</label>
-                        <input
-                            type="password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            className="w-full px-4 py-2 border-2 border-black rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            placeholder="••••••••"
-                            required
-                        />
-                    </div>
-
-                    <Button
-                        type="submit"
-                        disabled={loading}
-                        className="w-full bg-blue-500 hover:bg-blue-600 text-white font-bold py-3 border-2 border-black shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] hover:-translate-x-[2px] hover:-translate-y-[2px] transition-all duration-300"
-                    >
-                        {loading ? "กำลังเข้าสู่ระบบ..." : "เข้าสู่ระบบ"}
-                    </Button>
-                </form>
-
-                <div className="mt-6 text-center">
-                    <Link href="/" className="text-blue-500 hover:underline">
-                        ← กลับหน้าหลัก
-                    </Link>
+                    <h1 className="text-2xl font-bold tracking-tight">System Access</h1>
+                    <p className="text-muted-foreground mt-2">Enter credentials to access the control panel</p>
                 </div>
-            </Card>
+
+                <Card className="p-6 md:p-8 bg-card/50 backdrop-blur-sm border shadow-lg">
+                    {error && (
+                        <div className="bg-destructive/10 border border-destructive/20 text-destructive px-4 py-3 rounded-md text-sm mb-6 flex items-center gap-2">
+                             <Lock className="h-4 w-4" />
+                            {error}
+                        </div>
+                    )}
+
+                    <form onSubmit={handleLogin} className="space-y-4">
+                        <div className="space-y-2">
+                            <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">Email Access</label>
+                            <Input
+                                type="email"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                className="bg-background/50"
+                                placeholder="admin@system.dev"
+                                required
+                            />
+                        </div>
+
+                        <div className="space-y-2">
+                            <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">Security Key</label>
+                            <Input
+                                type="password"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                className="bg-background/50"
+                                placeholder="••••••••"
+                                required
+                            />
+                        </div>
+
+                        <Button
+                            type="submit"
+                            disabled={loading}
+                            className="w-full font-bold"
+                        >
+                            {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Lock className="mr-2 h-4 w-4" />}
+                            {loading ? "Authenticating..." : "Initialize Session"}
+                        </Button>
+                    </form>
+
+                    <div className="mt-6 text-center">
+                        <Link href="/" className="text-sm text-muted-foreground hover:text-primary transition-colors">
+                            ← Return to Public Site
+                        </Link>
+                    </div>
+                </Card>
+            </motion.div>
         </div>
     );
 }

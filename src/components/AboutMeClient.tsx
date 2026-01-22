@@ -47,12 +47,9 @@ const AboutMeClient = () => {
         {/* Narrative Section */}
         <div className="grid md:grid-cols-2 gap-12 items-center mb-24">
            <div className="space-y-6">
-              <h2 className="text-3xl font-bold tracking-tight">The &quot;Heavy Lifting&quot; Philosophy</h2>
-              <p className="text-muted-foreground leading-relaxed">
-                 My journey didn&apos;t start with CSS animations. It started with <code>Oracle 19c</code> execution plans, PL/SQL optimization, and table partitioning.
-              </p>
-              <p className="text-muted-foreground leading-relaxed">
-                 When I transitioned to Full Stack development, I carried this &quot;Architecture First&quot; mindset with me. I don&apos;t just build pages; I build systems that can handle the load, ensuring the data layer is as performant as the UI layer.
+              <h2 className="text-3xl font-bold tracking-tight">{profile?.about_philosophy_title || "The \"Heavy Lifting\" Philosophy"}</h2>
+              <p className="text-muted-foreground leading-relaxed whitespace-pre-wrap">
+                 {profile?.about_philosophy_content || "My journey didn't start with CSS animations. It started with Oracle 19c execution plans, PL/SQL optimization, and table partitioning. When I transitioned to Full Stack development, I carried this \"Architecture First\" mindset with me."}
               </p>
            </div>
            <div className="relative aspect-square md:aspect-auto md:h-full bg-secondary/20 rounded-2xl border flex items-center justify-center p-8">

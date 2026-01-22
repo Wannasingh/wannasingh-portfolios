@@ -14,6 +14,9 @@ export interface Profile {
   bio_short: string;
   github_link: string;
   linkedin_link: string;
+  twitter_link?: string;
+  about_philosophy_title?: string;
+  about_philosophy_content?: string;
 }
 
 export interface Experience {

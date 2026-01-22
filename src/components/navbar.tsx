@@ -8,6 +8,8 @@ import { ModeToggle } from "@/components/mode-toggle";
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
+
+
   const navLinks = [
     { name: "Home", href: "/" },
     { name: "About", href: "/about" },
