@@ -1,8 +1,9 @@
 "use client";
 import Link from "next/link";
-import { Terminal, Menu, X, Code2 } from "lucide-react";
+import { Terminal, Menu, X } from "lucide-react";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { ModeToggle } from "@/components/mode-toggle";
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -37,6 +38,7 @@ export default function Header() {
               {link.name}
             </Link>
           ))}
+          <ModeToggle />
           <Link
              href="/hire-me"
              className="inline-flex h-9 items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
@@ -46,12 +48,15 @@ export default function Header() {
         </div>
 
         {/* Mobile Nav Toggle */}
-        <button
-          className="md:hidden p-2 text-muted-foreground hover:text-foreground"
-          onClick={() => setIsMenuOpen(!isMenuOpen)}
-        >
-          {isMenuOpen ? <X /> : <Menu />}
-        </button>
+        <div className="flex items-center gap-4 md:hidden">
+            <ModeToggle />
+            <button
+            className="p-2 text-muted-foreground hover:text-foreground"
+            onClick={() => setIsMenuOpen(!isMenuOpen)}
+            >
+            {isMenuOpen ? <X /> : <Menu />}
+            </button>
+        </div>
       </nav>
 
       {/* Mobile Menu */}

@@ -38,6 +38,7 @@ export interface Skill {
   id: string;
   category_id: string;
   name: string;
+  icon_key: string;
   display_order: number;
 }
 

@@ -4,6 +4,7 @@ import "@/app/globals.css";
 import Header from "@/components/navbar";
 import Footer from "@/components/footer";
 import { Toaster } from "sonner";
+import { ThemeProvider } from "@/components/theme-provider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -24,12 +25,19 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <body className={`${inter.className} min-h-screen text-[#1E1E1E]`}>
-        <Header />
-        <main className="pt-16">{children}</main>
-        <Toaster richColors position="bottom-right" />
-        <Footer />
+    <html lang="en" suppressHydrationWarning>
+      <body className={`${inter.className} min-h-screen bg-background text-foreground`}>
+        <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+          <Header />
+          <main className="pt-16">{children}</main>
+          <Toaster richColors position="bottom-right" />
+          <Footer />
+        </ThemeProvider>
       </body>
     </html>
   );

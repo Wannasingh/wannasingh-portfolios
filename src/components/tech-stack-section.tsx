@@ -4,9 +4,15 @@ import { Code2, Database, Layout, Server, Settings, Terminal, Cpu } from "lucide
 import { motion } from "framer-motion";
 import { supabase, SkillCategory, Skill } from "@/app/lib/supabase";
 import { Loader2 } from "lucide-react";
+import { 
+  SiOracle, SiPostgresql, SiDatabricks, SiApachespark, SiVeritas, 
+  SiNodedotjs, SiDotnet, SiOpenapiinitiative, SiGraphql, SiRedis, SiDocker,
+  SiReact, SiNextdotjs, SiTypescript, SiFramer, SiRedux, SiTailwindcss
+} from "react-icons/si";
+import { MdSecurity } from "react-icons/md"; // Using Material design shield for Data Guard if SiShield not available
 
-// Helper to map icon string name to Lucide component
-const IconMap: { [key: string]: any } = {
+// Helper to map icon string name to Lucide component (for Categories)
+const CategoryIconMap: { [key: string]: any } = {
   Database: Database,
   Server: Server,
   Code2: Code2,
@@ -14,6 +20,29 @@ const IconMap: { [key: string]: any } = {
   Settings: Settings,
   Terminal: Terminal,
   Cpu: Cpu,
+};
+
+// Helper to map string keys to React Icons (for Skills)
+// We use a fallback if the key isn't found
+const SkillIconMap: { [key: string]: any } = {
+  SiOracle: SiOracle,
+  SiPostgresql: SiPostgresql,
+  SiDatabricks: SiDatabricks,
+  SiApachespark: SiApachespark,
+  SiVeritas: SiVeritas,
+  SiShield: MdSecurity, // Fallback for "Data Guard"
+  SiNodedotjs: SiNodedotjs,
+  SiDotnet: SiDotnet,
+  SiOpenapiinitiative: SiOpenapiinitiative,
+  SiGraphql: SiGraphql,
+  SiRedis: SiRedis,
+  SiDocker: SiDocker,
+  SiReact: SiReact,
+  SiNextdotjs: SiNextdotjs,
+  SiTypescript: SiTypescript,
+  SiTailwindcss: SiTailwindcss,
+  SiFramer: SiFramer,
+  SiRedux: SiRedux,
 };
 
 export default function TechStackSection() {
@@ -65,7 +94,7 @@ export default function TechStackSection() {
         
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
           {categories.map((category, idx) => {
-             const IconComponent = category.icon_name && IconMap[category.icon_name] ? IconMap[category.icon_name] : Code2;
+             const CategoryIcon = category.icon_name && CategoryIconMap[category.icon_name] ? CategoryIconMap[category.icon_name] : Code2;
              
              return (
              <motion.div
@@ -75,17 +104,21 @@ export default function TechStackSection() {
              >
                 <div className="flex items-center gap-3 mb-6">
                    <div className="p-2 rounded-lg bg-background shadow-sm">
-                      <IconComponent className="w-6 h-6" />
+                      <CategoryIcon className="w-6 h-6" />
                    </div>
                    <h3 className="font-bold text-lg">{category.name}</h3>
                 </div>
                 
                 <div className="flex flex-wrap gap-2">
-                   {category.skills.map(skill => (
-                      <span key={skill.id} className="px-3 py-1 bg-background/50 border border-black/5 dark:border-white/10 rounded-md text-sm font-medium">
-                         {skill.name}
-                      </span>
-                   ))}
+                   {category.skills.map(skill => {
+                      const SkillIcon = skill.icon_key && SkillIconMap[skill.icon_key] ? SkillIconMap[skill.icon_key] : null;
+                      return (
+                        <span key={skill.id} className="flex items-center gap-2 px-3 py-1.5 bg-background/50 border border-black/5 dark:border-white/10 rounded-md text-sm font-medium hover:bg-background/80 transition-colors">
+                            {SkillIcon && <SkillIcon className="w-4 h-4" />}
+                            {skill.name}
+                        </span>
+                      );
+                   })}
                 </div>
              </motion.div>
           )})}
