@@ -36,7 +36,6 @@ export default function AdminSkillsPage() {
   const [currentCat, setCurrentCat] = useState<Partial<SkillCategory>>({});
   const [currentSkill, setCurrentSkill] = useState<Partial<Skill>>({});
   
-  const [saving, setSaving] = useState(false);
   const [expandedCat, setExpandedCat] = useState<string | null>(null);
 
   const router = useRouter();
@@ -85,7 +84,6 @@ export default function AdminSkillsPage() {
   };
   const handleSaveCat = async (e: React.FormEvent) => {
       e.preventDefault();
-      setSaving(true);
       const payload = { name: currentCat.name, icon_name: currentCat.icon_name, class_name: currentCat.class_name, display_order: currentCat.display_order };
       
       let error;
@@ -99,7 +97,6 @@ export default function AdminSkillsPage() {
 
       if(error) toast.error("Failed to save category");
       else { toast.success("Category saved"); setIsCatDialogOpen(false); fetchData(); }
-      setSaving(false);
   };
   const handleDeleteCat = async (id: string) => {
       if(!confirm("Delete category? This will delete all skills inside it!")) return;
@@ -123,7 +120,6 @@ export default function AdminSkillsPage() {
   };
   const handleSaveSkill = async (e: React.FormEvent) => {
       e.preventDefault();
-      setSaving(true);
       const payload = { 
           name: currentSkill.name, 
           icon_key: currentSkill.icon_key, 
@@ -142,7 +138,6 @@ export default function AdminSkillsPage() {
 
       if(error) toast.error("Failed to save skill");
       else { toast.success("Skill saved"); setIsSkillDialogOpen(false); fetchData(); }
-      setSaving(false);
   };
   const handleDeleteSkill = async (id: string) => {
       if(!confirm("Delete skill?")) return;
