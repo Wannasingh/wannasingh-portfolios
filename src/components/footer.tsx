@@ -19,6 +19,7 @@ export default function Footer() {
           linkedin: data.linkedin_link || "https://linkedin.com",
           twitter: data.twitter_link || "",
         });
+        // Silently ignore errors — defaults are already set
       });
   }, []);
 

@@ -11,13 +11,21 @@ const FALLBACK_ROLE = "Full Stack Developer & Oracle DBA";
 const FALLBACK_BIO =
   "I design the infrastructure your frontend can't break. Bridging enterprise-grade database architecture with modern web applications that scale.";
 
+const FALLBACK_PROFILE = {
+  name: FALLBACK_NAME,
+  role: FALLBACK_ROLE,
+  bio_short: FALLBACK_BIO,
+} as Profile;
+
 export default function HeroSectionNew() {
-  const [profile, setProfile] = useState<Profile | null>(null);
+  const [profile, setProfile] = useState<Profile>(FALLBACK_PROFILE);
 
   useEffect(() => {
+    const controller = new AbortController();
     supabase.from("profile").select("*").single().then(({ data }) => {
       if (data) setProfile(data);
     });
+    return () => controller.abort();
   }, []);
 
   const name = profile?.name || FALLBACK_NAME;
@@ -178,6 +186,7 @@ export default function HeroSectionNew() {
                   src="/images/profile.jpg"
                   alt={`${name} — ${role}`}
                   fill
+                  sizes="(max-width: 1024px) 0px, 360px"
                   className="object-cover object-top"
                   priority
                 />

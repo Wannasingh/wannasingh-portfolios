@@ -22,26 +22,67 @@ const SkillIconMap: Record<string, any> = {
   SiTailwindcss, SiFramer, SiRedux,
 };
 
+const FALLBACK_CATEGORIES: SkillCategory[] = [
+  {
+    id: "1", name: "Database & Oracle", icon_name: "Database", class_name: "", display_order: 1,
+    skills: [
+      { id: "1", name: "Oracle 21c", icon_key: "SiOracle", category_id: "1", display_order: 1 },
+      { id: "2", name: "PostgreSQL", icon_key: "SiPostgresql", category_id: "1", display_order: 2 },
+      { id: "3", name: "PL/SQL", icon_key: "", category_id: "1", display_order: 3 },
+      { id: "4", name: "Data Guard", icon_key: "SiShield", category_id: "1", display_order: 4 },
+      { id: "5", name: "Databricks", icon_key: "SiDatabricks", category_id: "1", display_order: 5 },
+    ],
+  },
+  {
+    id: "2", name: "Backend & API", icon_name: "Server", class_name: "", display_order: 2,
+    skills: [
+      { id: "6", name: "Node.js", icon_key: "SiNodedotjs", category_id: "2", display_order: 1 },
+      { id: "7", name: "GraphQL", icon_key: "SiGraphql", category_id: "2", display_order: 2 },
+      { id: "8", name: "Redis", icon_key: "SiRedis", category_id: "2", display_order: 3 },
+      { id: "9", name: "Docker", icon_key: "SiDocker", category_id: "2", display_order: 4 },
+    ],
+  },
+  {
+    id: "3", name: "Frontend", icon_name: "Layout", class_name: "", display_order: 3,
+    skills: [
+      { id: "10", name: "React", icon_key: "SiReact", category_id: "3", display_order: 1 },
+      { id: "11", name: "Next.js", icon_key: "SiNextdotjs", category_id: "3", display_order: 2 },
+      { id: "12", name: "TypeScript", icon_key: "SiTypescript", category_id: "3", display_order: 3 },
+      { id: "13", name: "Tailwind CSS", icon_key: "SiTailwindcss", category_id: "3", display_order: 4 },
+    ],
+  },
+];
+
 export default function TechStackSection() {
   const [categories, setCategories] = useState<SkillCategory[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    const timeout = setTimeout(() => {
+      setCategories(FALLBACK_CATEGORIES);
+      setLoading(false);
+    }, 5000);
+
     supabase
       .from("skill_categories")
       .select(`*, skills (*)`)
       .order("display_order", { ascending: true })
       .then(({ data, error }) => {
-        if (!error) {
+        clearTimeout(timeout);
+        if (!error && data && data.length > 0) {
           setCategories(
-            data?.map((cat: any) => ({
+            data.map((cat: any) => ({
               ...cat,
               skills: cat.skills.sort((a: Skill, b: Skill) => a.display_order - b.display_order),
-            })) || []
+            }))
           );
+        } else {
+          setCategories(FALLBACK_CATEGORIES);
         }
         setLoading(false);
       });
+
+    return () => clearTimeout(timeout);
   }, []);
 
   if (loading) {
