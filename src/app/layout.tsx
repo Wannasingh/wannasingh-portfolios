@@ -53,7 +53,7 @@ export default function RootLayout({
       <body className={`${plusJakartaSans.className} ${dmMono.variable} min-h-screen bg-background text-foreground select-none`}>
         <ThemeProvider
             attribute="class"
-            defaultTheme="system"
+            defaultTheme="dark"
             enableSystem
             disableTransitionOnChange
           >

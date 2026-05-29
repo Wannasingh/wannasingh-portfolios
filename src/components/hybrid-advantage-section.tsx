@@ -1,150 +1,135 @@
 "use client";
 import { motion } from "framer-motion";
-import { CheckCircle2, XCircle, Database, Globe } from "lucide-react";
+import { Database, Globe, Gauge, ArrowUpRight } from "lucide-react";
 
-const fadeUp = (delay = 0) => ({
-  initial: { opacity: 0, y: 18 },
-  whileInView: { opacity: 1, y: 0 },
-  viewport: { once: true },
-  transition: { duration: 0.45, delay, ease: [0.16, 1, 0.3, 1] },
-});
-
-const stats = [
-  { value: "5+", label: "Years of Experience" },
-  { value: "50+", label: "Projects Delivered" },
-  { value: "Oracle", label: "Certified DBA" },
-  { value: "100%", label: "Client Satisfaction" },
-];
-
-const typicalItems = [
-  "Builds UIs & REST APIs",
-  "Relies on ORMs — inefficient at scale",
-  "Treats the database as a black box",
-  "Hits performance walls under load",
-];
-
-const hybridItems = [
-  "Performance-first architecture from day one",
-  "Deep Oracle schema & query optimisation",
-  "PL/SQL tuning with advanced indexing",
-  "Snappy React/Next.js UIs backed by fast data",
+const SERVICES = [
+  {
+    icon: Database,
+    number: "01",
+    title: "Database Architecture",
+    description:
+      "Oracle 21c design, PL/SQL optimisation, partitioning strategies, and performance tuning that handles millions of records without breaking a sweat.",
+    tags: ["Oracle DB", "PL/SQL", "Indexing", "Data Guard"],
+  },
+  {
+    icon: Globe,
+    number: "02",
+    title: "Full Stack Development",
+    description:
+      "End-to-end web applications with Next.js and Node.js — from database schema to deployed product. Clean code, tested, and built to last.",
+    tags: ["Next.js", "Node.js", "TypeScript", "REST & GraphQL"],
+  },
+  {
+    icon: Gauge,
+    number: "03",
+    title: "System Optimisation",
+    description:
+      "When your app is slow, I find why. Deep profiling from SQL query plans to frontend bundle sizes — fixing the root cause, not the symptoms.",
+    tags: ["Query Tuning", "Performance", "Monitoring", "Scalability"],
+  },
 ];
 
 export default function HybridAdvantageSection() {
   return (
     <section className="py-28 relative overflow-hidden" id="advantage">
-      <div className="absolute inset-0 bg-gradient-to-b from-secondary/40 via-background to-background pointer-events-none" />
+      {/* Top separator */}
+      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-border to-transparent" />
 
-      <div className="container mx-auto px-4 md:px-8 relative z-10">
+      <div className="container mx-auto px-6 max-w-6xl">
         {/* Header */}
-        <motion.div {...fadeUp()} className="max-w-2xl mb-16">
-          <p className="text-xs font-bold text-primary tracking-widest uppercase mb-3">
-            The Hybrid Advantage
-          </p>
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-foreground mb-4">
-            One engineer.
-            <br />
-            <span className="text-gradient">The full picture.</span>
-          </h2>
-          <p className="text-base sm:text-lg text-muted-foreground leading-relaxed">
-            Most developers stop at the API layer. I optimise the entire data journey —
-            from the database disk block to the browser pixel.
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5 }}
+          className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 mb-16"
+        >
+          <div>
+            <p className="mono text-xs text-primary tracking-widest uppercase mb-3">
+              What I Build
+            </p>
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-foreground">
+              Engineering from
+              <br />
+              <span className="text-gradient">disk to display.</span>
+            </h2>
+          </div>
+          <p className="text-muted-foreground text-sm max-w-xs leading-relaxed sm:text-right">
+            Most developers work one layer. I own the full stack — database to browser.
           </p>
         </motion.div>
 
-        {/* Comparison */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-5 max-w-4xl mb-16">
-          {/* Standard */}
-          <motion.div
-            {...fadeUp(0.05)}
-            className="relative p-7 rounded-2xl border border-border bg-card"
-          >
-            <div className="flex items-center gap-3 mb-6">
-              <div className="w-9 h-9 rounded-xl bg-muted flex items-center justify-center">
-                <Globe className="w-4 h-4 text-muted-foreground" />
-              </div>
-              <div>
-                <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">
-                  Standard
+        {/* Service cards */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {SERVICES.map((service, i) => {
+            const Icon = service.icon;
+            return (
+              <motion.div
+                key={service.number}
+                initial={{ opacity: 0, y: 24 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.45, delay: i * 0.08 }}
+                className="relative group p-6 rounded-xl border border-border bg-card card-glow flex flex-col"
+              >
+                {/* Number */}
+                <span className="mono text-[10px] text-muted-foreground tracking-widest mb-5">
+                  {service.number}
+                </span>
+
+                {/* Icon */}
+                <div className="w-10 h-10 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center mb-5">
+                  <Icon className="w-5 h-5 text-primary" />
+                </div>
+
+                {/* Content */}
+                <h3 className="text-base font-bold text-foreground mb-3">{service.title}</h3>
+                <p className="text-sm text-muted-foreground leading-relaxed flex-1 mb-6">
+                  {service.description}
                 </p>
-                <h3 className="text-base font-bold text-muted-foreground">Full Stack Developer</h3>
-              </div>
-            </div>
 
-            <ul className="space-y-3.5">
-              {typicalItems.map((item) => (
-                <li key={item} className="flex items-start gap-3">
-                  <XCircle className="w-4 h-4 mt-0.5 text-red-400/70 shrink-0" />
-                  <span className="text-sm text-muted-foreground">{item}</span>
-                </li>
-              ))}
-            </ul>
+                {/* Tags */}
+                <div className="flex flex-wrap gap-1.5">
+                  {service.tags.map((tag) => (
+                    <span
+                      key={tag}
+                      className="px-2 py-0.5 rounded-md border border-border bg-secondary mono text-[10px] text-muted-foreground"
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
 
-            <div className="mt-7 pt-5 border-t border-border">
-              <p className="text-xs text-center text-muted-foreground">
-                Functional, but hits walls as traffic grows.
-              </p>
-            </div>
-          </motion.div>
-
-          {/* Hybrid — highlighted */}
-          <motion.div
-            {...fadeUp(0.12)}
-            className="relative p-7 rounded-2xl border border-primary/25 bg-gradient-to-br from-primary/[0.06] to-violet-500/[0.04] shadow-lg shadow-primary/[0.06]"
-          >
-            <div className="absolute top-4 right-4">
-              <span className="text-xs font-bold bg-primary text-primary-foreground px-3 py-1 rounded-full">
-                My Approach
-              </span>
-            </div>
-
-            <div className="flex items-center gap-3 mb-6">
-              <div className="w-9 h-9 rounded-xl bg-primary/15 flex items-center justify-center">
-                <Database className="w-4 h-4 text-primary" />
-              </div>
-              <div>
-                <p className="text-xs font-semibold text-primary uppercase tracking-wider">
-                  Hybrid
-                </p>
-                <h3 className="text-base font-bold">Full Stack Architect</h3>
-              </div>
-            </div>
-
-            <ul className="space-y-3.5">
-              {hybridItems.map((item) => (
-                <li key={item} className="flex items-start gap-3">
-                  <CheckCircle2 className="w-4 h-4 mt-0.5 text-primary shrink-0" />
-                  <span className="text-sm font-medium">{item}</span>
-                </li>
-              ))}
-            </ul>
-
-            <div className="mt-7 pt-5 border-t border-primary/15">
-              <p className="text-xs text-center font-semibold text-primary">
-                Scalable systems, fast by design — not by chance.
-              </p>
-            </div>
-          </motion.div>
+                {/* Hover accent */}
+                <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-primary/0 to-transparent group-hover:via-primary/60 transition-all duration-500 rounded-t-xl" />
+              </motion.div>
+            );
+          })}
         </div>
 
-        {/* Stats */}
+        {/* Why hire one — compact callout */}
         <motion.div
-          {...fadeUp(0.2)}
-          className="grid grid-cols-2 sm:grid-cols-4 gap-4 max-w-3xl"
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.45, delay: 0.3 }}
+          className="mt-6 p-6 rounded-xl border border-primary/20 bg-primary/5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4"
         >
-          {stats.map(({ value, label }) => (
-            <div
-              key={label}
-              className="flex flex-col gap-1 p-5 rounded-xl bg-secondary/60 border border-border"
-            >
-              <span className="text-2xl sm:text-3xl font-extrabold text-foreground tabular-nums">
-                {value}
-              </span>
-              <span className="text-xs text-muted-foreground font-medium leading-snug">
-                {label}
-              </span>
-            </div>
-          ))}
+          <div>
+            <p className="text-sm font-bold text-foreground mb-1">
+              Why hire one person for all three?
+            </p>
+            <p className="text-sm text-muted-foreground max-w-xl">
+              Because when the database engineer <em>is</em> the frontend developer, there are no
+              translation errors between layers — only faster, better decisions.
+            </p>
+          </div>
+          <a
+            href="/about"
+            className="shrink-0 inline-flex items-center gap-1.5 text-xs font-semibold text-primary hover:underline underline-offset-4 transition-colors"
+          >
+            More about me <ArrowUpRight className="h-3.5 w-3.5" />
+          </a>
         </motion.div>
       </div>
     </section>
