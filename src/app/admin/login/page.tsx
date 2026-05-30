@@ -27,8 +27,12 @@ export default function AdminLoginPage() {
             const { data: { user } } = await supabaseAdmin.auth.getUser();
 
             if (user) {
-                const adminEmails = ['wannasingh.khan@gmail.com', 'sarankhtn@gmail.com'];
-                if (adminEmails.includes(user.email || '')) {
+                const { data } = await supabaseAdmin
+                    .from('admin_emails')
+                    .select('email')
+                    .eq('email', user.email || '')
+                    .single();
+                if (data) {
                     router.push("/admin");
                     return;
                 }
@@ -53,8 +57,12 @@ export default function AdminLoginPage() {
 
             if (error) throw error;
 
-            const adminEmails = ['wannasingh.khan@gmail.com', 'sarankhtn@gmail.com'];
-            if (!adminEmails.includes(email)) {
+            const { data } = await supabaseAdmin
+                .from('admin_emails')
+                .select('email')
+                .eq('email', email)
+                .single();
+            if (!data) {
                 await supabaseAdmin.auth.signOut();
                 throw new Error("Unauthorized Access Detected");
             }

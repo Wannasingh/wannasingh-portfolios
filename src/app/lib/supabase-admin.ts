@@ -1,15 +1,7 @@
-import { createClient } from '@supabase/supabase-js';
+import { supabase } from "./supabase";
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://placeholder.supabase.co';
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY || 'placeholder';
-
-// Client สำหรับ admin (ใช้ auth)
-export const supabaseAdmin = createClient(supabaseUrl, supabaseAnonKey, {
-  auth: {
-    persistSession: true,
-    autoRefreshToken: true,
-  }
-});
+// Client สำหรับ admin (ใช้ตัวเดียวกับ client ทั่วไปเพื่อไม่ให้ session ชนกัน)
+export const supabaseAdmin = supabase;
 
 // Helper function เช็คว่าเป็น admin หรือไม่
 export async function isAdmin() {
@@ -17,12 +9,13 @@ export async function isAdmin() {
   
   if (!user) return false;
   
-  const adminEmails = [
-    'wannasingh.khan@gmail.com',
-    'sarankhtn@gmail.com'
-  ];
+  const { data } = await supabaseAdmin
+    .from('admin_emails')
+    .select('email')
+    .eq('email', user.email || '')
+    .single();
   
-  return adminEmails.includes(user.email || '');
+  return !!data;
 }
 
 // Helper function สำหรับ protected routes

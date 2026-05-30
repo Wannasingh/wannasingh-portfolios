@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { ArrowRight, Database, Code2 } from "lucide-react";
+import { ArrowRight, Database, Code2, Loader2 } from "lucide-react";
 import Link from "next/link";
 import { supabase, Profile } from "@/app/lib/supabase";
 import Image from "next/image";
@@ -19,11 +19,15 @@ const FALLBACK_PROFILE = {
 
 export default function HeroSectionNew() {
   const [profile, setProfile] = useState<Profile>(FALLBACK_PROFILE);
+  const [profileLoaded, setProfileLoaded] = useState(false);
 
   useEffect(() => {
     const controller = new AbortController();
     supabase.from("profile").select("*").single().then(({ data }) => {
-      if (data) setProfile(data);
+      if (data) {
+        setProfile(data);
+      }
+      setProfileLoaded(true);
     });
     return () => controller.abort();
   }, []);
@@ -181,15 +185,22 @@ export default function HeroSectionNew() {
               <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-primary to-transparent z-10" />
 
               {/* Photo */}
-              <div className="relative aspect-[3/4]">
-                <Image
-                  src="/images/profile.jpg"
-                  alt={`${name} — ${role}`}
-                  fill
-                  sizes="(max-width: 1024px) 0px, 360px"
-                  className="object-cover object-top"
-                  priority
-                />
+              <div className="relative aspect-[3/4] bg-muted/20">
+                {!profileLoaded ? (
+                  <div className="absolute inset-0 bg-secondary/10 animate-pulse flex items-center justify-center">
+                    <Loader2 className="h-6 w-6 animate-spin text-primary/40" />
+                  </div>
+                ) : (
+                  <Image
+                    src={profile?.avatar_url || "/images/profile.jpg"}
+                    alt={`${name} — ${role}`}
+                    fill
+                    sizes="(max-width: 1024px) 0px, 360px"
+                    className="object-cover object-top"
+                    priority
+                    unoptimized={!!profile?.avatar_url}
+                  />
+                )}
                 {/* Bottom gradient fade */}
                 <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-card/95 to-transparent z-10" />
 

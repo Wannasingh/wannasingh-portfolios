@@ -65,6 +65,7 @@ export default function HireMeClient() {
           pageType="hire-me"
           title="Let's Build Something Scalable"
           description={profile?.bio_short || "Ready to bring database-level optimization to your full-stack project? I'm currently available for freelance and full-time opportunities."}
+          avatarUrl={profile?.avatar_url}
           primaryButton={{ text: "Email Me", href: `mailto:${profile?.email || 'wannasingh.khan@gmail.com'}` }}
           secondaryButton={{ text: "View Portfolio", href: "/portfolio" }}
         />
