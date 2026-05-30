@@ -1,201 +1,267 @@
 "use client";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { ArrowRight, Database, Layout, Loader2 } from "lucide-react";
+import { ArrowRight, Database, Code2, Loader2 } from "lucide-react";
 import Link from "next/link";
 import { supabase, Profile } from "@/app/lib/supabase";
+import Image from "next/image";
+
+const FALLBACK_NAME = "Wannasingh";
+const FALLBACK_ROLE = "Full Stack Developer & Oracle DBA";
+const FALLBACK_BIO =
+  "I design the infrastructure your frontend can't break. Bridging enterprise-grade database architecture with modern web applications that scale.";
+
+const FALLBACK_PROFILE = {
+  name: FALLBACK_NAME,
+  role: FALLBACK_ROLE,
+  bio_short: FALLBACK_BIO,
+} as Profile;
 
 export default function HeroSectionNew() {
-  const [profile, setProfile] = useState<Profile | null>(null);
-  const [loading, setLoading] = useState(true);
+  const [profile, setProfile] = useState<Profile>(FALLBACK_PROFILE);
+  const [profileLoaded, setProfileLoaded] = useState(false);
 
   useEffect(() => {
-    async function fetchProfile() {
-      const { data } = await supabase
-        .from('profile')
-        .select('*')
-        .single();
-      
-      if (data) setProfile(data);
-      setLoading(false);
-    }
-    fetchProfile();
+    const controller = new AbortController();
+    supabase.from("profile").select("*").single().then(({ data }) => {
+      if (data) {
+        setProfile(data);
+      }
+      setProfileLoaded(true);
+    });
+    return () => controller.abort();
   }, []);
 
-  if (loading) {
-     return (
-        <section className="relative min-h-[100dvh] flex items-center justify-center overflow-hidden bg-background pt-20">
-             <Loader2 className="h-8 w-8 animate-spin text-primary" />
-        </section>
-     );
-  }
+  const name = profile?.name || FALLBACK_NAME;
+  const firstName = name.split(" ")[0];
+  const lastName = name.split(" ").slice(1).join(" ");
+  const role = profile?.role || FALLBACK_ROLE;
+  const bio = profile?.bio_short || FALLBACK_BIO;
 
   return (
-    <section className="relative min-h-[100dvh] flex items-center justify-center overflow-hidden bg-background pt-20">
-      {/* Background Decor: Data/Grid lines */}
-      <div className="absolute inset-0 w-full h-full bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:24px_24px]"></div>
-      <div className="absolute left-0 right-0 top-0 -z-10 m-auto h-[310px] w-[310px] rounded-full bg-blue-500 opacity-20 blur-[100px]"></div>
-      
-      <div className="container mx-auto relative z-10 px-4 md:px-6">
-        <div className="grid gap-8 lg:grid-cols-[1fr_400px] lg:gap-12 xl:grid-cols-[1fr_600px] items-center">
-          
-          {/* Left Column: Text Content */}
-          <motion.div 
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.5 }}
-            className="flex flex-col justify-center space-y-4"
-          >
-            <div className="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent bg-secondary text-secondary-foreground hover:bg-secondary/80 w-fit">
-              <Database className="mr-2 h-3 w-3" />
-              <span>{profile?.role || "Full Stack Developer + Oracle DBA"}</span>
+    <section className="relative min-h-[100dvh] flex flex-col justify-center overflow-hidden bg-background noise">
+      {/* Fine grid */}
+      <div className="absolute inset-0 bg-grid opacity-100 pointer-events-none" />
+
+      {/* Radial vignette to darken corners */}
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_80%_60%_at_50%_-10%,hsl(210_100%_56%_/_0.10),transparent)] pointer-events-none" />
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_60%_50%_at_100%_80%,hsl(186_88%_46%_/_0.06),transparent)] pointer-events-none" />
+
+      <div className="container mx-auto px-6 max-w-6xl relative z-10 pt-24 pb-16">
+        <div className="grid lg:grid-cols-[1fr_360px] gap-12 xl:gap-20 items-center">
+
+          {/* ── Left column ── */}
+          <div className="flex flex-col">
+
+            {/* Status pill */}
+            <motion.div
+              initial={{ opacity: 0, y: -8 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4 }}
+              className="flex items-center gap-2 mb-10"
+            >
+              <div className="flex items-center gap-2 px-3 py-1.5 rounded-full border border-border bg-card/60 backdrop-blur-sm">
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-60" />
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500" />
+                </span>
+                <span className="text-xs text-muted-foreground mono">
+                  Open to new projects
+                </span>
+              </div>
+            </motion.div>
+
+            {/* Giant name */}
+            <div className="overflow-hidden mb-2">
+              <motion.h1
+                initial={{ y: "100%", opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ duration: 0.65, ease: [0.16, 1, 0.3, 1] }}
+                className="text-[clamp(3.5rem,10vw,7.5rem)] font-extrabold tracking-[-0.04em] leading-none text-foreground"
+              >
+                {firstName}
+              </motion.h1>
             </div>
-            
-            <h1 className="text-3xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none bg-clip-text text-transparent bg-gradient-to-r from-foreground to-foreground/70">
-              {profile?.tagline ? profile.tagline.split('. ').map((part, i, arr) => (
-                  <span key={i}>
-                      {part}{i < arr.length - 1 ? '.' : ''}
-                      {i < arr.length - 1 && <br />}
-                  </span>
-              )) : (
-                  <>
-                  Architecting Robust Data. <br />
-                  Building Modern Apps.
-                  </>
-              )}
-            </h1>
-            
-            <p className="max-w-[600px] text-muted-foreground md:text-xl">
-              {profile?.bio_short || "I don't just write code; I design the infrastructure that powers it. Bridging the gap between complex Oracle database tuning and responsive React interfaces."}
-            </p>
-            
-            <div className="flex flex-col gap-2 min-[400px]:flex-row">
+            {lastName && (
+              <div className="overflow-hidden mb-6">
+                <motion.p
+                  initial={{ y: "100%", opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  transition={{ duration: 0.65, delay: 0.08, ease: [0.16, 1, 0.3, 1] }}
+                  className="text-[clamp(3.5rem,10vw,7.5rem)] font-extrabold tracking-[-0.04em] leading-none text-gradient"
+                >
+                  {lastName}
+                </motion.p>
+              </div>
+            )}
+
+            {/* Horizontal rule */}
+            <motion.div
+              initial={{ scaleX: 0, opacity: 0 }}
+              animate={{ scaleX: 1, opacity: 1 }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+              style={{ transformOrigin: "left" }}
+              className="hr-glow mb-6"
+            />
+
+            {/* Role */}
+            <motion.p
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4, delay: 0.4 }}
+              className="text-sm mono text-primary tracking-widest uppercase mb-5"
+            >
+              {role}
+            </motion.p>
+
+            {/* Bio */}
+            <motion.p
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4, delay: 0.5 }}
+              className="text-base sm:text-lg text-muted-foreground leading-relaxed max-w-lg mb-9"
+            >
+              {bio}
+            </motion.p>
+
+            {/* CTAs */}
+            <motion.div
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4, delay: 0.6 }}
+              className="flex flex-col sm:flex-row gap-3 mb-12"
+            >
               <Link
                 href="/#projects"
-                className="inline-flex h-10 items-center justify-center rounded-md bg-primary px-8 text-sm font-medium text-primary-foreground shadow transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50"
+                className="inline-flex items-center justify-center gap-2 h-11 px-6 rounded-lg bg-primary text-primary-foreground font-semibold text-sm hover:bg-primary/90 transition-all duration-150 shadow-lg shadow-primary/20 group"
               >
-                View Selected Projects
-                <ArrowRight className="ml-2 h-4 w-4" />
+                View Selected Work
+                <ArrowRight className="h-4 w-4 group-hover:translate-x-0.5 transition-transform" />
               </Link>
               <Link
                 href="/hire-me"
-                className="inline-flex h-10 items-center justify-center rounded-md border border-input bg-background px-8 text-sm font-medium shadow-sm transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50"
+                className="inline-flex items-center justify-center gap-2 h-11 px-6 rounded-lg border border-border/80 text-muted-foreground font-semibold text-sm hover:text-foreground hover:border-primary/30 hover:bg-white/5 transition-all duration-150"
               >
-                Contact Me
+                Get in Touch
               </Link>
-            </div>
-          </motion.div>
+            </motion.div>
 
-          {/* Right Column: Visual "Hybrid" Representation */}
+            {/* Stats strip */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ duration: 0.5, delay: 0.75 }}
+              className="flex items-center gap-6 sm:gap-8"
+            >
+              {[
+                { value: "5+", label: "Years" },
+                { value: "50+", label: "Projects" },
+                { value: "Oracle", label: "Certified" },
+              ].map(({ value, label }, i) => (
+                <div key={label} className="flex items-center gap-4">
+                  {i > 0 && <div className="w-px h-8 bg-border" />}
+                  <div>
+                    <p className="text-xl sm:text-2xl font-extrabold text-foreground tabular-nums">{value}</p>
+                    <p className="text-xs text-muted-foreground mono">{label}</p>
+                  </div>
+                </div>
+              ))}
+            </motion.div>
+          </div>
+
+          {/* ── Right column: Photo ── */}
           <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.5, delay: 0.2 }}
-            className="mx-auto w-full max-w-[600px] overflow-hidden rounded-xl border bg-card/50 shadow-xl backdrop-blur-sm lg:aspect-square"
+            initial={{ opacity: 0, x: 24 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.7, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+            className="relative hidden lg:block"
           >
-            {/* A Code/Terminal Visual to represent the "Depth" */}
-            <div className="flex lg:h-full flex-col font-mono text-sm">
-              <div className="flex items-center gap-2 border-b bg-muted/40 px-4 py-3">
-                <div className="flex gap-1.5">
-                  <div className="h-3 w-3 rounded-full bg-red-500/80"></div>
-                  <div className="h-3 w-3 rounded-full bg-yellow-500/80"></div>
-                  <div className="h-3 w-3 rounded-full bg-green-500/80"></div>
-                </div>
-                <div className="ml-auto text-xs text-muted-foreground">wannasingh.dev — bash</div>
-              </div>
-              
-              <div className="flex-1 p-6 space-y-4 text-muted-foreground overflow-x-auto">
-                <div className="min-w-[400px]">
-                  <div className="flex gap-4">
-                    <div className="w-8 text-right text-slate-500 select-none">1</div>
-                    <div>
-                      <span className="text-purple-500">class</span> <span className="text-yellow-500">HybridEngineer</span> <span className="text-slate-500">extends</span> <span className="text-blue-500">Developer</span> {"{"}
-                    </div>
-                  </div>
-                  
-                  <div className="flex gap-4">
-                    <div className="w-8 text-right text-slate-500 select-none">2</div>
-                    <div className="pl-4">
-                      <span className="text-slate-500">{"// Backend & Database Optimization"}</span>
-                    </div>
-                  </div>
-                  
-                  <div className="flex gap-4">
-                    <div className="w-8 text-right text-slate-500 select-none">3</div>
-                    <div className="pl-4">
-                      <span className="text-purple-500">public</span> <span className="text-blue-500">optimizeQuery</span>(): <span className="text-orange-500">void</span> {"{"}
-                    </div>
-                  </div>
+            {/* Glow behind */}
+            <div className="absolute inset-0 scale-90 rounded-2xl bg-primary/15 blur-3xl" />
 
-                  <div className="flex gap-4">
-                    <div className="w-8 text-right text-slate-500 select-none">4</div>
-                    <div className="pl-8">
-                       <span className="text-slate-500">this.oracle.tune(</span><span className="text-green-500">&quot;performance&quot;</span><span className="text-slate-500">);</span>
-                    </div>
-                  </div>
+            {/* Main photo card */}
+            <div className="relative rounded-2xl overflow-hidden border border-border bg-card">
+              {/* Accent top bar */}
+              <div className="absolute top-0 left-0 right-0 h-[2px] bg-gradient-to-r from-transparent via-primary to-transparent z-10" />
 
-                  <div className="flex gap-4">
-                    <div className="w-8 text-right text-slate-500 select-none">5</div>
-                    <div className="pl-4">
-                      {"}"}
-                    </div>
+              {/* Photo */}
+              <div className="relative aspect-[3/4] bg-muted/20">
+                {!profileLoaded ? (
+                  <div className="absolute inset-0 bg-secondary/10 animate-pulse flex items-center justify-center">
+                    <Loader2 className="h-6 w-6 animate-spin text-primary/40" />
                   </div>
-                  
-                  <div className="flex gap-4">
-                    <div className="w-8 text-right text-slate-500 select-none">6</div>
-                    <div className="pl-4">
-                       <span className="text-slate-500">{"// Modern UI Implementation"}</span>
-                    </div>
-                  </div>
-
-                  <div className="flex gap-4">
-                    <div className="w-8 text-right text-slate-500 select-none">7</div>
-                    <div className="pl-4">
-                      <span className="text-purple-500">public</span> <span className="text-blue-500">renderUI</span>(): <span className="text-orange-500">JSX.Element</span> {"{"}
-                    </div>
-                  </div>
-
-                  <div className="flex gap-4">
-                    <div className="w-8 text-right text-slate-500 select-none">8</div>
-                    <div className="pl-8">
-                      <span className="text-purple-500">return</span> <span className="text-blue-300">&lt;React.App /&gt;</span>;
-                    </div>
-                  </div>
-
-                  <div className="flex gap-4">
-                    <div className="w-8 text-right text-slate-500 select-none">9</div>
-                    <div className="pl-4">
-                       {"}"}
-                    </div>
-                  </div>
-
-                  <div className="flex gap-4">
-                    <div className="w-8 text-right text-slate-500 select-none">10</div>
-                    <div>{"}"}</div>
-                  </div>
-                  
-                  <motion.div 
-                     animate={{ opacity: [1, 0] }}
-                     transition={{ repeat: Infinity, duration: 0.8 }}
-                     className="h-5 w-2.5 bg-blue-500 ml-4 inline-block align-middle"
+                ) : (
+                  <Image
+                    src={profile?.avatar_url || "/images/profile.jpg"}
+                    alt={`${name} — ${role}`}
+                    fill
+                    sizes="(max-width: 1024px) 0px, 360px"
+                    className="object-cover object-top"
+                    priority
+                    unoptimized={!!profile?.avatar_url}
                   />
-                </div>
+                )}
+                {/* Bottom gradient fade */}
+                <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-card/95 to-transparent z-10" />
+
+                {/* Floating info badges */}
+                <motion.div
+                  animate={{ y: [0, -5, 0] }}
+                  transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                  className="absolute top-4 right-4 z-20 bg-background/80 backdrop-blur-md border border-border rounded-xl px-3.5 py-2.5"
+                >
+                  <div className="flex items-center gap-2">
+                    <Database className="h-3.5 w-3.5 text-primary" />
+                    <div>
+                      <p className="text-xs font-bold text-foreground leading-tight">Oracle DBA</p>
+                      <p className="text-[10px] text-muted-foreground mono">Performance Expert</p>
+                    </div>
+                  </div>
+                </motion.div>
+
+                <motion.div
+                  animate={{ y: [0, 5, 0] }}
+                  transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 1 }}
+                  className="absolute bottom-16 left-4 z-20 bg-background/80 backdrop-blur-md border border-border rounded-xl px-3.5 py-2.5"
+                >
+                  <div className="flex items-center gap-2">
+                    <Code2 className="h-3.5 w-3.5 text-primary" />
+                    <div>
+                      <p className="text-xs font-bold text-foreground leading-tight">Full Stack</p>
+                      <p className="text-[10px] text-muted-foreground mono">Next.js & React</p>
+                    </div>
+                  </div>
+                </motion.div>
               </div>
-              
-              <div className="border-t bg-muted/40 p-2 text-xs flex justify-between items-center text-muted-foreground px-4">
-                 <div className="flex items-center gap-2">
-                    <Database className="h-3 w-3" />
-                    <span>Oracle 21c AI</span>
-                 </div>
-                 <div className="flex items-center gap-2">
-                    <Layout className="h-3 w-3" />
-                    <span>Next.js 15</span>
-                 </div>
+
+              {/* Info strip */}
+              <div className="px-4 py-3 bg-card">
+                <p className="text-sm font-bold text-foreground">{firstName}</p>
+                <p className="text-xs text-muted-foreground mono truncate">{role}</p>
               </div>
             </div>
+
+            {/* Side accent line */}
+            <div className="absolute -right-3 top-12 bottom-12 w-[2px] bg-gradient-to-b from-transparent via-primary/50 to-transparent rounded-full" />
           </motion.div>
+
         </div>
       </div>
+
+      {/* Scroll indicator */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1.2 }}
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
+      >
+        <span className="text-[10px] mono text-muted-foreground tracking-widest uppercase">Scroll</span>
+        <motion.div
+          animate={{ y: [0, 6, 0] }}
+          transition={{ duration: 1.5, repeat: Infinity }}
+          className="w-px h-8 bg-gradient-to-b from-border to-transparent"
+        />
+      </motion.div>
     </section>
   );
 }

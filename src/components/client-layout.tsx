@@ -14,7 +14,7 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
          {!isAdmin && <Header />}
          
          {/* Only add padding for fixed header if NOT admin */}
-         <main className={isAdmin ? "" : "pt-16"}>
+         <main className={isAdmin ? "" : "pt-20"}>
             {children}
          </main>
 

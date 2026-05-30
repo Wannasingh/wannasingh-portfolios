@@ -1,7 +1,7 @@
 import { createClient } from '@supabase/supabase-js';
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://placeholder.supabase.co';
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY || 'placeholder';
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
@@ -17,6 +17,7 @@ export interface Profile {
   twitter_link?: string;
   about_philosophy_title?: string;
   about_philosophy_content?: string;
+  avatar_url?: string;
 }
 
 export interface Experience {
@@ -69,6 +70,16 @@ export interface Availability {
   display_order: number;
 }
 
+export interface Service {
+  id: string;
+  title: string;
+  description: string;
+  icon_name: string;
+  icon_color: string;
+  display_order: number;
+  is_active: boolean;
+}
+
 export interface Stat {
   id: string;
   number: string;
@@ -87,12 +98,3 @@ export interface TechTag {
   is_active: boolean;
 }
 
-export interface Service {
-  id: string;
-  title: string;
-  description: string;
-  icon_name: string;
-  icon_color: string;
-  display_order: number;
-  is_active: boolean;
-}

@@ -22,6 +22,7 @@ export default function ProjectCard({ project }: ProjectCardProps) {
               layout="fill"
               objectFit="cover"
               className="hover:scale-105 transition-transform duration-500"
+              unoptimized={project.image_path.startsWith('http')}
             />
           )}
         </div>

@@ -1,14 +1,21 @@
 "use client";
 import Link from "next/link";
-import { Terminal, Menu, X } from "lucide-react";
-import { useState } from "react";
+import { Menu, X } from "lucide-react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ModeToggle } from "@/components/mode-toggle";
+import { usePathname } from "next/navigation";
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const pathname = usePathname();
 
-
+  useEffect(() => {
+    const handleScroll = () => setScrolled(window.scrollY > 40);
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   const navLinks = [
     { name: "Home", href: "/" },
@@ -18,69 +25,92 @@ export default function Header() {
   ];
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50 border-b bg-background/80 backdrop-blur-md">
-      <nav className="container mx-auto px-4 md:px-6 h-16 flex items-center justify-between">
-        <Link href="/" className="flex items-center gap-2 group">
-          <div className="bg-primary/10 p-2 rounded-lg group-hover:bg-primary/20 transition-colors">
-            <Terminal className="h-5 w-5 text-primary" />
+    <header
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
+        scrolled
+          ? "bg-background/90 backdrop-blur-xl border-b border-border"
+          : "bg-transparent"
+      }`}
+    >
+      <div className="container mx-auto px-6 h-16 flex items-center justify-between max-w-6xl">
+        {/* Logo */}
+        <Link href="/" className="flex items-center gap-3 group">
+          <div className="w-7 h-7 rounded-md bg-primary flex items-center justify-center shrink-0">
+            <span className="text-primary-foreground font-bold text-xs mono">W</span>
           </div>
-          <span className="text-lg font-bold tracking-tight">
+          <span className="font-semibold text-sm text-foreground/80 group-hover:text-foreground transition-colors tracking-tight">
             wannasingh<span className="text-primary">.dev</span>
           </span>
         </Link>
-        
+
         {/* Desktop Nav */}
-        <div className="hidden md:flex items-center gap-8">
-          {navLinks.map((link) => (
-            <Link
-              key={link.name}
-              href={link.href}
-              className="text-sm font-medium text-muted-foreground hover:text-primary transition-colors hover:underline underline-offset-4"
-            >
-              {link.name}
-            </Link>
-          ))}
+        <nav className="hidden md:flex items-center gap-1">
+          {navLinks.map((link) => {
+            const isActive = pathname === link.href;
+            return (
+              <Link
+                key={link.name}
+                href={link.href}
+                className={`px-3.5 py-2 rounded-md text-sm transition-all duration-150 ${
+                  isActive
+                    ? "text-primary bg-primary/10"
+                    : "text-muted-foreground hover:text-foreground hover:bg-white/5"
+                }`}
+              >
+                {link.name}
+              </Link>
+            );
+          })}
+        </nav>
+
+        {/* Right */}
+        <div className="flex items-center gap-2">
           <ModeToggle />
           <Link
-             href="/hire-me"
-             className="inline-flex h-9 items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground shadow transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+            href="/hire-me"
+            className="hidden md:inline-flex items-center h-8 px-4 rounded-md bg-primary text-primary-foreground text-xs font-semibold hover:bg-primary/90 transition-colors"
           >
-             Hire Me
+            Hire Me
           </Link>
-        </div>
-
-        {/* Mobile Nav Toggle */}
-        <div className="flex items-center gap-4 md:hidden">
-            <ModeToggle />
-            <button
-            className="p-2 text-muted-foreground hover:text-foreground"
+          <button
+            className="md:hidden p-2 rounded-md text-muted-foreground hover:text-foreground hover:bg-white/5 transition-colors"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
-            >
-            {isMenuOpen ? <X /> : <Menu />}
-            </button>
+          >
+            {isMenuOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
+          </button>
         </div>
-      </nav>
+      </div>
 
-      {/* Mobile Menu */}
+      {/* Mobile menu */}
       <AnimatePresence>
         {isMenuOpen && (
           <motion.div
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
-            className="md:hidden border-b bg-background"
+            transition={{ duration: 0.15 }}
+            className="md:hidden overflow-hidden bg-background/95 backdrop-blur-xl border-b border-border"
           >
-            <div className="container py-4 flex flex-col gap-4">
+            <div className="container mx-auto px-6 py-3 flex flex-col gap-0.5">
               {navLinks.map((link) => (
                 <Link
                   key={link.name}
                   href={link.href}
-                  className="text-sm font-medium p-2 hover:bg-muted rounded-md"
                   onClick={() => setIsMenuOpen(false)}
+                  className="px-3 py-2.5 rounded-md text-sm text-muted-foreground hover:text-foreground hover:bg-white/5 transition-colors"
                 >
                   {link.name}
                 </Link>
               ))}
+              <div className="pt-2 mt-1 border-t border-border/50">
+                <Link
+                  href="/hire-me"
+                  onClick={() => setIsMenuOpen(false)}
+                  className="flex items-center justify-center py-2.5 rounded-md text-sm font-semibold bg-primary text-primary-foreground"
+                >
+                  Hire Me
+                </Link>
+              </div>
             </div>
           </motion.div>
         )}

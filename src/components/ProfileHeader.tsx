@@ -10,6 +10,7 @@ interface ProfileHeaderProps {
   description?: string;
   pageType: 'about' | 'hire-me' | 'portfolio' | 'home';  
   title?: string;
+  avatarUrl?: string;
   primaryButton?: {
     text: string;
     href: string;
@@ -23,6 +24,7 @@ interface ProfileHeaderProps {
 export const ProfileHeader: React.FC<ProfileHeaderProps> = ({ 
   description,
   title,
+  avatarUrl,
   primaryButton,
   secondaryButton
 }) => {
@@ -36,11 +38,12 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
       <div className="flex flex-col md:flex-row items-center gap-10">
         <div className="relative w-40 h-40 md:w-56 md:h-56 shrink-0 rounded-full overflow-hidden border-4 border-background shadow-2xl ring-1 ring-border">
           <Image
-            src={profilePic}
+            src={avatarUrl || profilePic}
             alt="Profile Picture"
             layout="fill"
             objectFit="cover"
             className="rounded-full hover:scale-105 transition-transform duration-500"
+            unoptimized={!!avatarUrl}
           />
         </div>
         

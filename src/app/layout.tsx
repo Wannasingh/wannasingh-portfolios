@@ -1,14 +1,25 @@
-import { Inter } from "next/font/google";
+import type { Metadata } from "next";
+import { Plus_Jakarta_Sans, DM_Mono } from "next/font/google";
 import "@/app/globals.css";
 import { Toaster } from "sonner";
 import { ThemeProvider } from "@/components/theme-provider";
 import ClientLayout from "@/components/client-layout";
 
-const inter = Inter({ subsets: ["latin"] });
+const plusJakartaSans = Plus_Jakarta_Sans({ 
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700", "800"],
+  variable: "--font-plus-jakarta",
+});
+
+const dmMono = DM_Mono({
+  subsets: ["latin"],
+  weight: ["400", "500"],
+  variable: "--font-dm-mono",
+});
 
 import { supabase } from "@/app/lib/supabase";
 
-export async function generateMetadata() {
+export async function generateMetadata(): Promise<Metadata> {
   const { data: settings } = await supabase
     .from('system_settings')
     .select('site_title, site_description')
@@ -39,10 +50,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${inter.className} min-h-screen bg-background text-foreground select-none`}>
+      <body className={`${plusJakartaSans.className} ${dmMono.variable} min-h-screen bg-background text-foreground select-none`}>
         <ThemeProvider
             attribute="class"
-            defaultTheme="system"
+            defaultTheme="dark"
             enableSystem
             disableTransitionOnChange
           >

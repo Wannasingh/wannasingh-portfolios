@@ -40,6 +40,7 @@ const AboutMeClient = () => {
           pageType="about"
           title={profile?.tagline || "From The Engine Room To The Controls"}
           description={profile?.bio_short || "Most developers learn frameworks first. I learned data first. This foundation shapes everything I build today."}
+          avatarUrl={profile?.avatar_url}
           primaryButton={{ text: "View Portfolio", href: "/portfolio" }}
           secondaryButton={{ text: "Contact Me", href: "/hire-me" }}
         />

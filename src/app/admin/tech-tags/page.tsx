@@ -22,7 +22,8 @@ export default function AdminTechTagsPage() {
     useEffect(() => {
         checkAuth();
         fetchTechTags();
-    }, []); // eslint-disable-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     async function checkAuth() {
         const { data: { user } } = await supabaseAdmin.auth.getUser();
@@ -159,7 +160,7 @@ export default function AdminTechTagsPage() {
                 )}
 
                 <div className="space-y-6">
-                    {Object.entries(groupedTags).map(([category, tags]) => (
+                    {(Object.entries(groupedTags) as [string, TechTag[]][]).map(([category, tags]) => (
                         <div key={category}>
                             <h2 className="text-2xl font-bold mb-4">{category}</h2>
                             <div className="grid gap-4">
