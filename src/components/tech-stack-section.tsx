@@ -1,6 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
-import { Code2, Database, Layout, Server, Settings, Terminal, Cpu } from "lucide-react";
+import { Code2, Database, Layout, Server, Settings, Terminal, Cpu, LucideIcon } from "lucide-react";
 import { motion } from "framer-motion";
 import { supabase, SkillCategory, Skill } from "@/app/lib/supabase";
 import { Loader2 } from "lucide-react";
@@ -11,11 +11,11 @@ import {
 } from "react-icons/si";
 import { MdSecurity } from "react-icons/md";
 
-const CategoryIconMap: Record<string, any> = {
+const CategoryIconMap: Record<string, LucideIcon> = {
   Database, Server, Code2, Layout, Settings, Terminal, Cpu,
 };
 
-const SkillIconMap: Record<string, any> = {
+const SkillIconMap: Record<string, React.ComponentType<{ className?: string }>> = {
   SiOracle, SiPostgresql, SiDatabricks, SiApachespark, SiVeritas,
   SiShield: MdSecurity, SiNodedotjs, SiDotnet, SiOpenapiinitiative,
   SiGraphql, SiRedis, SiDocker, SiReact, SiNextdotjs, SiTypescript,
@@ -70,10 +70,11 @@ export default function TechStackSection() {
       .then(({ data, error }) => {
         clearTimeout(timeout);
         if (!error && data && data.length > 0) {
+          const categoriesData = data as unknown as (SkillCategory & { skills: Skill[] })[];
           setCategories(
-            data.map((cat: any) => ({
+            categoriesData.map((cat) => ({
               ...cat,
-              skills: cat.skills.sort((a: Skill, b: Skill) => a.display_order - b.display_order),
+              skills: [...cat.skills].sort((a, b) => a.display_order - b.display_order),
             }))
           );
         } else {

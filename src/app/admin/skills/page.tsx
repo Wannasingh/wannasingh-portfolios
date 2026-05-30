@@ -6,9 +6,9 @@ import { supabaseAdmin } from "@/app/lib/supabase-admin";
 import { supabase, SkillCategory, Skill } from "@/app/lib/supabase";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
-import { Loader2, Plus, Pencil, Trash2, ArrowLeft, Save, ChevronDown, ChevronRight, Code2 } from "lucide-react";
+import { Loader2, Plus, Pencil, Trash2, ArrowLeft, ChevronDown, ChevronRight } from "lucide-react";
 import Link from "next/link";
 import { toast } from "sonner";
 import {
@@ -18,11 +18,6 @@ import {
   DialogTitle,
   DialogFooter,
 } from "@/components/ui/dialog";
-import { 
-  SiOracle, SiPostgresql, SiDatabricks, SiApachespark, SiVeritas, 
-  SiNodedotjs, SiDotnet, SiOpenapiinitiative, SiGraphql, SiRedis, SiDocker,
-  SiReact, SiNextdotjs, SiTypescript, SiFramer, SiRedux, SiTailwindcss
-} from "react-icons/si";
 
 // Simple mapping for demonstration of available icons
 const AVAILABLE_ICONS = [
@@ -72,9 +67,9 @@ export default function AdminSkillsPage() {
        toast.error("Failed to load skills");
     } else {
        // Sort skills
-       const sorted = data?.map((cat: any) => ({
+       const sorted = (data as unknown as (SkillCategory & { skills: Skill[] })[])?.map((cat) => ({
            ...cat,
-           skills: cat.skills.sort((a: any, b: any) => a.display_order - b.display_order)
+           skills: [...cat.skills].sort((a, b) => a.display_order - b.display_order)
        })) || [];
        setCategories(sorted);
     }
@@ -234,7 +229,12 @@ export default function AdminSkillsPage() {
                         <Input value={currentCat.display_order || 0} type="number" onChange={e => setCurrentCat({...currentCat, display_order: parseInt(e.target.value)})} placeholder="Order" required />
                         <Input value={currentCat.icon_name || ''} onChange={e => setCurrentCat({...currentCat, icon_name: e.target.value})} placeholder="Icon Name (Lucide)" />
                         <Input value={currentCat.class_name || ''} onChange={e => setCurrentCat({...currentCat, class_name: e.target.value})} placeholder="Tailwind Class (e.g. text-blue-500)" />
-                        <DialogFooter><Button type="submit">Save</Button></DialogFooter>
+                        <DialogFooter>
+                            <Button type="submit" disabled={saving}>
+                                {saving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                                Save
+                            </Button>
+                        </DialogFooter>
                     </form>
                 </DialogContent>
             </Dialog>
@@ -253,7 +253,12 @@ export default function AdminSkillsPage() {
                              </div>
                              <p className="text-xs text-muted-foreground">Available examples: {AVAILABLE_ICONS.slice(0, 5).join(", ")}...</p>
                         </div>
-                        <DialogFooter><Button type="submit">Save</Button></DialogFooter>
+                        <DialogFooter>
+                            <Button type="submit" disabled={saving}>
+                                {saving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                                Save
+                            </Button>
+                        </DialogFooter>
                     </form>
                 </DialogContent>
             </Dialog>

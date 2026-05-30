@@ -82,7 +82,6 @@ const AboutMeClient = () => {
                
                {experiences.map((exp, index) => {
                    const isLeft = index % 2 === 0;
-                   const colorClass = index === 0 ? "blue" : index === 1 ? "purple" : "green";
                    // Simple color mapping logic matching the original design
                    const badgeColor = index === 0 ? "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-300" :
                                       index === 1 ? "bg-purple-100 text-purple-700 dark:bg-purple-900/30 dark:text-purple-300" :

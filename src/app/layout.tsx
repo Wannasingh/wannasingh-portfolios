@@ -19,7 +19,7 @@ const dmMono = DM_Mono({
 
 import { supabase } from "@/app/lib/supabase";
 
-export async function generateMetadata() {
+export async function generateMetadata(): Promise<Metadata> {
   const { data: settings } = await supabase
     .from('system_settings')
     .select('site_title, site_description')

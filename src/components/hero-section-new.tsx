@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { ArrowRight, Database, Code2, Layers } from "lucide-react";
+import { ArrowRight, Database, Code2 } from "lucide-react";
 import Link from "next/link";
 import { supabase, Profile } from "@/app/lib/supabase";
 import Image from "next/image";

@@ -6,7 +6,7 @@ import { supabaseAdmin } from "@/app/lib/supabase-admin";
 import { supabase, Availability } from "@/app/lib/supabase";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Loader2, Plus, Pencil, Trash2, ArrowLeft, Save, GripVertical } from "lucide-react";
 import Link from "next/link";
@@ -133,7 +133,7 @@ export default function AdminAvailabilityPage() {
 
             <div className="space-y-4">
                 <p className="text-sm text-muted-foreground mb-4">
-                    These items appear on the "Hire Me" page under "I am open to discussing:".
+                    These items appear on the &quot;Hire Me&quot; page under &quot;I am open to discussing:&quot;.
                 </p>
                 {items.map((item) => (
                     <Card key={item.id} className="flex items-center p-4 gap-4">

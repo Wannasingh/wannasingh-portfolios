@@ -1,7 +1,7 @@
 "use client";
 
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import { FolderGit2, Code2, Briefcase, User, Layers } from "lucide-react";
+import { FolderGit2, Code2, Briefcase, Layers } from "lucide-react";
 import { useEffect, useState } from "react";
 import { supabase } from "@/app/lib/supabase";
 

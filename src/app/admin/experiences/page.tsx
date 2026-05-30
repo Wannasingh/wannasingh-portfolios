@@ -9,7 +9,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
-import { Loader2, Plus, Pencil, Trash2, ArrowLeft, Save, X } from "lucide-react";
+import { Loader2, Plus, Pencil, Trash2, ArrowLeft, Save } from "lucide-react";
 import Link from "next/link";
 import { toast } from "sonner";
 import {
@@ -17,11 +17,9 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
   DialogFooter,
-  DialogClose
 } from "@/components/ui/dialog";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"; // You might need to check if Select component exists or use native select
+
 
 export default function AdminExperiencesPage() {
   const [experiences, setExperiences] = useState<Experience[]>([]);
@@ -216,7 +214,7 @@ export default function AdminExperiencesPage() {
                             <select 
                                 className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
                                 value={currentExp.type || 'work'}
-                                onChange={(e) => setCurrentExp({...currentExp, type: e.target.value as any})}
+                                onChange={(e) => setCurrentExp({...currentExp, type: e.target.value as Experience['type']})}
                             >
                                 <option value="work">Work</option>
                                 <option value="education">Education</option>

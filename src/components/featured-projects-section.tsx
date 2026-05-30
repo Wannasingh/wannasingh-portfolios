@@ -42,9 +42,10 @@ export default function FeaturedProjectsSection() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    let loaded = false;
     // Timeout after 5s to avoid infinite spinner when Supabase is unreachable
     const timeout = setTimeout(() => {
-      if (projects.length === 0) {
+      if (!loaded) {
         setProjects(FALLBACK_PROJECTS);
         setLoading(false);
       }
@@ -55,7 +56,8 @@ export default function FeaturedProjectsSection() {
       .select("*")
       .eq("is_featured", true)
       .order("created_at", { ascending: false })
-      .then(({ data, error }) => {
+      .then(({ data }) => {
+        loaded = true;
         clearTimeout(timeout);
         setProjects(data && data.length > 0 ? data : FALLBACK_PROJECTS);
         setLoading(false);
