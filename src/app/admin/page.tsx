@@ -23,8 +23,13 @@ export default function AdminPage() {
             return;
         }
 
-        const adminEmails = ['wannasingh.khan@gmail.com', 'sarankhtn@gmail.com'];
-        if (!adminEmails.includes(user.email || '')) {
+        const { data } = await supabaseAdmin
+            .from('admin_emails')
+            .select('email')
+            .eq('email', user.email || '')
+            .single();
+
+        if (!data) {
             router.push("/");
             return;
         }

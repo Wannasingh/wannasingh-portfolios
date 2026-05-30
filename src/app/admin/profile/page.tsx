@@ -13,6 +13,8 @@ import { Loader2, Save, ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { toast } from "sonner";
 
+import { uploadImage } from "@/app/lib/storage-utils";
+
 interface ProfileData {
   id?: string;
   name: string;
@@ -25,13 +27,32 @@ interface ProfileData {
   twitter_link?: string;
   about_philosophy_title?: string;
   about_philosophy_content?: string;
+  avatar_url?: string;
 }
 
 export default function AdminProfilePage() {
   const [profile, setProfile] = useState<ProfileData | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [uploading, setUploading] = useState(false);
   const router = useRouter();
+
+  async function handlePhotoUpload(e: React.ChangeEvent<HTMLInputElement>) {
+      if (!e.target.files || e.target.files.length === 0) return;
+      const file = e.target.files[0];
+      setUploading(true);
+
+      try {
+          const url = await uploadImage(file, "profile");
+          setProfile(prev => prev ? ({ ...prev, avatar_url: url }) : null);
+          toast.success("Photo uploaded successfully");
+      } catch (err) {
+          console.error("Photo upload error:", err);
+          toast.error("Failed to upload photo. Ensure storage bucket is active.");
+      } finally {
+          setUploading(false);
+      }
+  }
 
   useEffect(() => {
     checkUserAndFetch();
@@ -77,7 +98,8 @@ export default function AdminProfilePage() {
             linkedin_link: profile.linkedin_link,
             twitter_link: profile.twitter_link,
             about_philosophy_title: profile.about_philosophy_title,
-            about_philosophy_content: profile.about_philosophy_content
+            about_philosophy_content: profile.about_philosophy_content,
+            avatar_url: profile.avatar_url
         })
         .eq('id', profile.id);
 
@@ -118,12 +140,43 @@ export default function AdminProfilePage() {
                 </CardHeader>
                 <CardContent>
                     <form onSubmit={handleSave} className="space-y-6">
+                        {/* Profile Photo Upload */}
+                        <div className="flex flex-col md:flex-row items-center gap-6 pb-6 border-b">
+                            <div className="relative w-28 h-28 rounded-full overflow-hidden border bg-muted flex items-center justify-center shrink-0">
+                                {profile.avatar_url ? (
+                                    <img 
+                                        src={profile.avatar_url} 
+                                        alt="Profile Preview" 
+                                        className="w-full h-full object-cover"
+                                    />
+                                ) : (
+                                    <span className="text-muted-foreground text-sm">No Photo</span>
+                                )}
+                                {uploading && (
+                                    <div className="absolute inset-0 bg-background/85 flex items-center justify-center">
+                                        <Loader2 className="h-6 w-6 animate-spin text-primary" />
+                                    </div>
+                                )}
+                            </div>
+                            <div className="space-y-2 flex-1">
+                                <Label className="text-sm font-semibold">Profile Photo</Label>
+                                <Input 
+                                    type="file" 
+                                    accept="image/*" 
+                                    onChange={handlePhotoUpload} 
+                                    disabled={uploading}
+                                    className="max-w-xs cursor-pointer bg-background"
+                                />
+                                <p className="text-xs text-muted-foreground">Supported formats: JPG, PNG, GIF, WebP.</p>
+                            </div>
+                        </div>
+
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div className="space-y-2">
                                 <Label htmlFor="name">Full Name</Label>
                                 <Input 
                                     id="name" 
-                                    value={profile.name} 
+                                    value={profile.name || ''} 
                                     onChange={(e) => setProfile({...profile, name: e.target.value})}
                                 />
                             </div>
@@ -131,7 +184,7 @@ export default function AdminProfilePage() {
                                 <Label htmlFor="email">Email</Label>
                                 <Input 
                                     id="email" 
-                                    value={profile.email} 
+                                    value={profile.email || ''} 
                                     onChange={(e) => setProfile({...profile, email: e.target.value})}
                                 />
                             </div>
@@ -141,7 +194,7 @@ export default function AdminProfilePage() {
                             <Label htmlFor="role">Role / Title (displayed in Hero)</Label>
                             <Input 
                                 id="role" 
-                                value={profile.role} 
+                                value={profile.role || ''} 
                                 onChange={(e) => setProfile({...profile, role: e.target.value})}
                             />
                         </div>
@@ -151,7 +204,7 @@ export default function AdminProfilePage() {
                             <Textarea 
                                 id="tagline" 
                                 rows={2}
-                                value={profile.tagline} 
+                                value={profile.tagline || ''} 
                                 onChange={(e) => setProfile({...profile, tagline: e.target.value})}
                                 className="resize-none"
                             />
@@ -163,7 +216,7 @@ export default function AdminProfilePage() {
                             <Textarea 
                                 id="bio" 
                                 rows={3}
-                                value={profile.bio_short} 
+                                value={profile.bio_short || ''} 
                                 onChange={(e) => setProfile({...profile, bio_short: e.target.value})}
                             />
                         </div>
@@ -196,7 +249,7 @@ export default function AdminProfilePage() {
                                 <Label htmlFor="github">GitHub Link</Label>
                                 <Input 
                                     id="github" 
-                                    value={profile.github_link} 
+                                    value={profile.github_link || ''} 
                                     onChange={(e) => setProfile({...profile, github_link: e.target.value})}
                                 />
                             </div>
@@ -204,7 +257,7 @@ export default function AdminProfilePage() {
                                 <Label htmlFor="linkedin">LinkedIn Link</Label>
                                 <Input 
                                     id="linkedin" 
-                                    value={profile.linkedin_link} 
+                                    value={profile.linkedin_link || ''} 
                                     onChange={(e) => setProfile({...profile, linkedin_link: e.target.value})}
                                 />
                             </div>

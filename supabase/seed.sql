@@ -1,5 +1,11 @@
 -- Seed data for Wannasingh Portfolio
 
+-- 0. Seed Admin Emails
+INSERT INTO public.admin_emails (id, email) VALUES
+('d1111111-1111-2222-3333-444455556666', 'wannasingh.khan@gmail.com'),
+('d2222222-1111-2222-3333-444455556666', 'sarankhtn@gmail.com')
+ON CONFLICT (email) DO NOTHING;
+
 -- 1. Seed Profile
 INSERT INTO public.profile (
     id,
@@ -12,7 +18,8 @@ INSERT INTO public.profile (
     linkedin_link,
     twitter_link,
     about_philosophy_title,
-    about_philosophy_content
+    about_philosophy_content,
+    avatar_url
 ) VALUES (
     '8c9c0b11-a20c-4033-b924-c189b7cfcdfa',
     'Wannasingh',
@@ -24,7 +31,8 @@ INSERT INTO public.profile (
     'https://linkedin.com/in/wannasingh',
     'https://twitter.com/wannasingh',
     'The "Heavy Lifting" Philosophy',
-    'My journey did not start with CSS animations. It started with Oracle 19c execution plans, PL/SQL optimization, and table partitioning. When I transitioned to Full Stack development, I carried this "Architecture First" mindset with me.'
+    'My journey did not start with CSS animations. It started with Oracle 19c execution plans, PL/SQL optimization, and table partitioning. When I transitioned to Full Stack development, I carried this "Architecture First" mindset with me.',
+    '/images/profile.jpg'
 ) ON CONFLICT (id) DO NOTHING;
 
 -- 2. Seed System Settings

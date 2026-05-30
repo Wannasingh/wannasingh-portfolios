@@ -2,19 +2,27 @@
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 CREATE EXTENSION IF NOT EXISTS "pgcrypto";
 
--- Admin helper function based on signed JWT claims
+-- Admin emails table
+CREATE TABLE IF NOT EXISTS public.admin_emails (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    email TEXT NOT NULL UNIQUE,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
+);
+
+-- Admin helper function based on admin_emails table
 CREATE OR REPLACE FUNCTION public.is_admin()
 RETURNS BOOLEAN AS $$
 BEGIN
-  RETURN COALESCE(auth.jwt() ->> 'email', '') IN (
-    'wannasingh.khan@gmail.com',
-    'sarankhtn@gmail.com'
+  RETURN EXISTS (
+    SELECT 1 
+    FROM public.admin_emails 
+    WHERE email = COALESCE(auth.jwt() ->> 'email', '')
   );
 END;
 $$ LANGUAGE plpgsql SECURITY DEFINER;
 
 -- 1. Profile table
-CREATE TABLE public.profile (
+CREATE TABLE IF NOT EXISTS public.profile (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     name TEXT NOT NULL,
     role TEXT NOT NULL,
@@ -25,11 +33,12 @@ CREATE TABLE public.profile (
     linkedin_link TEXT NOT NULL,
     twitter_link TEXT,
     about_philosophy_title TEXT,
-    about_philosophy_content TEXT
+    about_philosophy_content TEXT,
+    avatar_url TEXT
 );
 
 -- 2. Experiences table
-CREATE TABLE public.experiences (
+CREATE TABLE IF NOT EXISTS public.experiences (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     period TEXT NOT NULL,
     title TEXT NOT NULL,
@@ -39,7 +48,7 @@ CREATE TABLE public.experiences (
 );
 
 -- 3. Skill Categories table
-CREATE TABLE public.skill_categories (
+CREATE TABLE IF NOT EXISTS public.skill_categories (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     name TEXT NOT NULL,
     icon_name TEXT NOT NULL,
@@ -48,7 +57,7 @@ CREATE TABLE public.skill_categories (
 );
 
 -- 4. Skills table
-CREATE TABLE public.skills (
+CREATE TABLE IF NOT EXISTS public.skills (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     category_id UUID NOT NULL REFERENCES public.skill_categories(id) ON DELETE CASCADE,
     name TEXT NOT NULL,
@@ -57,7 +66,7 @@ CREATE TABLE public.skills (
 );
 
 -- 5. Projects table
-CREATE TABLE public.projects (
+CREATE TABLE IF NOT EXISTS public.projects (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     title TEXT NOT NULL,
     category TEXT,
@@ -76,14 +85,14 @@ CREATE TABLE public.projects (
 );
 
 -- 6. Availability table
-CREATE TABLE public.availability (
+CREATE TABLE IF NOT EXISTS public.availability (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     item_text TEXT NOT NULL,
     display_order INTEGER NOT NULL DEFAULT 0
 );
 
 -- 7. Services table
-CREATE TABLE public.services (
+CREATE TABLE IF NOT EXISTS public.services (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     title TEXT NOT NULL,
     description TEXT NOT NULL,
@@ -94,7 +103,7 @@ CREATE TABLE public.services (
 );
 
 -- 8. Stats table
-CREATE TABLE public.stats (
+CREATE TABLE IF NOT EXISTS public.stats (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     number TEXT NOT NULL,
     label TEXT NOT NULL,
@@ -104,7 +113,7 @@ CREATE TABLE public.stats (
 );
 
 -- 9. Tech Tags table
-CREATE TABLE public.tech_tags (
+CREATE TABLE IF NOT EXISTS public.tech_tags (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     name TEXT NOT NULL,
     category TEXT NOT NULL,
@@ -114,7 +123,7 @@ CREATE TABLE public.tech_tags (
 );
 
 -- 10. Social Links table
-CREATE TABLE public.social_links (
+CREATE TABLE IF NOT EXISTS public.social_links (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     platform TEXT NOT NULL,
     icon_name TEXT NOT NULL,
@@ -124,7 +133,7 @@ CREATE TABLE public.social_links (
 );
 
 -- 11. System Settings table
-CREATE TABLE public.system_settings (
+CREATE TABLE IF NOT EXISTS public.system_settings (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     site_title TEXT NOT NULL DEFAULT 'Wannasingh Portfolio',
     site_description TEXT NOT NULL DEFAULT 'Full Stack Developer',
@@ -134,7 +143,7 @@ CREATE TABLE public.system_settings (
 );
 
 -- 12. Testimonials table
-CREATE TABLE public.testimonials (
+CREATE TABLE IF NOT EXISTS public.testimonials (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
     name TEXT NOT NULL,
     role TEXT NOT NULL,
@@ -156,6 +165,7 @@ ALTER TABLE public.tech_tags ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.social_links ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.system_settings ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.testimonials ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.admin_emails ENABLE ROW LEVEL SECURITY;
 
 -- Create Policies for public SELECT
 CREATE POLICY "Allow public read profile" ON public.profile FOR SELECT TO public USING (true);
@@ -170,6 +180,7 @@ CREATE POLICY "Allow public read tech_tags" ON public.tech_tags FOR SELECT TO pu
 CREATE POLICY "Allow public read social_links" ON public.social_links FOR SELECT TO public USING (true);
 CREATE POLICY "Allow public read system_settings" ON public.system_settings FOR SELECT TO public USING (true);
 CREATE POLICY "Allow public read testimonials" ON public.testimonials FOR SELECT TO public USING (true);
+CREATE POLICY "Allow public read admin_emails" ON public.admin_emails FOR SELECT TO public USING (true);
 
 -- Create Policies for admin ALL actions (writes/updates/deletes)
 CREATE POLICY "Allow admin write profile" ON public.profile FOR ALL TO authenticated USING (public.is_admin()) WITH CHECK (public.is_admin());
@@ -184,3 +195,25 @@ CREATE POLICY "Allow admin write tech_tags" ON public.tech_tags FOR ALL TO authe
 CREATE POLICY "Allow admin write social_links" ON public.social_links FOR ALL TO authenticated USING (public.is_admin()) WITH CHECK (public.is_admin());
 CREATE POLICY "Allow admin write system_settings" ON public.system_settings FOR ALL TO authenticated USING (public.is_admin()) WITH CHECK (public.is_admin());
 CREATE POLICY "Allow admin write testimonials" ON public.testimonials FOR ALL TO authenticated USING (public.is_admin()) WITH CHECK (public.is_admin());
+CREATE POLICY "Allow admin write admin_emails" ON public.admin_emails FOR ALL TO authenticated USING (public.is_admin()) WITH CHECK (public.is_admin());
+
+-- Create storage buckets if not exists
+INSERT INTO storage.buckets (id, name, public)
+VALUES
+  ('project-images', 'project-images', true),
+  ('portfolio-assets', 'portfolio-assets', true)
+ON CONFLICT (id) DO NOTHING;
+
+-- Policies for storage.buckets
+DROP POLICY IF EXISTS "Allow public select buckets" ON storage.buckets;
+CREATE POLICY "Allow public select buckets" ON storage.buckets FOR SELECT TO public USING (true);
+
+DROP POLICY IF EXISTS "Allow admin to manage buckets" ON storage.buckets;
+CREATE POLICY "Allow admin to manage buckets" ON storage.buckets FOR ALL TO authenticated USING (public.is_admin()) WITH CHECK (public.is_admin());
+
+-- Policies for storage.objects
+DROP POLICY IF EXISTS "Allow public SELECT on objects" ON storage.objects;
+CREATE POLICY "Allow public SELECT on objects" ON storage.objects FOR SELECT TO public USING (bucket_id IN ('project-images', 'portfolio-assets'));
+
+DROP POLICY IF EXISTS "Allow admin to manage objects" ON storage.objects;
+CREATE POLICY "Allow admin to manage objects" ON storage.objects FOR ALL TO authenticated USING (public.is_admin()) WITH CHECK (public.is_admin());

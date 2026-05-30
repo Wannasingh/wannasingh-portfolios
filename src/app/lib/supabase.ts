@@ -17,6 +17,7 @@ export interface Profile {
   twitter_link?: string;
   about_philosophy_title?: string;
   about_philosophy_content?: string;
+  avatar_url?: string;
 }
 
 export interface Experience {
