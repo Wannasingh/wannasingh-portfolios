@@ -119,9 +119,10 @@ export default function AdminProjectsPage() {
         setCurrentProject(prev => ({ ...prev, image_path: publicUrl }));
         toast.success("Image uploaded successfully");
 
-      } catch (error: any) {
-          console.error("Error uploading image:", error);
-          toast.error(`Upload failed: ${error.message || "Unknown error"}. Check console.`);
+      } catch (error) {
+          const err = error as Error;
+          console.error("Error uploading image:", err);
+          toast.error(`Upload failed: ${err.message || "Unknown error"}. Check console.`);
       } finally {
           setUploading(false);
       }
@@ -141,7 +142,9 @@ export default function AdminProjectsPage() {
       };
       
       // Remove id from payload if creating
-      const { id, created_at, ...updateData } = payload as any;
+      const updateData = { ...payload };
+      delete updateData.id;
+      delete updateData.created_at;
 
       let error;
       if (currentProject.id) {

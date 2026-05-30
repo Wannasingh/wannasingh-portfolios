@@ -2,35 +2,23 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
+  Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { motion } from "framer-motion";
 import { sendEmail } from "@/lib/email";
-import { Mail, Sparkles } from "lucide-react";
+import { Mail, ArrowRight } from "lucide-react";
+import Link from "next/link";
 
 export default function CTASection() {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    message: "",
-  });
+  const [formData, setFormData] = useState({ name: "", email: "", message: "" });
   const [open, setOpen] = useState(false);
 
-  const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
-  ) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value,
-    }));
+    setFormData((p) => ({ ...p, [name]: value }));
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -42,81 +30,81 @@ export default function CTASection() {
   };
 
   return (
-    <section className="py-24 bg-background border-t" id="contact">
-      <div className="container mx-auto px-6">
+    <section className="py-32 relative overflow-hidden" id="contact">
+      <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-border to-transparent" />
+
+      {/* Background grid */}
+      <div className="absolute inset-0 bg-grid opacity-60 pointer-events-none" />
+
+      {/* Glow */}
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_50%_50%_at_50%_100%,hsl(210_100%_56%_/_0.08),transparent)] pointer-events-none" />
+
+      <div className="container mx-auto px-6 max-w-6xl relative z-10">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          className="mx-auto max-w-3xl text-center space-y-8"
+          transition={{ duration: 0.5 }}
+          className="max-w-3xl"
         >
-          <div className="space-y-4">
-             <div className="inline-flex items-center rounded-full border bg-secondary/50 px-3 py-1 text-sm font-medium text-secondary-foreground backdrop-blur-sm">
-                <Sparkles className="mr-2 h-3.5 w-3.5 text-primary" />
-                <span>Ready to scale?</span>
-             </div>
-             <h2 className="text-3xl font-bold tracking-tighter sm:text-4xl md:text-5xl">
-                Let&apos;s build your masterpiece.
-             </h2>
-             <p className="text-lg text-muted-foreground max-w-[600px] mx-auto leading-relaxed">
-                Whether you need a database overhaul or a pixel-perfect frontend, 
-                I bring the full stack of expertise to your team.
-             </p>
-          </div>
+          <p className="mono text-xs text-primary tracking-widest uppercase mb-4">
+            Let&apos;s Work Together
+          </p>
 
-          <Dialog open={open} onOpenChange={setOpen}>
-            <DialogTrigger asChild>
-              <Button size="lg" className="h-12 px-8 text-base shadow-lg hover:shadow-xl transition-all hover:scale-105">
-                Start Your Project
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="sm:max-w-[425px]">
-              <DialogHeader>
-                <DialogTitle>Send a Message</DialogTitle>
-              </DialogHeader>
-              <form className="grid gap-4 py-4" onSubmit={handleSubmit}>
-                <div className="grid gap-2">
-                  <Label htmlFor="name">Name</Label>
-                  <Input
-                    id="name"
-                    name="name"
-                    placeholder="Your name"
-                    value={formData.name}
-                    onChange={handleInputChange}
-                    required
-                  />
-                </div>
-                <div className="grid gap-2">
-                  <Label htmlFor="email">Email</Label>
-                  <Input
-                    id="email"
-                    name="email"
-                    type="email"
-                    placeholder="name@example.com"
-                    value={formData.email}
-                    onChange={handleInputChange}
-                    required
-                  />
-                </div>
-                <div className="grid gap-2">
-                  <Label htmlFor="message">Message</Label>
-                  <Textarea
-                    id="message"
-                    name="message"
-                    placeholder="Tell me about your project..."
-                    value={formData.message}
-                    onChange={handleInputChange}
-                    required
-                    className="min-h-[100px]"
-                  />
-                </div>
-                <Button type="submit" className="w-full">
-                  <Mail className="mr-2 h-4 w-4" />
-                  Send Message
-                </Button>
-              </form>
-            </DialogContent>
-          </Dialog>
+          <h2 className="text-4xl sm:text-5xl md:text-6xl font-extrabold text-foreground mb-6 leading-tight">
+            Got a project?
+            <br />
+            <span className="text-gradient">Let&apos;s build it right.</span>
+          </h2>
+
+          <p className="text-base sm:text-lg text-muted-foreground leading-relaxed mb-10 max-w-xl">
+            Whether it&apos;s a database that won&apos;t scale, an app that needs rebuilding,
+            or a greenfield product — I help teams ship faster with fewer architectural regrets.
+          </p>
+
+          <div className="flex flex-col sm:flex-row gap-3">
+            <Dialog open={open} onOpenChange={setOpen}>
+              <DialogTrigger asChild>
+                <button className="inline-flex items-center justify-center gap-2 h-11 px-6 rounded-lg bg-primary text-primary-foreground font-semibold text-sm hover:bg-primary/90 transition-all duration-150 shadow-lg shadow-primary/20 group">
+                  <Mail className="h-4 w-4" />
+                  Send a Message
+                  <ArrowRight className="h-4 w-4 group-hover:translate-x-0.5 transition-transform" />
+                </button>
+              </DialogTrigger>
+              <DialogContent className="sm:max-w-[400px] rounded-xl border-border bg-card">
+                <DialogHeader>
+                  <DialogTitle className="text-base font-bold">Send a Message</DialogTitle>
+                  <p className="text-xs text-muted-foreground">
+                    I&apos;ll reply within one business day.
+                  </p>
+                </DialogHeader>
+                <form className="grid gap-3.5 pt-1" onSubmit={handleSubmit}>
+                  <div className="grid gap-1.5">
+                    <Label htmlFor="name" className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Name</Label>
+                    <Input id="name" name="name" placeholder="Your name" value={formData.name} onChange={handleInputChange} className="h-9 rounded-lg text-sm" required />
+                  </div>
+                  <div className="grid gap-1.5">
+                    <Label htmlFor="email" className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Email</Label>
+                    <Input id="email" name="email" type="email" placeholder="you@company.com" value={formData.email} onChange={handleInputChange} className="h-9 rounded-lg text-sm" required />
+                  </div>
+                  <div className="grid gap-1.5">
+                    <Label htmlFor="message" className="text-xs font-semibold text-muted-foreground uppercase tracking-wider">Message</Label>
+                    <Textarea id="message" name="message" placeholder="Tell me about your project..." value={formData.message} onChange={handleInputChange} className="rounded-lg min-h-[100px] resize-none text-sm" required />
+                  </div>
+                  <Button type="submit" className="w-full h-9 rounded-lg text-sm font-semibold">
+                    Send Message
+                  </Button>
+                </form>
+              </DialogContent>
+            </Dialog>
+
+            <Link
+              href="/hire-me"
+              className="inline-flex items-center justify-center h-11 px-6 rounded-lg border border-border text-muted-foreground font-semibold text-sm hover:text-foreground hover:border-primary/30 hover:bg-white/5 transition-all duration-150"
+            >
+              View contact page
+            </Link>
+          </div>
         </motion.div>
       </div>
     </section>
