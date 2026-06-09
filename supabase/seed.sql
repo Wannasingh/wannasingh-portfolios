@@ -19,20 +19,40 @@ INSERT INTO public.profile (
     twitter_link,
     about_philosophy_title,
     about_philosophy_content,
-    avatar_url
+    avatar_url,
+    about_analogy_title_left,
+    about_analogy_desc_left,
+    about_analogy_title_right,
+    about_analogy_desc_right,
+    about_analogy_center_title,
+    about_analogy_label_left,
+    about_analogy_label_right,
+    about_analogy_label_center,
+    about_evolution_title,
+    about_evolution_subtitle
 ) VALUES (
     '8c9c0b11-a20c-4033-b924-c189b7cfcdfa',
     'Wannasingh',
     'Full Stack Developer & Oracle DBA',
     'wannasingh.khan@gmail.com',
-    'From The Engine Room To The Controls',
-    'Most developers learn frameworks first. I learned data first. This foundation shapes everything I build today.',
+    'Fast Learning. Data Centric. Full Stack Agile.',
+    'I graduated with First Class Honors in Business English before mastering Full-Stack Engineering and Oracle DBA administrations. This unique hybrid skillset allows me to combine business logic, database performance, and modern interfaces.',
     'https://github.com/wannasingh',
     'https://linkedin.com/in/wannasingh',
     'https://twitter.com/wannasingh',
-    'The "Heavy Lifting" Philosophy',
-    'My journey did not start with CSS animations. It started with Oracle 19c execution plans, PL/SQL optimization, and table partitioning. When I transitioned to Full Stack development, I carried this "Architecture First" mindset with me.',
-    '/images/profile.jpg'
+    'The Adaptability Superpower',
+    'My journey is defined by rapid adaptation. Stepping from a First Class Honors degree in International Business English into the deep technical waters of Oracle DBA (19c/21c EE) and Full-Stack Engineering was a challenge I met with speed and precision. At Prem Group Engineering, I manage core database operations—fine-tuning FRA, IMPDP data pumps, index optimization, and SQL execution plans—while building mission-critical business software like Master Data Management and Debt Restructuring portals. I do not just write code; I bridge communication gaps and solve complex system requirements with lightning learning speed.',
+    '/images/profile.jpg',
+    'Oracle DBA',
+    '19c/21c EE & Tuning',
+    'Full-Stack Dev',
+    'React, Node, Web Apps',
+    'The Hybrid Architect',
+    'FRA, IMPDP, SQL Tuning',
+    'MDM & Debt Systems',
+    'Fast Learning, Solid Execution',
+    'My Evolution',
+    'Bridging communication, database systems, and full-stack software.'
 ) ON CONFLICT (id) DO NOTHING;
 
 -- 2. Seed System Settings
@@ -94,9 +114,9 @@ ON CONFLICT (id) DO NOTHING;
 
 -- 7. Seed Experiences
 INSERT INTO public.experiences (id, period, title, description, type, display_order) VALUES
-('b3c3d3e3-1111-2222-3333-444455556666', '2022 - Present', 'Senior Database & Full Stack Architect', 'Lead developer on high-volume services. Redesigned core query executions, optimized database connections, and developed robust dashboard widgets in Next.js.', 'work', 1),
-('c3d3e3f3-1111-2222-3333-444455556666', '2019 - 2022', 'Oracle Database Administrator & Backend Specialist', 'Managed migration of large enterprise data architectures, created robust PL/SQL stored procedures, and integrated backend API endpoints.', 'work', 2),
-('d3e3f3a3-1111-2222-3333-444455556666', '2015 - 2019', 'Computer Engineering Degree', 'Studied structural software programming, networking protocols, and foundational database schemas.', 'education', 3)
+('b3c3d3e3-1111-2222-3333-444455556666', '2024 - Present', 'Full-Stack Developer & Oracle DBA', 'Oversee full DBA operations at Prem Group Engineering, installing and managing Oracle 19c/21c EE databases, configuring Flash Recovery Areas (FRA), performing high-speed IMPDP migrations, and optimizing indexes/queries for high availability. Simultaneously architected full-stack enterprise systems, including a Master Data Management (MDM) system and a Debt Restructuring program.', 'work', 1),
+('c3d3e3f3-1111-2222-3333-444455556666', '2024', 'Full-Stack Developer Trainee', 'Completed intensive software engineering bootcamp at TechUp. Mastered modern web development patterns, API structures, React, Next.js, Node.js, and database optimization, demonstrating high learning agility and rapid technical adaptation.', 'work', 2),
+('d3e3f3a3-1111-2222-3333-444455556666', '2020 - 2024', 'B.A. in International Business English', 'Graduated with First Class Honors from North Bangkok University. Developed professional English communications, business logic, and analytical problem-solving skills, building a strong foundation for technical consulting and collaboration.', 'education', 3)
 ON CONFLICT (id) DO NOTHING;
 
 -- 8. Seed Projects

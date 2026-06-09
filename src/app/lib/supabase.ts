@@ -18,6 +18,16 @@ export interface Profile {
   about_philosophy_title?: string;
   about_philosophy_content?: string;
   avatar_url?: string;
+  about_analogy_title_left?: string;
+  about_analogy_desc_left?: string;
+  about_analogy_title_right?: string;
+  about_analogy_desc_right?: string;
+  about_analogy_center_title?: string;
+  about_analogy_label_left?: string;
+  about_analogy_label_right?: string;
+  about_analogy_label_center?: string;
+  about_evolution_title?: string;
+  about_evolution_subtitle?: string;
 }
 
 export interface Experience {
