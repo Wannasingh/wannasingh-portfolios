@@ -13,7 +13,10 @@
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
     "format": "prettier --write .",
-    "prepare": "husky install || true"
+    "prepare": "husky install || true",
+    "sonar:up": "docker compose -f docker-compose.sonar.yml up -d",
+    "sonar:down": "docker compose -f docker-compose.sonar.yml down",
+    "sonar:scan": "eslint . -f json -o eslint-report.json || true && npx sonarqube-scanner"
   },
   "dependencies": {
     "@radix-ui/react-dialog": "^1.1.15",
