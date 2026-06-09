@@ -202,7 +202,9 @@ const AboutMeClient = () => {
                <p className="text-muted-foreground">{profile?.about_evolution_subtitle || "A path from deep backend infrastructure to modern frontend mastery."}</p>
             </div>
 
-            <div className="relative border-l border-border ml-4 md:ml-1/2 space-y-12 pl-8 md:pl-0">
+            <div className="relative space-y-12 pl-10 md:pl-0">
+               {/* Vertical Timeline Axis Line */}
+               <div className="absolute left-4 md:left-1/2 md:-translate-x-1/2 top-0 bottom-0 w-px bg-border" />
                
                {experiences.map((exp, index) => {
                    const isLeft = index % 2 === 0;
