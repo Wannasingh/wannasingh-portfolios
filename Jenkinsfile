@@ -82,9 +82,11 @@ pipeline {
 
     post {
         always {
-            node {
-                // Clean workspace to avoid disk space buildup
-                cleanWs()
+            script {
+                node {
+                    // Clean workspace to avoid disk space buildup
+                    cleanWs()
+                }
             }
         }
     }
