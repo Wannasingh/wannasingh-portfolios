@@ -1,12 +1,5 @@
 pipeline {
-    agent {
-        docker {
-            image 'oven/bun:latest'
-            alwaysPull true
-            // Run container as root to avoid permission issues in Jenkins workspace
-            args '-u root'
-        }
-    }
+    agent none
 
     environment {
         // Load credentials configured in Jenkins (Manage Jenkins -> Credentials)
@@ -19,12 +12,26 @@ pipeline {
 
     stages {
         stage('Install Dependencies') {
+            agent {
+                docker {
+                    image 'oven/bun:latest'
+                    alwaysPull true
+                    args '-u root'
+                }
+            }
             steps {
                 sh 'bun install --ignore-scripts'
             }
         }
 
         stage('Build') {
+            agent {
+                docker {
+                    image 'oven/bun:latest'
+                    alwaysPull true
+                    args '-u root'
+                }
+            }
             steps {
                 sh 'bun run build'
             }
@@ -55,6 +62,13 @@ pipeline {
         }
 
         stage('Deploy to Vercel') {
+            agent {
+                docker {
+                    image 'oven/bun:latest'
+                    alwaysPull true
+                    args '-u root'
+                }
+            }
             when {
                 branch 'main'
             }
