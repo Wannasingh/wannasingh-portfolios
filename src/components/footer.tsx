@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { Github, Linkedin, Twitter } from "lucide-react";
+import { FaGithub, FaLinkedin, FaXTwitter } from "react-icons/fa6";
 import { useEffect, useState } from "react";
 import { supabase } from "@/app/lib/supabase";
 
@@ -62,16 +62,16 @@ export default function Footer() {
           <div className="flex gap-3">
             <Link href={socials.github} target="_blank" rel="noopener noreferrer"
               className="p-2 rounded-lg border border-border text-muted-foreground hover:text-foreground hover:border-primary/30 transition-all duration-150">
-              <Github className="h-3.5 w-3.5" />
+              <FaGithub className="h-3.5 w-3.5" />
             </Link>
             <Link href={socials.linkedin} target="_blank" rel="noopener noreferrer"
               className="p-2 rounded-lg border border-border text-muted-foreground hover:text-foreground hover:border-primary/30 transition-all duration-150">
-              <Linkedin className="h-3.5 w-3.5" />
+              <FaLinkedin className="h-3.5 w-3.5" />
             </Link>
             {socials.twitter && (
               <Link href={socials.twitter} target="_blank" rel="noopener noreferrer"
                 className="p-2 rounded-lg border border-border text-muted-foreground hover:text-foreground hover:border-primary/30 transition-all duration-150">
-                <Twitter className="h-3.5 w-3.5" />
+                <FaXTwitter className="h-3.5 w-3.5" />
               </Link>
             )}
           </div>

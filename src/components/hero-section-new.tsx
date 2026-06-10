@@ -186,11 +186,7 @@ export default function HeroSectionNew() {
 
               {/* Photo */}
               <div className="relative aspect-[3/4] bg-muted/20">
-                {!profileLoaded ? (
-                  <div className="absolute inset-0 bg-secondary/10 animate-pulse flex items-center justify-center">
-                    <Loader2 className="h-6 w-6 animate-spin text-primary/40" />
-                  </div>
-                ) : (
+                {profileLoaded ? (
                   <Image
                     src={profile?.avatar_url || "/images/profile.jpg"}
                     alt={`${name} — ${role}`}
@@ -200,6 +196,10 @@ export default function HeroSectionNew() {
                     priority
                     unoptimized={!!profile?.avatar_url}
                   />
+                ) : (
+                  <div className="absolute inset-0 bg-secondary/10 animate-pulse flex items-center justify-center">
+                    <Loader2 className="h-6 w-6 animate-spin text-primary/40" />
+                  </div>
                 )}
                 {/* Bottom gradient fade */}
                 <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-card/95 to-transparent z-10" />

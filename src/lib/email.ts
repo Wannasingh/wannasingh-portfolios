@@ -22,7 +22,10 @@ export const sendEmail = async (formData: EmailFormData, resetForm: () => void) 
         if (!response.ok) {
           throw new Error('Failed to send message');
         }
-        resetForm();
+        // Defer form reset to prevent updating state during the render cycle of Toast components
+        setTimeout(() => {
+          resetForm();
+        }, 0);
         return 'Message sent successfully!';
       },
       error: 'Failed to send message. Please try again.',

@@ -4,7 +4,7 @@ import { usePathname } from "next/navigation";
 import Header from "@/components/navbar";
 import Footer from "@/components/footer";
 
-export default function ClientLayout({ children }: { children: React.ReactNode }) {
+export default function ClientLayout({ children }: Readonly<{ children: React.ReactNode }>) {
    const pathname = usePathname();
    const isAdmin = pathname?.startsWith("/admin");
 

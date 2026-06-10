@@ -1,10 +1,10 @@
 "use client";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { ExternalLink, Github, ArrowRight } from "lucide-react";
+import { ExternalLink, ArrowRight, Loader2 } from "lucide-react";
+import { FaGithub } from "react-icons/fa6";
 import Link from "next/link";
 import { supabase, Project } from "@/app/lib/supabase";
-import { Loader2 } from "lucide-react";
 
 const FALLBACK_PROJECTS: Project[] = [
   {
@@ -138,10 +138,10 @@ export default function FeaturedProjectsSection() {
                   {/* Links */}
                   <div className="flex gap-2 shrink-0">
                     {project.github_link && project.github_link !== "#" && (
-                      <Link href={project.github_link} target="_blank" rel="noopener noreferrer"
-                        className="p-2 rounded-lg border border-border text-muted-foreground hover:text-foreground hover:border-primary/30 transition-all duration-150">
-                        <Github className="h-4 w-4" />
-                      </Link>
+                       <Link href={project.github_link} target="_blank" rel="noopener noreferrer"
+                         className="p-2 rounded-lg border border-border text-muted-foreground hover:text-foreground hover:border-primary/30 transition-all duration-150">
+                         <FaGithub className="h-4 w-4" />
+                       </Link>
                     )}
                     {project.demo_link && project.demo_link !== "#" && (
                       <Link href={project.demo_link} target="_blank" rel="noopener noreferrer"

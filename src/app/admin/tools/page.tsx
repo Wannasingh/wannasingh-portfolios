@@ -55,7 +55,7 @@ export default function AdminToolsPage() {
     }
 
     async function handleSave() {
-        if (!editingId || editingId === "new") {
+        if (editingId === "new") {
             const { error } = await supabaseAdmin.from("tools").insert([formData]);
             if (error) return;
         } else {
@@ -96,8 +96,9 @@ export default function AdminToolsPage() {
                         <div className="space-y-4">
                             <div className="grid grid-cols-2 gap-4">
                                 <div>
-                                    <label className="block font-bold mb-2">ชื่อ</label>
+                                    <label htmlFor="tool-name" className="block font-bold mb-2">ชื่อ</label>
                                     <input
+                                        id="tool-name"
                                         type="text"
                                         value={formData.name || ""}
                                         onChange={(e) => setFormData({ ...formData, name: e.target.value })}
@@ -106,8 +107,9 @@ export default function AdminToolsPage() {
                                     />
                                 </div>
                                 <div>
-                                    <label className="block font-bold mb-2">Icon</label>
+                                    <label htmlFor="tool-icon" className="block font-bold mb-2">Icon</label>
                                     <select
+                                        id="tool-icon"
                                         value={formData.icon_name || ""}
                                         onChange={(e) => setFormData({ ...formData, icon_name: e.target.value })}
                                         className="w-full px-4 py-2 border-2 border-black rounded"
@@ -120,11 +122,12 @@ export default function AdminToolsPage() {
                             </div>
                             <div className="grid grid-cols-2 gap-4">
                                 <div>
-                                    <label className="block font-bold mb-2">ลำดับ</label>
+                                    <label htmlFor="tool-order" className="block font-bold mb-2">ลำดับ</label>
                                     <input
+                                        id="tool-order"
                                         type="number"
                                         value={formData.display_order || 0}
-                                        onChange={(e) => setFormData({ ...formData, display_order: parseInt(e.target.value) })}
+                                        onChange={(e) => setFormData({ ...formData, display_order: Number.parseInt(e.target.value) })}
                                         className="w-full px-4 py-2 border-2 border-black rounded"
                                     />
                                 </div>

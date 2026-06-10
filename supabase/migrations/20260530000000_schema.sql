@@ -34,7 +34,17 @@ CREATE TABLE IF NOT EXISTS public.profile (
     twitter_link TEXT,
     about_philosophy_title TEXT,
     about_philosophy_content TEXT,
-    avatar_url TEXT
+    avatar_url TEXT,
+    about_analogy_title_left TEXT DEFAULT 'Solid Data',
+    about_analogy_desc_left TEXT DEFAULT 'DBA & Storage',
+    about_analogy_title_right TEXT DEFAULT 'Fluid UI',
+    about_analogy_desc_right TEXT DEFAULT 'App & Frontend',
+    about_analogy_center_title TEXT DEFAULT 'The Hybrid Architect',
+    about_analogy_label_left TEXT DEFAULT 'Robust Infrastructure',
+    about_analogy_label_right TEXT DEFAULT 'Stunning Experience',
+    about_analogy_label_center TEXT DEFAULT 'The Perfect Balance',
+    about_evolution_title TEXT DEFAULT 'My Evolution',
+    about_evolution_subtitle TEXT DEFAULT 'A path from deep backend infrastructure to modern frontend mastery.'
 );
 
 -- 2. Experiences table

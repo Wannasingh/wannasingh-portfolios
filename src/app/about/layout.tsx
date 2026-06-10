@@ -4,6 +4,6 @@ export const metadata: Metadata = {
   title: "About",
 };
 
-export default function Layout({ children }: { children: React.ReactNode }) {
+export default function Layout({ children }: Readonly<{ children: React.ReactNode }>) {
   return <>{children}</>;
 }

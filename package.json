@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack",
+    "dev": "rm -rf .next && next dev --turbopack",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
@@ -13,7 +13,10 @@
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
     "format": "prettier --write .",
-    "prepare": "husky install || true"
+    "prepare": "husky install || true",
+    "sonar:up": "docker compose -f docker-compose.sonar.yml up -d",
+    "sonar:down": "docker compose -f docker-compose.sonar.yml down",
+    "sonar:scan": "eslint . -f json -o eslint-report.json || true && npx sonarqube-scanner"
   },
   "dependencies": {
     "@radix-ui/react-dialog": "^1.1.15",
@@ -46,6 +49,8 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.2",
     "@types/jest": "^29.5.14",
     "@types/node": "^20",
     "@types/nodemailer": "^6.4.17",
@@ -54,6 +59,8 @@
     "eslint": "^9",
     "eslint-config-next": "15.1.5",
     "husky": "^9.1.7",
+    "jest": "^30.4.2",
+    "jest-environment-jsdom": "^30.4.1",
     "postcss": "^8",
     "tailwindcss": "^3.4.1",
     "typescript": "^5"

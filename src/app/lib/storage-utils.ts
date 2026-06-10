@@ -15,7 +15,7 @@ export async function uploadImage(
   try {
     // สร้างชื่อไฟล์ที่ unique
     const fileExt = file.name.split(".").pop();
-    const fileName = `${folder}/${Date.now()}-${Math.random().toString(36).substring(7)}.${fileExt}`;
+    const fileName = `${folder}/${Date.now()}-${crypto.randomUUID()}.${fileExt}`;
 
     // อัพโหลดไฟล์
     const { data, error } = await supabaseAdmin.storage

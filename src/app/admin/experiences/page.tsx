@@ -193,7 +193,7 @@ export default function AdminExperiencesPage() {
                                     id="display_order" 
                                     type="number"
                                     value={currentExp.display_order || 0} 
-                                    onChange={(e) => setCurrentExp({...currentExp, display_order: parseInt(e.target.value)})}
+                                    onChange={(e) => setCurrentExp({...currentExp, display_order: Number.parseInt(e.target.value) || 0})}
                                     required
                                 />
                             </div>

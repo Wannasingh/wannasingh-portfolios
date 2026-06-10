@@ -1,5 +1,5 @@
 describe('Smoke Test', () => {
   it('should pass', () => {
-    expect(true).toBe(true);
+    expect(process.env).toBeDefined();
   });
 });

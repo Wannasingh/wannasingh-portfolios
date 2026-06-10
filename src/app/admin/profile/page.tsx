@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import { supabaseAdmin } from "@/app/lib/supabase-admin";
 import { supabase } from "@/app/lib/supabase"; 
 import { Button } from "@/components/ui/button";
@@ -28,6 +29,16 @@ interface ProfileData {
   about_philosophy_title?: string;
   about_philosophy_content?: string;
   avatar_url?: string;
+  about_analogy_title_left?: string;
+  about_analogy_desc_left?: string;
+  about_analogy_title_right?: string;
+  about_analogy_desc_right?: string;
+  about_analogy_center_title?: string;
+  about_analogy_label_left?: string;
+  about_analogy_label_right?: string;
+  about_analogy_label_center?: string;
+  about_evolution_title?: string;
+  about_evolution_subtitle?: string;
 }
 
 export default function AdminProfilePage() {
@@ -99,7 +110,17 @@ export default function AdminProfilePage() {
             twitter_link: profile.twitter_link,
             about_philosophy_title: profile.about_philosophy_title,
             about_philosophy_content: profile.about_philosophy_content,
-            avatar_url: profile.avatar_url
+            avatar_url: profile.avatar_url,
+            about_analogy_title_left: profile.about_analogy_title_left,
+            about_analogy_desc_left: profile.about_analogy_desc_left,
+            about_analogy_title_right: profile.about_analogy_title_right,
+            about_analogy_desc_right: profile.about_analogy_desc_right,
+            about_analogy_center_title: profile.about_analogy_center_title,
+            about_analogy_label_left: profile.about_analogy_label_left,
+            about_analogy_label_right: profile.about_analogy_label_right,
+            about_analogy_label_center: profile.about_analogy_label_center,
+            about_evolution_title: profile.about_evolution_title,
+            about_evolution_subtitle: profile.about_evolution_subtitle
         })
         .eq('id', profile.id);
 
@@ -144,10 +165,13 @@ export default function AdminProfilePage() {
                         <div className="flex flex-col md:flex-row items-center gap-6 pb-6 border-b">
                             <div className="relative w-28 h-28 rounded-full overflow-hidden border bg-muted flex items-center justify-center shrink-0">
                                 {profile.avatar_url ? (
-                                    <img 
+                                    <Image 
                                         src={profile.avatar_url} 
                                         alt="Profile Preview" 
+                                        width={112}
+                                        height={112}
                                         className="w-full h-full object-cover"
+                                        unoptimized
                                     />
                                 ) : (
                                     <span className="text-muted-foreground text-sm">No Photo</span>
@@ -241,6 +265,116 @@ export default function AdminProfilePage() {
                                     onChange={(e) => setProfile({...profile, about_philosophy_content: e.target.value})}
                                     placeholder="My journey didn't start with CSS animations..."
                                 />
+                            </div>
+                        </div>
+
+                        <div className="space-y-4 border p-4 rounded-lg bg-secondary/5">
+                            <h3 className="font-semibold text-sm">About Page - Interactive Analogy (Fusion Engine)</h3>
+                            
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div className="space-y-2">
+                                    <Label htmlFor="analogy_title_left">Left Card Title (Data)</Label>
+                                    <Input 
+                                        id="analogy_title_left" 
+                                        value={profile.about_analogy_title_left || ''} 
+                                        onChange={(e) => setProfile({...profile, about_analogy_title_left: e.target.value})}
+                                        placeholder='Solid Data'
+                                    />
+                                </div>
+                                <div className="space-y-2">
+                                    <Label htmlFor="analogy_desc_left">Left Card Subtitle</Label>
+                                    <Input 
+                                        id="analogy_desc_left" 
+                                        value={profile.about_analogy_desc_left || ''} 
+                                        onChange={(e) => setProfile({...profile, about_analogy_desc_left: e.target.value})}
+                                        placeholder='DBA & Storage'
+                                    />
+                                </div>
+                            </div>
+
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div className="space-y-2">
+                                    <Label htmlFor="analogy_title_right">Right Card Title (UI)</Label>
+                                    <Input 
+                                        id="analogy_title_right" 
+                                        value={profile.about_analogy_title_right || ''} 
+                                        onChange={(e) => setProfile({...profile, about_analogy_title_right: e.target.value})}
+                                        placeholder='Fluid UI'
+                                    />
+                                </div>
+                                <div className="space-y-2">
+                                    <Label htmlFor="analogy_desc_right">Right Card Subtitle</Label>
+                                    <Input 
+                                        id="analogy_desc_right" 
+                                        value={profile.about_analogy_desc_right || ''} 
+                                        onChange={(e) => setProfile({...profile, about_analogy_desc_right: e.target.value})}
+                                        placeholder='App & Frontend'
+                                    />
+                                </div>
+                            </div>
+
+                            <div className="space-y-2">
+                                <Label htmlFor="analogy_center_title">Center Glowing Title</Label>
+                                <Input 
+                                    id="analogy_center_title" 
+                                    value={profile.about_analogy_center_title || ''} 
+                                    onChange={(e) => setProfile({...profile, about_analogy_center_title: e.target.value})}
+                                    placeholder='The Hybrid Architect'
+                                />
+                            </div>
+
+                            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                                <div className="space-y-2">
+                                    <Label htmlFor="analogy_label_left">Left Slogan (Data Hover)</Label>
+                                    <Input 
+                                        id="analogy_label_left" 
+                                        value={profile.about_analogy_label_left || ''} 
+                                        onChange={(e) => setProfile({...profile, about_analogy_label_left: e.target.value})}
+                                        placeholder='Robust Infrastructure'
+                                    />
+                                </div>
+                                <div className="space-y-2">
+                                    <Label htmlFor="analogy_label_right">Right Slogan (UI Hover)</Label>
+                                    <Input 
+                                        id="analogy_label_right" 
+                                        value={profile.about_analogy_label_right || ''} 
+                                        onChange={(e) => setProfile({...profile, about_analogy_label_right: e.target.value})}
+                                        placeholder='Stunning Experience'
+                                    />
+                                </div>
+                                <div className="space-y-2">
+                                    <Label htmlFor="analogy_label_center">Center Slogan (Default)</Label>
+                                    <Input 
+                                        id="analogy_label_center" 
+                                        value={profile.about_analogy_label_center || ''} 
+                                        onChange={(e) => setProfile({...profile, about_analogy_label_center: e.target.value})}
+                                        placeholder='The Perfect Balance'
+                                    />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="space-y-4 border p-4 rounded-lg bg-secondary/5">
+                            <h3 className="font-semibold text-sm">About Page - Evolution Headers</h3>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div className="space-y-2">
+                                    <Label htmlFor="evolution_title">Evolution Title</Label>
+                                    <Input 
+                                        id="evolution_title" 
+                                        value={profile.about_evolution_title || ''} 
+                                        onChange={(e) => setProfile({...profile, about_evolution_title: e.target.value})}
+                                        placeholder='My Evolution'
+                                    />
+                                </div>
+                                <div className="space-y-2">
+                                    <Label htmlFor="evolution_subtitle">Evolution Subtitle</Label>
+                                    <Input 
+                                        id="evolution_subtitle" 
+                                        value={profile.about_evolution_subtitle || ''} 
+                                        onChange={(e) => setProfile({...profile, about_evolution_subtitle: e.target.value})}
+                                        placeholder='A path from deep backend infrastructure to modern frontend mastery.'
+                                    />
+                                </div>
                             </div>
                         </div>
 

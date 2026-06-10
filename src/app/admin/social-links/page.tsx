@@ -56,7 +56,7 @@ export default function AdminSocialLinksPage() {
     }
 
     async function handleSave() {
-        if (!editingId || editingId === "new") {
+        if (editingId === "new") {
             const { error } = await supabaseAdmin.from("social_links").insert([formData]);
             if (error) return;
         } else {
@@ -97,8 +97,9 @@ export default function AdminSocialLinksPage() {
                         <div className="space-y-4">
                             <div className="grid grid-cols-2 gap-4">
                                 <div>
-                                    <label className="block font-bold mb-2">Platform</label>
+                                    <label htmlFor="social-platform" className="block font-bold mb-2">Platform</label>
                                     <input
+                                        id="social-platform"
                                         type="text"
                                         value={formData.platform || ""}
                                         onChange={(e) => setFormData({ ...formData, platform: e.target.value })}
@@ -107,8 +108,9 @@ export default function AdminSocialLinksPage() {
                                     />
                                 </div>
                                 <div>
-                                    <label className="block font-bold mb-2">Icon</label>
+                                    <label htmlFor="social-icon" className="block font-bold mb-2">Icon</label>
                                     <select
+                                        id="social-icon"
                                         value={formData.icon_name || ""}
                                         onChange={(e) => setFormData({ ...formData, icon_name: e.target.value })}
                                         className="w-full px-4 py-2 border-2 border-black rounded"
@@ -120,8 +122,9 @@ export default function AdminSocialLinksPage() {
                                 </div>
                             </div>
                             <div>
-                                <label className="block font-bold mb-2">URL</label>
+                                <label htmlFor="social-url" className="block font-bold mb-2">URL</label>
                                 <input
+                                    id="social-url"
                                     type="url"
                                     value={formData.url || ""}
                                     onChange={(e) => setFormData({ ...formData, url: e.target.value })}
@@ -131,11 +134,12 @@ export default function AdminSocialLinksPage() {
                             </div>
                             <div className="grid grid-cols-2 gap-4">
                                 <div>
-                                    <label className="block font-bold mb-2">ลำดับ</label>
+                                    <label htmlFor="social-order" className="block font-bold mb-2">ลำดับ</label>
                                     <input
+                                        id="social-order"
                                         type="number"
                                         value={formData.display_order || 0}
-                                        onChange={(e) => setFormData({ ...formData, display_order: parseInt(e.target.value) })}
+                                        onChange={(e) => setFormData({ ...formData, display_order: Number.parseInt(e.target.value) })}
                                         className="w-full px-4 py-2 border-2 border-black rounded"
                                     />
                                 </div>
