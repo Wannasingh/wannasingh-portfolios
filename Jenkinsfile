@@ -31,14 +31,26 @@ pipeline {
         }
 
         stage('Lint') {
+            agent {
+                docker {
+                    image 'node:20-slim'
+                    args '-u root'
+                }
+            }
             steps {
-                sh 'bun run lint'
+                sh 'npm run lint'
             }
         }
 
         stage('Test') {
+            agent {
+                docker {
+                    image 'node:20-slim'
+                    args '-u root'
+                }
+            }
             steps {
-                sh 'bun run test'
+                sh 'npm run test'
             }
         }
 
