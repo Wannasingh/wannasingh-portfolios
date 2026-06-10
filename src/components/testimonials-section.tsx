@@ -32,8 +32,7 @@ export default function TestimonialsSection() {
         className="text-center mb-12"
       >
         <h2 className="text-3xl md:text-4xl font-bold mb-4">
-          Project Highlights
-          <span className="text-blue-500 ml-2">✨</span>
+          Project Highlights <span className="text-blue-500 ml-2">✨</span>
         </h2>
         <p className="text-gray-600 max-w-2xl mx-auto">
           Here are some of the projects I&apos;ve worked on and the impact
@@ -44,7 +43,7 @@ export default function TestimonialsSection() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
         {testimonials.map((item, index) => (
           <motion.div
-            key={index}
+            key={item.name}
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}

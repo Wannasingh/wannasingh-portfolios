@@ -2,7 +2,8 @@ import { Card } from "@/components/ui/card";
 import Link from "next/link";
 import Image from "next/image";
 import { Project } from "@/app/lib/supabase";
-import { Github, ExternalLink, Maximize2, ArrowUpRight } from "lucide-react";
+import { ExternalLink, Maximize2, ArrowUpRight } from "lucide-react";
+import { FaGithub } from "react-icons/fa6";
 import {
   Dialog,
   DialogContent,
@@ -12,7 +13,7 @@ import {
 } from "@/components/ui/dialog";
 
 interface ProjectCardProps {
-  project: Project;
+  readonly project: Project;
 }
 
 export default function ProjectCard({ project }: ProjectCardProps) {
@@ -83,10 +84,13 @@ export default function ProjectCard({ project }: ProjectCardProps) {
                   {/* Scrollable image body */}
                   <div className="flex-1 overflow-y-auto bg-muted/10 p-4 sm:p-6 scrollbar-thin">
                     <div className="relative w-full rounded-lg border border-border bg-background shadow-md overflow-hidden">
-                      <img
+                      <Image
                         src={project.image_path}
                         alt={project.title}
+                        width={1200}
+                        height={800}
                         className="w-full h-auto object-contain"
+                        unoptimized
                       />
                     </div>
                   </div>
@@ -105,9 +109,9 @@ export default function ProjectCard({ project }: ProjectCardProps) {
               </h2>
               {/* Tech stack tags */}
               <div className="flex flex-wrap gap-1.5 mt-2">
-                {project.tech_stack?.slice(0, 6).map((tech, index) => (
+                {project.tech_stack?.slice(0, 6).map((tech) => (
                   <span
-                    key={index}
+                    key={tech}
                     className="px-2.5 py-0.5 rounded border border-border bg-secondary/40 text-[10px] sm:text-xs font-mono font-medium text-muted-foreground"
                   >
                     {tech}
@@ -132,8 +136,8 @@ export default function ProjectCard({ project }: ProjectCardProps) {
                   Key Features
                 </h3>
                 <ul className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2.5 text-sm">
-                  {project.key_features.slice(0, 4).map((feature, index) => (
-                    <li key={index} className="flex items-start gap-2 text-foreground/80 leading-snug">
+                  {project.key_features.slice(0, 4).map((feature) => (
+                    <li key={feature} className="flex items-start gap-2 text-foreground/80 leading-snug">
                       <span className="mt-2 h-1.5 w-1.5 rounded-full bg-primary shrink-0" />
                       {feature}
                     </li>
@@ -152,7 +156,7 @@ export default function ProjectCard({ project }: ProjectCardProps) {
                 rel="noopener noreferrer"
                 className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-muted-foreground hover:text-foreground hover:translate-x-0.5 transition-all duration-200 group/link"
               >
-                <Github className="h-4 w-4" />
+                <FaGithub className="h-4 w-4" />
                 View Source
                 <ArrowUpRight className="h-3 w-3 opacity-0 group-hover/link:opacity-100 -translate-y-0.5 -translate-x-0.5 group-hover/link:translate-y-0 group-hover/link:translate-x-0 transition-all duration-200" />
               </Link>

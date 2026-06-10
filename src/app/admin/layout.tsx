@@ -8,9 +8,9 @@ import { AdminSidebar, AdminMobileSidebar } from "@/components/admin-sidebar";
 
 export default function AdminLayout({
   children,
-}: {
+}: Readonly<{
   children: React.ReactNode;
-}) {
+}>) {
   const [user, setUser] = useState<{ email?: string } | null>(null);
   const router = useRouter();
   const pathname = usePathname();

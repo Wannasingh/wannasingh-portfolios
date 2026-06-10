@@ -6,7 +6,7 @@ export const metadata: Metadata = {
   description: "Hire me for your next project",
 };
 
-export default function Layout({ children }: { children: React.ReactNode }) {
+export default function Layout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <>
       {children}

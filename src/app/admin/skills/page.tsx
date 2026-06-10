@@ -176,18 +176,21 @@ export default function AdminSkillsPage() {
             <div className="space-y-4">
                 {categories.map(cat => (
                     <Card key={cat.id} className="overflow-hidden">
-                        <div 
-                            className="flex items-center p-4 bg-muted/30 cursor-pointer hover:bg-muted/50 transition-colors"
-                            onClick={() => setExpandedCat(expandedCat === cat.id ? null : cat.id)}
-                        >
-                            <div className="mr-2">
-                                {expandedCat === cat.id ? <ChevronDown className="h-5 w-5"/> : <ChevronRight className="h-5 w-5"/>}
-                            </div>
-                            <div className="flex-1 font-bold flex items-center gap-2">
-                                {cat.name} 
-                                <span className="text-xs font-normal text-muted-foreground bg-primary/10 px-2 py-0.5 rounded">{cat.skills.length} skills</span>
-                            </div>
-                            <div className="flex gap-1" onClick={e => e.stopPropagation()}>
+                        <div className="flex items-center justify-between p-2 sm:p-4 bg-muted/30">
+                            <button 
+                                type="button"
+                                className="flex-1 flex items-center text-left font-bold focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring rounded"
+                                onClick={() => setExpandedCat(expandedCat === cat.id ? null : cat.id)}
+                            >
+                                <div className="mr-2 shrink-0">
+                                    {expandedCat === cat.id ? <ChevronDown className="h-5 w-5"/> : <ChevronRight className="h-5 w-5"/>}
+                                </div>
+                                <div className="flex items-center gap-2 truncate mr-2">
+                                    <span className="truncate">{cat.name}</span>
+                                    <span className="text-xs font-normal text-muted-foreground bg-primary/10 px-2 py-0.5 rounded shrink-0">{cat.skills.length} skills</span>
+                                </div>
+                            </button>
+                            <div className="flex gap-1 shrink-0">
                                 <Button variant="ghost" size="icon" onClick={() => handleEditCat(cat)}><Pencil className="h-4 w-4"/></Button>
                                 <Button variant="ghost" size="icon" className="text-destructive" onClick={() => handleDeleteCat(cat.id)}><Trash2 className="h-4 w-4"/></Button>
                             </div>
@@ -226,7 +229,7 @@ export default function AdminSkillsPage() {
                     <DialogHeader><DialogTitle>{currentCat.id ? "Edit Category" : "New Category"}</DialogTitle></DialogHeader>
                     <form onSubmit={handleSaveCat} className="space-y-4 py-4">
                         <Input value={currentCat.name || ''} onChange={e => setCurrentCat({...currentCat, name: e.target.value})} placeholder="Category Name" required />
-                        <Input value={currentCat.display_order || 0} type="number" onChange={e => setCurrentCat({...currentCat, display_order: parseInt(e.target.value)})} placeholder="Order" required />
+                        <Input value={currentCat.display_order || 0} type="number" onChange={e => setCurrentCat({...currentCat, display_order: Number.parseInt(e.target.value) || 0})} placeholder="Order" required />
                         <Input value={currentCat.icon_name || ''} onChange={e => setCurrentCat({...currentCat, icon_name: e.target.value})} placeholder="Icon Name (Lucide)" />
                         <Input value={currentCat.class_name || ''} onChange={e => setCurrentCat({...currentCat, class_name: e.target.value})} placeholder="Tailwind Class (e.g. text-blue-500)" />
                         <DialogFooter>
@@ -245,7 +248,7 @@ export default function AdminSkillsPage() {
                     <DialogHeader><DialogTitle>{currentSkill.id ? "Edit Skill" : "New Skill"}</DialogTitle></DialogHeader>
                     <form onSubmit={handleSaveSkill} className="space-y-4 py-4">
                         <Input value={currentSkill.name || ''} onChange={e => setCurrentSkill({...currentSkill, name: e.target.value})} placeholder="Skill Name" required />
-                        <Input value={currentSkill.display_order || 0} type="number" onChange={e => setCurrentSkill({...currentSkill, display_order: parseInt(e.target.value)})} placeholder="Order" required />
+                        <Input value={currentSkill.display_order || 0} type="number" onChange={e => setCurrentSkill({...currentSkill, display_order: Number.parseInt(e.target.value) || 0})} placeholder="Order" required />
                         <div className="space-y-2">
                              <Label>Icon Key (React Icons)</Label>
                              <div className="flex gap-2">

@@ -23,6 +23,7 @@ interface ProfileHeaderProps {
 
 export const ProfileHeader: React.FC<ProfileHeaderProps> = ({ 
   description,
+  pageType,
   title,
   avatarUrl,
   primaryButton,
@@ -34,6 +35,7 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.6 }}
       className="mb-16"
+      data-page-type={pageType}
     >
       <div className="flex flex-col md:flex-row items-center gap-10">
         <div className="relative w-40 h-40 md:w-56 md:h-56 shrink-0 rounded-full overflow-hidden border-4 border-background shadow-2xl ring-1 ring-border">

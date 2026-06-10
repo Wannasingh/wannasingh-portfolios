@@ -28,7 +28,7 @@ const sidebarItems = [
     { title: "Availability", href: "/admin/availability", icon: MessageSquare },
 ];
 
-export function AdminSidebar({ className }: { className?: string }) {
+export function AdminSidebar({ className, onItemClick }: Readonly<{ className?: string; onItemClick?: () => void }>) {
     const pathname = usePathname();
 
     return (
@@ -45,7 +45,7 @@ export function AdminSidebar({ className }: { className?: string }) {
                     </div>
                     <div className="space-y-1">
                         {sidebarItems.map((item) => (
-                            <Link key={item.href} href={item.href}>
+                            <Link key={item.href} href={item.href} onClick={onItemClick}>
                                 <Button 
                                     variant={pathname === item.href ? "secondary" : "ghost"} 
                                     className="w-full justify-start font-medium"
@@ -62,7 +62,7 @@ export function AdminSidebar({ className }: { className?: string }) {
                         Settings
                     </h2>
                     <div className="space-y-1">
-                        <Link href="/admin/settings">
+                        <Link href="/admin/settings" onClick={onItemClick}>
                             <Button variant={pathname === "/admin/settings" ? "secondary" : "ghost"} className="w-full justify-start">
                                 <Settings className="mr-2 h-4 w-4" />
                                 General
@@ -105,8 +105,8 @@ export function AdminMobileSidebar() {
                                     <X className="h-4 w-4" />
                                 </Button>
                             </div>
-                            <div onClick={() => setOpen(false)}>
-                                <AdminSidebar />
+                             <div>
+                                <AdminSidebar onItemClick={() => setOpen(false)} />
                             </div>
                         </motion.div>
                     </>

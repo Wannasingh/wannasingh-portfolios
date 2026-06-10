@@ -45,9 +45,9 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default function RootLayout({
   children,
-}: {
+}: Readonly<{
   children: React.ReactNode;
-}) {
+}>) {
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${plusJakartaSans.className} ${dmMono.variable} min-h-screen bg-background text-foreground select-none`}>

@@ -107,7 +107,7 @@ export const Timeline = forwardRef<HTMLDivElement, TimelineProps>(
       return () => window.removeEventListener("scroll", handleScroll);
     }, []);
 
-    const handleMouseEnter = (index: number, event: React.MouseEvent) => {
+    const handleMouseEnter = (index: number, event: React.MouseEvent | React.FocusEvent) => {
       setActiveSkill(index);
       setIsHovering(true);
       updateTooltipPosition(event);
@@ -124,8 +124,13 @@ export const Timeline = forwardRef<HTMLDivElement, TimelineProps>(
       }
     };
 
-    const updateTooltipPosition = (event: React.MouseEvent) => {
-      setTooltipPosition({ x: event.clientX, y: event.clientY });
+    const updateTooltipPosition = (event: React.MouseEvent | React.FocusEvent) => {
+      if ('clientX' in event && 'clientY' in event && event.clientX !== 0) {
+        setTooltipPosition({ x: event.clientX, y: event.clientY });
+      } else {
+        const rect = (event.currentTarget as HTMLElement).getBoundingClientRect();
+        setTooltipPosition({ x: rect.left + rect.width / 2 - 10, y: rect.bottom - 10 });
+      }
     };
 
     if (!isMounted) {
@@ -139,9 +144,10 @@ export const Timeline = forwardRef<HTMLDivElement, TimelineProps>(
           </h2>
           <div className="relative" ref={timelineRef}>
             {skills.map((skill, index) => (
-              <div
+              <button
+                type="button"
                 key={skill.id}
-                className={`timeline-item mb-8 flex p-4 border-2 rounded-sm border-black transition-all duration-300 ${
+                className={`timeline-item mb-8 flex p-4 border-2 rounded-sm border-black transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2 w-full text-left font-sans ${
                   activeSkill === index
                     ? `${skill.color} shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]`
                     : "bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]"
@@ -153,6 +159,10 @@ export const Timeline = forwardRef<HTMLDivElement, TimelineProps>(
                 onMouseEnter={(e) => handleMouseEnter(index, e)}
                 onMouseLeave={handleMouseLeave}
                 onMouseMove={handleMouseMove}
+                onFocus={(e) => handleMouseEnter(index, e)}
+                onBlur={handleMouseLeave}
+                aria-label={`Timeline item: ${skill.name} learned in ${skill.year}`}
+                onClick={() => setActiveSkill(activeSkill === index ? null : index)}
               >
                 <div className="flex flex-col items-center mr-4">
                   <div
@@ -174,7 +184,7 @@ export const Timeline = forwardRef<HTMLDivElement, TimelineProps>(
                     {skill.text}
                   </p>
                 </div>
-              </div>
+              </button>
             ))}
           </div>
           {isHovering && activeSkill !== null && (

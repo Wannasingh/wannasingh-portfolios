@@ -50,7 +50,7 @@ export default function AdminTechTagsPage() {
     }
 
     async function handleSave() {
-        if (!editingId || editingId === "new") {
+        if (editingId === "new") {
             const { error } = await supabaseAdmin.from("tech_tags").insert([formData]);
             if (error) return;
         } else {
@@ -97,8 +97,9 @@ export default function AdminTechTagsPage() {
                         <div className="space-y-4">
                             <div className="grid grid-cols-2 gap-4">
                                 <div>
-                                    <label className="block font-bold mb-2">ชื่อ</label>
+                                    <label htmlFor="tag-name" className="block font-bold mb-2">ชื่อ</label>
                                     <input
+                                        id="tag-name"
                                         type="text"
                                         value={formData.name || ""}
                                         onChange={(e) => setFormData({ ...formData, name: e.target.value })}
@@ -107,8 +108,9 @@ export default function AdminTechTagsPage() {
                                     />
                                 </div>
                                 <div>
-                                    <label className="block font-bold mb-2">Category</label>
+                                    <label htmlFor="tag-category" className="block font-bold mb-2">Category</label>
                                     <select
+                                        id="tag-category"
                                         value={formData.category || ""}
                                         onChange={(e) => setFormData({ ...formData, category: e.target.value })}
                                         className="w-full px-4 py-2 border-2 border-black rounded"
@@ -121,8 +123,9 @@ export default function AdminTechTagsPage() {
                             </div>
                             <div className="grid grid-cols-2 gap-4">
                                 <div>
-                                    <label className="block font-bold mb-2">สี</label>
+                                    <label htmlFor="tag-color" className="block font-bold mb-2">สี</label>
                                     <select
+                                        id="tag-color"
                                         value={formData.color || ""}
                                         onChange={(e) => setFormData({ ...formData, color: e.target.value })}
                                         className="w-full px-4 py-2 border-2 border-black rounded"
@@ -133,11 +136,12 @@ export default function AdminTechTagsPage() {
                                     </select>
                                 </div>
                                 <div>
-                                    <label className="block font-bold mb-2">ลำดับ</label>
+                                    <label htmlFor="tag-order" className="block font-bold mb-2">ลำดับ</label>
                                     <input
+                                        id="tag-order"
                                         type="number"
                                         value={formData.display_order || 0}
-                                        onChange={(e) => setFormData({ ...formData, display_order: parseInt(e.target.value) })}
+                                        onChange={(e) => setFormData({ ...formData, display_order: Number.parseInt(e.target.value) })}
                                         className="w-full px-4 py-2 border-2 border-black rounded"
                                     />
                                 </div>

@@ -2,7 +2,8 @@
 
 import React, { useState, useEffect } from "react";
 import { ProfileHeader } from "@/components/ProfileHeader";
-import { Github, Linkedin, Mail, FileText, Send, Loader2 } from "lucide-react";
+import { Mail, FileText, Send, Loader2 } from "lucide-react";
+import { FaGithub, FaLinkedin } from "react-icons/fa6";
 import { motion } from "framer-motion";
 import { sendEmail } from "@/lib/email";
 import { Card } from "@/components/ui/card";
@@ -81,12 +82,12 @@ export default function HireMeClient() {
                  </a>
                  {profile?.github_link && (
                     <a href={profile.github_link} target="_blank" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
-                        <Github className="h-4 w-4" /> GitHub Profile
+                        <FaGithub className="h-4 w-4" /> GitHub Profile
                     </a>
                  )}
                  {profile?.linkedin_link && (
                     <a href={profile.linkedin_link} target="_blank" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
-                        <Linkedin className="h-4 w-4" /> LinkedIn Profile
+                        <FaLinkedin className="h-4 w-4" /> LinkedIn Profile
                     </a>
                  )}
               </div>

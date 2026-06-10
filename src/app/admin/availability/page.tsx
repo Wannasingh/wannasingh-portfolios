@@ -186,7 +186,7 @@ export default function AdminAvailabilityPage() {
                                 id="display_order" 
                                 type="number"
                                 value={currentItem.display_order || 0} 
-                                onChange={(e) => setCurrentItem({...currentItem, display_order: parseInt(e.target.value)})}
+                                onChange={(e) => setCurrentItem({...currentItem, display_order: Number.parseInt(e.target.value) || 0})}
                                 required
                             />
                         </div>

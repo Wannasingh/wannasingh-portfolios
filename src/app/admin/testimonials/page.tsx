@@ -54,7 +54,7 @@ export default function AdminTestimonialsPage() {
     }
 
     async function handleSave() {
-        if (!editingId || editingId === "new") {
+        if (editingId === "new") {
             const { error } = await supabaseAdmin.from("testimonials").insert([formData]);
             if (error) return;
         } else {
@@ -94,8 +94,9 @@ export default function AdminTestimonialsPage() {
                         <h2 className="text-2xl font-bold mb-4">{editingId === "new" ? "เพิ่มใหม่" : "แก้ไข"}</h2>
                         <div className="space-y-4">
                             <div>
-                                <label className="block font-bold mb-2">ชื่อโปรเจค</label>
+                                <label htmlFor="testimonial-name" className="block font-bold mb-2">ชื่อโปรเจค</label>
                                 <input
+                                    id="testimonial-name"
                                     type="text"
                                     value={formData.name || ""}
                                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
@@ -104,8 +105,9 @@ export default function AdminTestimonialsPage() {
                                 />
                             </div>
                             <div>
-                                <label className="block font-bold mb-2">เทคโนโลยี</label>
+                                <label htmlFor="testimonial-role" className="block font-bold mb-2">เทคโนโลยี</label>
                                 <input
+                                    id="testimonial-role"
                                     type="text"
                                     value={formData.role || ""}
                                     onChange={(e) => setFormData({ ...formData, role: e.target.value })}
@@ -114,8 +116,9 @@ export default function AdminTestimonialsPage() {
                                 />
                             </div>
                             <div>
-                                <label className="block font-bold mb-2">คำอธิบาย</label>
+                                <label htmlFor="testimonial-quote" className="block font-bold mb-2">คำอธิบาย</label>
                                 <textarea
+                                    id="testimonial-quote"
                                     value={formData.quote || ""}
                                     onChange={(e) => setFormData({ ...formData, quote: e.target.value })}
                                     className="w-full px-4 py-2 border-2 border-black rounded"
@@ -125,11 +128,12 @@ export default function AdminTestimonialsPage() {
                             </div>
                             <div className="grid grid-cols-2 gap-4">
                                 <div>
-                                    <label className="block font-bold mb-2">ลำดับ</label>
+                                    <label htmlFor="testimonial-order" className="block font-bold mb-2">ลำดับ</label>
                                     <input
+                                        id="testimonial-order"
                                         type="number"
                                         value={formData.display_order || 0}
-                                        onChange={(e) => setFormData({ ...formData, display_order: parseInt(e.target.value) })}
+                                        onChange={(e) => setFormData({ ...formData, display_order: Number.parseInt(e.target.value) })}
                                         className="w-full px-4 py-2 border-2 border-black rounded"
                                     />
                                 </div>

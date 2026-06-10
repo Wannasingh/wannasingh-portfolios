@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import Image from "next/image";
 import { supabaseAdmin } from "@/app/lib/supabase-admin";
 import { supabase } from "@/app/lib/supabase"; 
 import { Button } from "@/components/ui/button";
@@ -164,10 +165,13 @@ export default function AdminProfilePage() {
                         <div className="flex flex-col md:flex-row items-center gap-6 pb-6 border-b">
                             <div className="relative w-28 h-28 rounded-full overflow-hidden border bg-muted flex items-center justify-center shrink-0">
                                 {profile.avatar_url ? (
-                                    <img 
+                                    <Image 
                                         src={profile.avatar_url} 
                                         alt="Profile Preview" 
+                                        width={112}
+                                        height={112}
                                         className="w-full h-full object-cover"
+                                        unoptimized
                                     />
                                 ) : (
                                     <span className="text-muted-foreground text-sm">No Photo</span>

@@ -1,9 +1,8 @@
 "use client";
 import { useEffect, useState } from "react";
-import { Code2, Database, Layout, Server, Settings, Terminal, Cpu, LucideIcon } from "lucide-react";
+import { Code2, Database, Layout, Server, Settings, Terminal, Cpu, LucideIcon, Loader2 } from "lucide-react";
 import { motion } from "framer-motion";
 import { supabase, SkillCategory, Skill } from "@/app/lib/supabase";
-import { Loader2 } from "lucide-react";
 import {
   SiOracle, SiPostgresql, SiDatabricks, SiApachespark, SiVeritas,
   SiNodedotjs, SiDotnet, SiOpenapiinitiative, SiGraphql, SiRedis, SiDocker,
@@ -53,6 +52,17 @@ const FALLBACK_CATEGORIES: SkillCategory[] = [
   },
 ];
 
+const sortSkillsByOrder = (skills: Skill[]) => {
+  return [...skills].sort((a, b) => a.display_order - b.display_order);
+};
+
+const mapAndSortCategories = (categories: (SkillCategory & { skills: Skill[] })[]) => {
+  return categories.map((cat) => ({
+    ...cat,
+    skills: sortSkillsByOrder(cat.skills),
+  }));
+};
+
 export default function TechStackSection() {
   const [categories, setCategories] = useState<SkillCategory[]>([]);
   const [loading, setLoading] = useState(true);
@@ -71,12 +81,7 @@ export default function TechStackSection() {
         clearTimeout(timeout);
         if (!error && data && data.length > 0) {
           const categoriesData = data as unknown as (SkillCategory & { skills: Skill[] })[];
-          setCategories(
-            categoriesData.map((cat) => ({
-              ...cat,
-              skills: [...cat.skills].sort((a, b) => a.display_order - b.display_order),
-            }))
-          );
+          setCategories(mapAndSortCategories(categoriesData));
         } else {
           setCategories(FALLBACK_CATEGORIES);
         }
