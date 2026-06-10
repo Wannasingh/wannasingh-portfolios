@@ -1,7 +1,8 @@
 pipeline {
     agent {
         docker {
-            image 'oven/bun:1'
+            image 'oven/bun:latest'
+            alwaysPull true
             // Run container as root to avoid permission issues in Jenkins workspace
             args '-u root'
         }
@@ -19,7 +20,7 @@ pipeline {
     stages {
         stage('Install Dependencies') {
             steps {
-                sh 'bun install --frozen-lockfile --ignore-scripts'
+                sh 'bun install --ignore-scripts'
             }
         }
 
