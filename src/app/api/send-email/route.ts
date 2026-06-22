@@ -1,4 +1,5 @@
-import { NextRequest, NextResponse } from "next/server";
+import { secureJsonResponse } from '@/app/lib/api-utils';
+import { NextRequest } from 'next/server';
 import nodemailer from 'nodemailer';
 
 export async function POST(request: NextRequest) {
@@ -11,7 +12,7 @@ export async function POST(request: NextRequest) {
 
     if (!process.env.SMTP_HOST || !process.env.SMTP_USER || !process.env.SMTP_PASS) {
       console.error("SMTP Configuration variables are missing.");
-      return NextResponse.json(
+      return secureJsonResponse(
         { message: "SMTP configuration is incomplete in server environment variables" },
         { status: 500 }
       );
@@ -36,10 +37,10 @@ export async function POST(request: NextRequest) {
 
     await transporter.sendMail(mailOptions);
     console.log("Email sent successfully!");
-    return NextResponse.json({ message: "Email sent successfully" }, { status: 200 });
+    return secureJsonResponse({ message: "Email sent successfully" }, { status: 200 });
   } catch (error) {
     console.error("Error sending email in route handler:", error);
-    return NextResponse.json(
+    return secureJsonResponse(
       { 
         message: "Failed to send email", 
         error: error instanceof Error ? error.message : "An unknown error occurred" 

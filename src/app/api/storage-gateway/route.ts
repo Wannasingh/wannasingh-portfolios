@@ -1,4 +1,5 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { secureJsonResponse } from '@/app/lib/api-utils';
+import { NextRequest } from 'next/server';
 import { r2Client, BUCKET_NAME, CDN_URL } from '@/app/lib/r2-client';
 import { PutObjectCommand, DeleteObjectCommand, ListObjectsV2Command } from '@aws-sdk/client-s3';
 import { verifyJWT } from '@/app/lib/auth-utils';
@@ -15,7 +16,7 @@ export async function POST(req: NextRequest) {
     const action = searchParams.get('action');
 
     if (!checkAuth(req)) {
-      return NextResponse.json({ error: 'Unauthorized admin access required' }, { status: 401 });
+      return secureJsonResponse({ error: 'Unauthorized admin access required' }, { status: 401 });
     }
 
     if (action === 'upload') {
@@ -24,7 +25,7 @@ export async function POST(req: NextRequest) {
       const folder = formData.get('folder') as string || 'projects';
 
       if (!file) {
-        return NextResponse.json({ error: 'No file provided' }, { status: 400 });
+        return secureJsonResponse({ error: 'No file provided' }, { status: 400 });
       }
 
       const fileExt = file.name.split('.').pop();
@@ -42,13 +43,13 @@ export async function POST(req: NextRequest) {
       );
 
       const publicUrl = `${CDN_URL}/${fileName}`;
-      return NextResponse.json({ publicUrl });
+      return secureJsonResponse({ publicUrl });
     }
 
     if (action === 'delete') {
       const { imageUrl } = await req.json();
       if (!imageUrl) {
-        return NextResponse.json({ error: 'No imageUrl provided' }, { status: 400 });
+        return secureJsonResponse({ error: 'No imageUrl provided' }, { status: 400 });
       }
 
       const url = new URL(imageUrl);
@@ -63,13 +64,13 @@ export async function POST(req: NextRequest) {
         })
       );
 
-      return NextResponse.json({ message: 'Deleted successfully' });
+      return secureJsonResponse({ message: 'Deleted successfully' });
     }
 
-    return NextResponse.json({ error: 'Invalid action' }, { status: 400 });
-  } catch (err: any) {
+    return secureJsonResponse({ error: 'Invalid action' }, { status: 400 });
+  } catch (err: unknown) {
     console.error('Storage gateway POST error:', err);
-    return NextResponse.json({ error: err.message || 'Storage error' }, { status: 500 });
+    return secureJsonResponse({ error: (err as Error).message || 'Storage error' }, { status: 500 });
   }
 }
 
@@ -81,7 +82,7 @@ export async function GET(req: NextRequest) {
 
     if (action === 'list') {
       if (!checkAuth(req)) {
-        return NextResponse.json({ error: 'Unauthorized admin access required' }, { status: 401 });
+        return secureJsonResponse({ error: 'Unauthorized admin access required' }, { status: 401 });
       }
 
       const response = await r2Client.send(
@@ -100,12 +101,12 @@ export async function GET(req: NextRequest) {
         };
       });
 
-      return NextResponse.json(files);
+      return secureJsonResponse(files);
     }
 
-    return NextResponse.json({ error: 'Invalid action' }, { status: 400 });
-  } catch (err: any) {
+    return secureJsonResponse({ error: 'Invalid action' }, { status: 400 });
+  } catch (err: unknown) {
     console.error('Storage gateway GET error:', err);
-    return NextResponse.json({ error: err.message || 'Storage error' }, { status: 500 });
+    return secureJsonResponse({ error: (err as Error).message || 'Storage error' }, { status: 500 });
   }
 }

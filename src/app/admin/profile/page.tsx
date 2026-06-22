@@ -14,7 +14,7 @@ import { Loader2, Save, ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { toast } from "sonner";
 
-import { uploadImage } from "@/app/lib/storage-utils";
+import { uploadImage, resolveImageUrl } from "@/app/lib/storage-utils";
 
 interface ProfileData {
   id?: string;
@@ -163,10 +163,10 @@ export default function AdminProfilePage() {
                     <form onSubmit={handleSave} className="space-y-6">
                         {/* Profile Photo Upload */}
                         <div className="flex flex-col md:flex-row items-center gap-6 pb-6 border-b">
-                            <div className="relative w-28 h-28 rounded-full overflow-hidden border bg-muted flex items-center justify-center shrink-0">
+                            <div className="relative w-28 h-28 rounded-md overflow-hidden border bg-muted flex items-center justify-center shrink-0">
                                 {profile.avatar_url ? (
                                     <Image 
-                                        src={profile.avatar_url} 
+                                        src={resolveImageUrl(profile.avatar_url, 'profile')} 
                                         alt="Profile Preview" 
                                         width={112}
                                         height={112}

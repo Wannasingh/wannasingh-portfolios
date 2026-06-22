@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Pool } from 'pg';
 
 // Use connection string DATABASE_URL if available, otherwise fallback to individual configurations

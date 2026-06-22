@@ -1,4 +1,5 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { secureJsonResponse } from '@/app/lib/api-utils';
+import { NextRequest } from 'next/server';
 import { executeDbQuery } from '@/app/lib/db-executor';
 import { signJWT } from '@/app/lib/auth-utils';
 
@@ -6,7 +7,7 @@ export async function POST(req: NextRequest) {
   try {
     const { email, password } = await req.json();
     if (!email || !password) {
-      return NextResponse.json({ error: 'Email and password are required' }, { status: 400 });
+      return secureJsonResponse({ error: 'Email and password are required' }, { status: 400 });
     }
 
     console.log('[Login Route] Login attempt for:', email);
@@ -24,25 +25,25 @@ export async function POST(req: NextRequest) {
     }
 
     if (!adminRecord) {
-      return NextResponse.json({ error: 'Unauthorized: Email is not registered as admin' }, { status: 401 });
+      return secureJsonResponse({ error: 'Unauthorized: Email is not registered as admin' }, { status: 401 });
     }
 
     // 2. Check password hash from database
     const storedHash = adminRecord.password_hash;
     if (!storedHash) {
-      return NextResponse.json({ error: 'Unauthorized: Password is not configured for this admin' }, { status: 401 });
+      return secureJsonResponse({ error: 'Unauthorized: Password is not configured for this admin' }, { status: 401 });
     }
 
     const { verifyPassword } = await import('@/app/lib/auth-utils');
     const isPasswordValid = verifyPassword(password, storedHash);
     
     if (!isPasswordValid) {
-      return NextResponse.json({ error: 'Invalid password' }, { status: 401 });
+      return secureJsonResponse({ error: 'Invalid password' }, { status: 401 });
     }
 
     // 3. Create session cookie
     const token = signJWT({ email });
-    const response = NextResponse.json({
+    const response = secureJsonResponse({
       user: { email },
       message: 'Login successful',
     });
@@ -57,8 +58,8 @@ export async function POST(req: NextRequest) {
     });
 
     return response;
-  } catch (err: any) {
+  } catch (err: unknown) {
     console.error('Login error:', err);
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+    return secureJsonResponse({ error: 'Internal server error' }, { status: 500 });
   }
 }

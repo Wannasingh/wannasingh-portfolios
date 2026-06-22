@@ -1,12 +1,13 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextRequest } from 'next/server';
 import { executeDbQuery, QueryDescription } from '@/app/lib/db-executor';
 import { verifyJWT } from '@/app/lib/auth-utils';
+import { secureJsonResponse } from '@/app/lib/api-utils';
 
 export async function POST(req: NextRequest) {
   try {
     const body = (await req.json()) as QueryDescription;
     if (!body || !body.table || !body.action) {
-      return NextResponse.json({ error: 'Invalid query request parameter' }, { status: 400 });
+      return secureJsonResponse({ error: 'Invalid query request parameter' }, { status: 400 });
     }
 
     // Determine if query requires admin authorization
@@ -19,19 +20,19 @@ export async function POST(req: NextRequest) {
       // Check auth cookie for write or sensitive operations
       const sessionCookie = req.cookies.get('session');
       if (!sessionCookie) {
-        return NextResponse.json({ error: 'Unauthorized: No session cookie' }, { status: 401 });
+        return secureJsonResponse({ error: 'Unauthorized: No session cookie' }, { status: 401 });
       }
 
       const payload = verifyJWT(sessionCookie.value);
       if (!payload) {
-        return NextResponse.json({ error: 'Unauthorized: Invalid token' }, { status: 401 });
+        return secureJsonResponse({ error: 'Unauthorized: Invalid token' }, { status: 401 });
       }
     }
 
     const result = await executeDbQuery(body);
-    return NextResponse.json(result);
-  } catch (err: any) {
+    return secureJsonResponse(result);
+  } catch (err: unknown) {
     console.error('db-gateway endpoint error:', err);
-    return NextResponse.json({ error: err.message || 'Internal server error' }, { status: 500 });
+    return secureJsonResponse({ error: (err as Error).message || 'Internal server error' }, { status: 500 });
   }
 }

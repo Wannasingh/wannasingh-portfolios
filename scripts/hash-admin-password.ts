@@ -1,5 +1,11 @@
-import { hashPassword } from '../src/app/lib/auth-utils';
-import { query } from '../src/app/lib/pg-client';
+import fs from 'fs';
+
+// Load env files automatically using native Node.js feature (Node v20.6+)
+if (fs.existsSync('.env.local')) {
+  process.loadEnvFile('.env.local');
+} else if (fs.existsSync('.env')) {
+  process.loadEnvFile('.env');
+}
 
 async function main() {
   const email = process.argv[2];
@@ -10,6 +16,9 @@ async function main() {
   }
 
   try {
+    const { hashPassword } = await import('../src/app/lib/auth-utils');
+    const { query } = await import('../src/app/lib/pg-client');
+
     const hash = hashPassword(password);
     await query('UPDATE public.admin_emails SET password_hash = $1 WHERE email = $2', [hash, email]);
     console.log(`Password hash successfully set for ${email}`);

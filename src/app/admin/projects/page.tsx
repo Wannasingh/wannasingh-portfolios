@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { supabaseAdmin } from '@/app/lib/admin-client';
 import { supabase, Project } from '@/app/lib/api-client';
+import { resolveImageUrl } from "@/app/lib/storage-utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -196,9 +197,9 @@ export default function AdminProjectsPage() {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 {projects.map((project) => (
                     <Card key={project.id} className="flex flex-col h-full border hover:border-primary/50 transition-colors">
-                        <div className="relative h-48 w-full bg-muted overflow-hidden rounded-t-lg">
+                        <div className="aspect-video relative bg-muted mb-4 rounded-md overflow-hidden flex items-center justify-center">
                             {project.image_path ? (
-                                <Image src={project.image_path} alt={project.title} width={300} height={192} className="w-full h-full object-cover" unoptimized />
+                                <Image src={resolveImageUrl(project.image_path, 'projects')} alt={project.title} width={300} height={192} className="w-full h-full object-cover" unoptimized />
                             ) : (
                                 <div className="flex items-center justify-center h-full text-muted-foreground">
                                     <ImageIcon className="h-10 w-10 opacity-20" />
@@ -274,7 +275,7 @@ export default function AdminProjectsPage() {
                              <div className="flex items-center gap-4">
                                 {currentProject.image_path ? (
                                     <div className="relative w-32 h-20 rounded border overflow-hidden">
-                                        <Image src={currentProject.image_path} alt="Preview" width={128} height={80} className="w-full h-full object-cover" unoptimized />
+                                        <Image src={resolveImageUrl(currentProject.image_path, 'projects')} alt="Preview" width={128} height={80} className="w-full h-full object-cover" unoptimized />
                                         <button 
                                             type="button"
                                             onClick={() => setCurrentProject(p => ({...p, image_path: ""}))}

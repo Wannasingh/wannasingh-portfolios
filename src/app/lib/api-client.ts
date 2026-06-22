@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { QueryDescription } from './db-executor';
 import { uploadImage, deleteImage } from './storage-utils';
 
@@ -229,7 +230,8 @@ export const supabase = {
   },
   storage: {
     from: (bucket: string) => ({
-      upload: async (filePath: string, file: File, options?: any) => {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      upload: async (filePath: string, file: File, _options?: any) => {
         try {
           const folder = bucket === 'portfolio-assets' ? 'portfolio-assets' : 'projects';
           // Upload file via wrapper which handles client/server check
