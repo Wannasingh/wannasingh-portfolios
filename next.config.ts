@@ -18,6 +18,11 @@ const nextConfig: NextConfig = {
         hostname: "yrajneeohlwnxtrwihyt.supabase.co",
         pathname: "/storage/v1/object/public/**",
       },
+      {
+        protocol: "https",
+        hostname: "media.wannasingh.dev",
+        pathname: "/**",
+      },
     ],
   },
   env: {

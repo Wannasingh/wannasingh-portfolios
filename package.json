@@ -19,6 +19,7 @@
     "sonar:scan": "eslint . -f json -o eslint-report.json || true && npx sonarqube-scanner"
   },
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.1073.0",
     "@radix-ui/react-dialog": "^1.1.15",
     "@radix-ui/react-label": "^2.1.1",
     "@radix-ui/react-popover": "^1.1.4",
@@ -38,6 +39,7 @@
     "next-themes": "^0.4.4",
     "nodemailer": "^6.9.16",
     "oracledb": "^7.0.0",
+    "pg": "^8.22.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-icon": "^1.0.0",
@@ -55,6 +57,7 @@
     "@types/jest": "^29.5.14",
     "@types/node": "^20",
     "@types/nodemailer": "^6.4.17",
+    "@types/pg": "^8.20.0",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",

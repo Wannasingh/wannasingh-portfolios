@@ -1,16 +1,21 @@
 // ponytail: native fetch for vault to avoid external library dependencies
 
 interface VaultSecrets {
-  ORACLE_USER?: string;
-  ORACLE_PASSWORD?: string;
-  ORACLE_CONNECT_STRING?: string;
-  ORACLE_WALLET_LOCATION?: string;
+  DATABASE_URL?: string;
+  [key: string]: string | undefined;
 }
+
+const CACHE_TTL_MS = 30 * 60 * 1000; // 30 minutes
 
 const globalForVault = globalThis as unknown as {
   cachedVaultToken?: string | null;
   cachedSecrets?: VaultSecrets | null;
+  cacheExpiresAt?: number;
 };
+
+function isCacheValid(): boolean {
+  return !!globalForVault.cacheExpiresAt && Date.now() < globalForVault.cacheExpiresAt;
+}
 
 function getBaseHeaders(): Record<string, string> {
   const headers: Record<string, string> = {
@@ -67,7 +72,11 @@ async function getVaultToken(vaultAddr: string): Promise<string | null> {
 }
 
 export async function fetchSecrets(): Promise<VaultSecrets> {
-  if (globalForVault.cachedSecrets) return globalForVault.cachedSecrets;
+  if (globalForVault.cachedSecrets && isCacheValid()) {
+    return globalForVault.cachedSecrets;
+  }
+  // Reset stale token on re-fetch
+  globalForVault.cachedVaultToken = null;
 
   const vaultAddr = process.env.VAULT_ADDR || 'https://vault.wannasingh.dev';
   const token = await getVaultToken(vaultAddr);
@@ -80,6 +89,7 @@ export async function fetchSecrets(): Promise<VaultSecrets> {
       ORACLE_CONNECT_STRING: process.env.ORACLE_CONNECT_STRING,
       ORACLE_WALLET_LOCATION: process.env.ORACLE_WALLET_LOCATION,
     };
+    globalForVault.cacheExpiresAt = Date.now() + CACHE_TTL_MS;
     return globalForVault.cachedSecrets;
   }
 
@@ -121,6 +131,7 @@ export async function fetchSecrets(): Promise<VaultSecrets> {
       ...sharedData,
       ...envData
     } as VaultSecrets;
+    globalForVault.cacheExpiresAt = Date.now() + CACHE_TTL_MS;
     return globalForVault.cachedSecrets;
   } catch (error) {
     console.error('Failed to fetch secrets from Vault:', error);

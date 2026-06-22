@@ -17,7 +17,7 @@ const dmMono = DM_Mono({
   variable: "--font-dm-mono",
 });
 
-import { supabase } from "@/app/lib/supabase";
+import { supabase } from '@/app/lib/api-client';
 
 export const dynamic = 'force-dynamic';
 

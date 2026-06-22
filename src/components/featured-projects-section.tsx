@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { ExternalLink, ArrowRight, Loader2 } from "lucide-react";
 import { FaGithub } from "react-icons/fa6";
 import Link from "next/link";
-import { supabase, Project } from "@/app/lib/supabase";
+import { supabase, Project } from '@/app/lib/api-client';
 
 const FALLBACK_PROJECTS: Project[] = [
   {

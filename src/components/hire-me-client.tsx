@@ -10,7 +10,7 @@ import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea"; 
 import { Button } from "@/components/ui/button";
-import { supabase, Availability, Profile } from "@/app/lib/supabase";
+import { supabase, Availability, Profile } from '@/app/lib/api-client';
 
 export default function HireMeClient() {
   const [formData, setFormData] = useState({

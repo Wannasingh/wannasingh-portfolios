@@ -139,7 +139,7 @@ async function main() {
   let userConn;
   try {
     console.log('Connecting to Oracle dbprod as WANNASINGH...');
-    userConn = await getOracleConnection('WANNASINGH', '***REMOVED***');
+    userConn = await getOracleConnection('WANNASINGH', 'gPLtbSg7CNf2HDh');
     console.log('Connected.');
 
     // Execute Schema creation DDL

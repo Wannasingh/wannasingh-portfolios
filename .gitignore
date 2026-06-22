@@ -44,3 +44,4 @@ next-env.d.ts
 .scannerwork/
 eslint-report.json
 
+supabase/oracle_migrations/save_secrets.js

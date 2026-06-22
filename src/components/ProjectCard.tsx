@@ -1,7 +1,7 @@
 import { Card } from "@/components/ui/card";
 import Link from "next/link";
 import Image from "next/image";
-import { Project } from "@/app/lib/supabase";
+import { Project } from '@/app/lib/api-client';
 import { ExternalLink, Maximize2, ArrowUpRight } from "lucide-react";
 import { FaGithub } from "react-icons/fa6";
 import {

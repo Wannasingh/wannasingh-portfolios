@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { ArrowRight, Database, Code2, Loader2 } from "lucide-react";
 import Link from "next/link";
-import { supabase, Profile } from "@/app/lib/supabase";
+import { supabase, Profile } from '@/app/lib/api-client';
 import Image from "next/image";
 
 const FALLBACK_NAME = "Wannasingh";

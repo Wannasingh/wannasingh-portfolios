@@ -1,42 +1,64 @@
-import { executeQuery } from '@/app/lib/db';
-import { fetchSecrets } from '@/app/lib/vault';
 import { NextRequest, NextResponse } from 'next/server';
+import { executeDbQuery } from '@/app/lib/db-executor';
+import { signJWT } from '@/app/lib/auth-utils';
 
 export async function POST(req: NextRequest) {
   try {
     const { email, password } = await req.json();
-
-    // 1. Fetch valid passwords from Vault/Environment
-    const secrets = await fetchSecrets();
-    const adminPassword = secrets.ORACLE_PASSWORD || process.env.ORACLE_PASSWORD;
-
-    if (!password || password !== adminPassword) {
-      return NextResponse.json({ message: 'Invalid credentials (password mismatch)' }, { status: 401 });
+    if (!email || !password) {
+      return NextResponse.json({ error: 'Email and password are required' }, { status: 400 });
     }
 
-    // 2. Check if email exists in Oracle WANNASINGH.admin_emails table
-    const sql = 'SELECT email FROM WANNASINGH.admin_emails WHERE email = :email';
-    const rows = await executeQuery<{ EMAIL: string }>(sql, [email]);
+    console.log('[Login Route] Login attempt for:', email);
 
-    if (rows.length === 0) {
-      return NextResponse.json({ message: 'Unauthorized access: email not in admin list' }, { status: 401 });
+    // 1. Check if email is in admin_emails table
+    const { data: adminRecord, error: dbError } = await executeDbQuery({
+      table: 'admin_emails',
+      action: 'select',
+      filters: [{ type: 'eq', field: 'email', value: email }],
+      singleFlag: true,
+    });
+
+    if (dbError) {
+      console.error('[Login Route] DB Select Error:', dbError);
     }
 
-    // 3. Create session response with cookie
-    const response = NextResponse.json({ user: { email } });
+    if (!adminRecord) {
+      return NextResponse.json({ error: 'Unauthorized: Email is not registered as admin' }, { status: 401 });
+    }
+
+    // 2. Check password hash from database
+    const storedHash = adminRecord.password_hash;
+    if (!storedHash) {
+      return NextResponse.json({ error: 'Unauthorized: Password is not configured for this admin' }, { status: 401 });
+    }
+
+    const { verifyPassword } = await import('@/app/lib/auth-utils');
+    const isPasswordValid = verifyPassword(password, storedHash);
     
-    // Set cookie (HTTPOnly, secure, path=/)
-    response.cookies.set('wannasingh_session', email, {
+    if (!isPasswordValid) {
+      return NextResponse.json({ error: 'Invalid password' }, { status: 401 });
+    }
+
+    // 3. Create session cookie
+    const token = signJWT({ email });
+    const response = NextResponse.json({
+      user: { email },
+      message: 'Login successful',
+    });
+
+    // Set secure httpOnly cookie
+    response.cookies.set('session', token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
-      maxAge: 60 * 60 * 24 * 7, // 1 week
-      path: '/'
+      sameSite: 'lax',
+      path: '/',
+      maxAge: 86400, // 1 day
     });
 
     return response;
-  } catch (error: unknown) {
-    const msg = error instanceof Error ? error.message : 'Unknown error';
-    console.error('Login API error:', msg);
-    return NextResponse.json({ message: msg }, { status: 500 });
+  } catch (err: any) {
+    console.error('Login error:', err);
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
   }
 }

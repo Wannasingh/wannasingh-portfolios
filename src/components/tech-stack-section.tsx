@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import { Code2, Database, Layout, Server, Settings, Terminal, Cpu, LucideIcon, Loader2 } from "lucide-react";
 import { motion } from "framer-motion";
-import { supabase, SkillCategory, Skill } from "@/app/lib/supabase";
+import { supabase, SkillCategory, Skill } from '@/app/lib/api-client';
 import {
   SiOracle, SiPostgresql, SiDatabricks, SiApachespark, SiVeritas,
   SiNodedotjs, SiDotnet, SiOpenapiinitiative, SiGraphql, SiRedis, SiDocker,

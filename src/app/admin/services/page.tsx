@@ -1,11 +1,11 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { supabaseAdmin } from "../../lib/supabase-admin";
+import { supabaseAdmin } from '../../lib/admin-client';
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import Link from "next/link";
-import { Service } from "../../lib/supabase";
+import { Service } from '../../lib/api-client';
 
 export default function AdminServicesPage() {
     const [services, setServices] = useState<Service[]>([]);

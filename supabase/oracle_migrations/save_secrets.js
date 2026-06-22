@@ -8,37 +8,44 @@ const path = require('path');
 
 const vaultAddr = process.env.VAULT_ADDR || 'https://vault.wannasingh.dev';
 
+// Read from environment variables — never hardcode secrets
+function requireEnv(name) {
+  const val = process.env[name];
+  if (!val) throw new Error(`Missing required env var: ${name}`);
+  return val;
+}
+
 // 1. Shared secrets across all environments
 const sharedSecrets = {
-  OCI_NAMESPACE: 'axwlz6nlaqwo',
-  OCI_REGION: 'ap-singapore-1'
+  OCI_NAMESPACE: process.env.OCI_NAMESPACE || 'axwlz6nlaqwo',
+  OCI_REGION: process.env.OCI_REGION || 'ap-singapore-1'
 };
 
 // 2. Development secrets
 const developmentSecrets = {
-  ORACLE_USER: 'WANNASINGH',
-  ORACLE_PASSWORD: '***REMOVED***',
-  ORACLE_CONNECT_STRING: 'dbprod_low',
-  ORACLE_WALLET_LOCATION: '/Users/haru/oracle-26-ai/dbprod/Wallet_dbprod',
-  ORACLE_WALLET_PASSWORD: '***REMOVED***'
+  ORACLE_USER: requireEnv('ORACLE_USER'),
+  ORACLE_PASSWORD: requireEnv('ORACLE_PASSWORD'),
+  ORACLE_CONNECT_STRING: process.env.ORACLE_CONNECT_STRING || 'dbprod_low',
+  ORACLE_WALLET_LOCATION: process.env.DEV_WALLET_LOCATION || '',
+  ORACLE_WALLET_PASSWORD: requireEnv('ORACLE_WALLET_PASSWORD')
 };
 
 // 3. Staging secrets (shares bucket-dev)
 const stagingSecrets = {
-  ORACLE_USER: 'WANNASINGH',
-  ORACLE_PASSWORD: '***REMOVED***',
-  ORACLE_CONNECT_STRING: 'dbprod_low',
-  ORACLE_WALLET_LOCATION: '/Users/haru/oracle-26-ai/dbprod/Wallet_dbprod',
-  ORACLE_WALLET_PASSWORD: '***REMOVED***'
+  ORACLE_USER: requireEnv('ORACLE_USER'),
+  ORACLE_PASSWORD: requireEnv('ORACLE_PASSWORD'),
+  ORACLE_CONNECT_STRING: process.env.ORACLE_CONNECT_STRING || 'dbprod_low',
+  ORACLE_WALLET_LOCATION: process.env.DEV_WALLET_LOCATION || '',
+  ORACLE_WALLET_PASSWORD: requireEnv('ORACLE_WALLET_PASSWORD')
 };
 
 // 4. Production secrets (uses bucket-prod)
 const productionSecrets = {
-  ORACLE_USER: 'WANNASINGH',
-  ORACLE_PASSWORD: '***REMOVED***',
-  ORACLE_CONNECT_STRING: 'dbprod_low',
-  ORACLE_WALLET_LOCATION: '/home/ubuntu/Wallet_dbprod',
-  ORACLE_WALLET_PASSWORD: '***REMOVED***'
+  ORACLE_USER: requireEnv('ORACLE_USER'),
+  ORACLE_PASSWORD: requireEnv('ORACLE_PASSWORD'),
+  ORACLE_CONNECT_STRING: process.env.ORACLE_CONNECT_STRING || 'dbprod_low',
+  ORACLE_WALLET_LOCATION: process.env.PROD_WALLET_LOCATION || '',
+  ORACLE_WALLET_PASSWORD: requireEnv('ORACLE_WALLET_PASSWORD')
 };
 
 function getBaseHeaders() {

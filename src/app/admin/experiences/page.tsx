@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { supabaseAdmin } from "@/app/lib/supabase-admin";
-import { supabase, Experience } from "@/app/lib/supabase";
+import { supabaseAdmin } from '@/app/lib/admin-client';
+import { supabase, Experience } from '@/app/lib/api-client';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";

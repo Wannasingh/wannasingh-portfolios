@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import ProjectCard from '@/components/ProjectCard';
-import { Project } from '@/app/lib/supabase';
+import { Project } from '@/app/lib/api-client';
 
 const mockProject: Project = {
   id: '1',

@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import AboutMeClient from '@/components/AboutMeClient';
-import { supabase } from '@/app/lib/supabase';
+import { supabase } from '@/app/lib/api-client';
 
 // Mock values
 const mockProfile = {

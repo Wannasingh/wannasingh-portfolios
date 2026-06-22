@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import ProjectCard from "@/components/ProjectCard";
-import { supabase, Project, Profile } from "@/app/lib/supabase";
+import { supabase, Project, Profile } from '@/app/lib/api-client';
 import { ProfileHeader } from "@/components/ProfileHeader";
 import { Loader2 } from "lucide-react";
 

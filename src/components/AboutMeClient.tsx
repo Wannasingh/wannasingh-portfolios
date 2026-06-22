@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { Database, Layout, Loader2 } from "lucide-react";
 import { motion } from "framer-motion";
 import { ProfileHeader } from "@/components/ProfileHeader";
-import { supabase, Experience, Profile } from "@/app/lib/supabase";
+import { supabase, Experience, Profile } from '@/app/lib/api-client';
 
 const dataTags = ["Oracle 21c", "PostgreSQL", "PL/SQL Tuning", "Data Guard"];
 const uiTags = ["React", "Next.js", "Tailwind CSS", "Framer Motion"];

@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { supabaseAdmin } from "@/app/lib/supabase-admin";
-import { supabase, Availability } from "@/app/lib/supabase";
+import { supabaseAdmin } from '@/app/lib/admin-client';
+import { supabase, Availability } from '@/app/lib/api-client';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";

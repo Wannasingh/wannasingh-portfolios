@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { FaGithub, FaLinkedin, FaXTwitter } from "react-icons/fa6";
 import { useEffect, useState } from "react";
-import { supabase } from "@/app/lib/supabase";
+import { supabase } from '@/app/lib/api-client';
 
 export default function Footer() {
   const [socials, setSocials] = useState({

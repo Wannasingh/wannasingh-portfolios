@@ -3,7 +3,7 @@
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { FolderGit2, Code2, Briefcase, Layers } from "lucide-react";
 import { useEffect, useState } from "react";
-import { supabase } from "@/app/lib/supabase";
+import { supabase } from '@/app/lib/api-client';
 
 export function AdminStats() {
     const [counts, setCounts] = useState({

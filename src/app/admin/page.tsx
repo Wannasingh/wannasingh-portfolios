@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { supabaseAdmin } from "../lib/supabase-admin";
+import { supabaseAdmin } from '../lib/admin-client';
 import { Loader2 } from "lucide-react";
 import { AdminStats } from "@/components/admin-stats";
 
