@@ -56,11 +56,17 @@ pipeline {
                 echo "📊 Running SonarQube Scanner..."
                 withSonarQubeEnv('SonarQube') {
                     sh """
-                        docker run --rm \
-                            -e SONAR_HOST_URL=\${SONAR_HOST_URL} \
-                            -e SONAR_TOKEN=\${SONAR_TOKEN} \
-                            -v "\$(pwd):/usr/src" \
-                            sonarsource/sonar-scanner-cli:latest
+                        cat << 'EOF' > Dockerfile.sonar
+                        FROM node:20-alpine
+                        WORKDIR /usr/src
+                        COPY . .
+                        RUN apk add --no-cache openjdk17-jre && npm install -g sonarqube-scanner
+                        CMD ["sonar-scanner"]
+                        EOF
+                        docker build -t sonar-runner -f Dockerfile.sonar .
+                        docker run --name sonar-runner-container -e SONAR_HOST_URL=\${SONAR_HOST_URL} -e SONAR_TOKEN=\${SONAR_TOKEN} sonar-runner
+                        docker cp sonar-runner-container:/usr/src/.scannerwork ./.scannerwork || true
+                        docker rm sonar-runner-container
                     """
                 }
             }
