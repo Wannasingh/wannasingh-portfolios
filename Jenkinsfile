@@ -28,35 +28,60 @@ pipeline {
                 echo "🚀 Starting Pipeline..."
                 // slackSend(color: "good", message: "🟢 Started: ${env.JOB_NAME} #${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)")
                 
-                sh "docker run --rm -v \${WORKSPACE}:/pwd trufflesecurity/trufflehog:latest github --repo https://github.com/wannasingh/wannasingh-portfolios.git --only-verified"
+                sh "docker run --rm trufflesecurity/trufflehog:latest github --repo https://github.com/wannasingh/wannasingh-portfolios.git --only-verified"
             }
         }
 
         stage('2. Install Dependencies') {
+            agent {
+                docker {
+                    image 'oven/bun:latest'
+                    alwaysPull true
+                    args '-u root'
+                }
+            }
             steps {
                 echo "📦 Installing dependencies using bun..."
-                sh "docker run --rm -v \${WORKSPACE}:/app -w /app oven/bun:latest bun install --frozen-lockfile"
+                sh "bun install --frozen-lockfile"
             }
         }
 
         stage('3. Parallel Build & Quality') {
             parallel {
                 stage('Type Check') {
+                    agent {
+                        docker {
+                            image 'oven/bun:latest'
+                            args '-u root'
+                        }
+                    }
                     steps {
                         echo "🔍 Running Type Check..."
-                        sh "docker run --rm -v \${WORKSPACE}:/app -w /app oven/bun:latest bun run tsc --noEmit"
+                        sh "bun run tsc --noEmit"
                     }
                 }
                 stage('Lint') {
+                    agent {
+                        docker {
+                            image 'oven/bun:latest'
+                            args '-u root'
+                        }
+                    }
                     steps {
                         echo "🧹 Running Lint..."
-                        sh "docker run --rm -v \${WORKSPACE}:/app -w /app oven/bun:latest bun run lint"
+                        sh "bun run lint"
                     }
                 }
                 stage('Unit Tests') {
+                    agent {
+                        docker {
+                            image 'oven/bun:latest'
+                            args '-u root'
+                        }
+                    }
                     steps {
                         echo "🧪 Running Unit Tests with Coverage..."
-                        sh "docker run --rm -v \${WORKSPACE}:/app -w /app oven/bun:latest bun run test:ci"
+                        sh "bun run test:ci"
                     }
                 }
             }
@@ -65,17 +90,29 @@ pipeline {
         stage('4. Code Quality & Security Scanning') {
             parallel {
                 stage('SonarQube Analysis') {
+                    agent {
+                        docker {
+                            image 'sonarsource/sonar-scanner-cli:latest'
+                            args '-u root'
+                        }
+                    }
                     steps {
                         echo "📊 Running SonarQube Scanner..."
                         withSonarQubeEnv('sonarqube') {
-                            sh "docker run --rm -v \${WORKSPACE}:/usr/src -e SONAR_HOST_URL=\${SONAR_HOST_URL} -e SONAR_TOKEN=\${SONAR_TOKEN} sonarsource/sonar-scanner-cli:latest"
+                            sh "sonar-scanner -Dsonar.host.url=\${SONAR_HOST_URL} -Dsonar.token=\${SONAR_TOKEN}"
                         }
                     }
                 }
                 stage('Dependency Audit') {
+                    agent {
+                        docker {
+                            image 'oven/bun:latest'
+                            args '-u root'
+                        }
+                    }
                     steps {
                         echo "🔒 Running Dependency Audit..."
-                        sh "docker run --rm -v \${WORKSPACE}:/app -w /app oven/bun:latest npm audit --audit-level=high || true"
+                        sh "npm audit --audit-level=high || true"
                     }
                 }
             }
