@@ -54,7 +54,7 @@ pipeline {
         stage('3. Code Quality & Security Scanning') {
             steps {
                 echo "📊 Running SonarQube Scanner..."
-                withSonarQubeEnv('sonarqube') {
+                withSonarQubeEnv('SonarQube') {
                     sh """
                         cat << 'EOF' > Dockerfile.sonar
                         FROM sonarsource/sonar-scanner-cli:latest
