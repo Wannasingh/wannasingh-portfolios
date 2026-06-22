@@ -19,14 +19,14 @@ pipeline {
         DOCKER_CREDS     = credentials("docker-registry-creds")
         APPS_KEY         = credentials("apps-ssh-key")
         SONAR_TOKEN      = credentials("sonarqube-token")
-        // SLACK_WEBHOOK_URL = credentials("slack-webhook-token")
+        SLACK_WEBHOOK_URL = credentials("slack-webhook-token")
     }
 
     stages {
         stage('1. Initialization & Pre-check') {
             steps {
                 echo "🚀 Starting Pipeline..."
-                // slackSend(color: "good", message: "🟢 Started: ${env.JOB_NAME} #${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)")
+                slackSend(color: "good", message: "🟢 Started: ${env.JOB_NAME} #${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)")
                 
                 sh "docker run --rm trufflesecurity/trufflehog:latest github --repo https://github.com/wannasingh/wannasingh-portfolios.git --only-verified"
             }
@@ -165,7 +165,7 @@ pipeline {
                 }
             }
             steps {
-                // slackSend(color: "warning", message: "⏸️ Waiting for approval: ${env.JOB_NAME} #${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)")
+                slackSend(color: "warning", message: "⏸️ Waiting for approval: ${env.JOB_NAME} #${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)")
                 input message: 'Approve deployment to Production?', ok: 'Deploy'
             }
         }
@@ -201,19 +201,19 @@ pipeline {
         }
         success {
             echo "✅ Pipeline Succeeded!"
-            // slackSend(color: "good", message: "✅ Success: ${env.JOB_NAME} #${env.BUILD_NUMBER}")
+            slackSend(color: "good", message: "✅ Success: ${env.JOB_NAME} #${env.BUILD_NUMBER}")
         }
         failure {
             echo "❌ Pipeline Failed!"
-            // slackSend(color: "danger", message: "❌ Failed: ${env.JOB_NAME} #${env.BUILD_NUMBER}")
+            slackSend(color: "danger", message: "❌ Failed: ${env.JOB_NAME} #${env.BUILD_NUMBER}")
         }
         unstable {
             echo "⚠️ Pipeline Unstable!"
-            // slackSend(color: "warning", message: "⚠️ Unstable: ${env.JOB_NAME} #${env.BUILD_NUMBER}")
+            slackSend(color: "warning", message: "⚠️ Unstable: ${env.JOB_NAME} #${env.BUILD_NUMBER}")
         }
         aborted {
             echo "🛑 Pipeline Aborted!"
-            // slackSend(color: "#808080", message: "🛑 Aborted: ${env.JOB_NAME} #${env.BUILD_NUMBER}")
+            slackSend(color: "#808080", message: "🛑 Aborted: ${env.JOB_NAME} #${env.BUILD_NUMBER}")
         }
     }
 }
