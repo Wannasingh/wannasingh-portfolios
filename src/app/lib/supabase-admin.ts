@@ -5,17 +5,20 @@ export const supabaseAdmin = supabase;
 
 // Helper function เช็คว่าเป็น admin หรือไม่
 export async function isAdmin() {
-  const { data: { user } } = await supabaseAdmin.auth.getUser();
+  const result = await supabaseAdmin.auth.getUser();
+  const { data: { user } } = result;
   
-  if (!user) return false;
+  if (!user) {
+    return false;
+  }
   
-  const { data } = await supabaseAdmin
+  const fromResult = await supabaseAdmin
     .from('admin_emails')
     .select('email')
     .eq('email', user.email || '')
     .single();
-  
-  return !!data;
+    
+  return !!fromResult.data;
 }
 
 // Helper function สำหรับ protected routes

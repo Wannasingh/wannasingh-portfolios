@@ -62,6 +62,7 @@ jest.mock('framer-motion', () => {
       p: Dummy('p'),
       span: Dummy('span'),
       button: Dummy('button'),
+      article: Dummy('article'),
     },
     AnimatePresence: ({ children }: any) => children,
   };
@@ -121,8 +122,9 @@ jest.mock('nodemailer', () => ({
 // Automatic Proxy mocks for icon libraries to bypass ESM compilation issues
 jest.mock('lucide-react', () => {
   const React = require('react');
-  return new Proxy({}, {
+  return new Proxy({ __esModule: true }, {
     get: (target, prop) => {
+      if (prop === '__esModule') return true;
       return (props: any) => React.createElement('svg', { ...props, 'data-testid': `lucide-${String(prop).toLowerCase()}` });
     }
   });
@@ -130,8 +132,9 @@ jest.mock('lucide-react', () => {
 
 jest.mock('react-icons/fa', () => {
   const React = require('react');
-  return new Proxy({}, {
+  return new Proxy({ __esModule: true }, {
     get: (target, prop) => {
+      if (prop === '__esModule') return true;
       return (props: any) => React.createElement('svg', { ...props, 'data-testid': `fa-${String(prop).toLowerCase()}` });
     }
   });
@@ -139,10 +142,52 @@ jest.mock('react-icons/fa', () => {
 
 jest.mock('react-icons/fa6', () => {
   const React = require('react');
-  return new Proxy({}, {
+  return new Proxy({ __esModule: true }, {
     get: (target, prop) => {
+      if (prop === '__esModule') return true;
       return (props: any) => React.createElement('svg', { ...props, 'data-testid': `fa6-${String(prop).toLowerCase()}` });
     }
   });
 });
 
+jest.mock('react-icons/si', () => {
+  const React = require('react');
+  return new Proxy({ __esModule: true }, {
+    get: (target, prop) => {
+      if (prop === '__esModule') return true;
+      return (props: any) => React.createElement('svg', { ...props, 'data-testid': `si-${String(prop).toLowerCase()}` });
+    }
+  });
+});
+
+jest.mock('react-icons/md', () => {
+  const React = require('react');
+  return new Proxy({ __esModule: true }, {
+    get: (target, prop) => {
+      if (prop === '__esModule') return true;
+      return (props: any) => React.createElement('svg', { ...props, 'data-testid': `md-${String(prop).toLowerCase()}` });
+    }
+  });
+});
+
+jest.mock('sonner', () => ({
+  toast: {
+    promise: jest.fn().mockImplementation(async (promise, options) => {
+      try {
+        const res = await promise;
+        if (options.success) {
+          const successRes = options.success(res);
+          return successRes instanceof Promise ? await successRes : successRes;
+        }
+        return res;
+      } catch (err) {
+        if (options.error && typeof options.error === 'function') {
+          options.error(err);
+        }
+        throw err;
+      }
+    }),
+    success: jest.fn(),
+    error: jest.fn(),
+  }
+}));
