@@ -47,10 +47,10 @@ describe('/api/send-email POST handler', () => {
     process.env.SMTP_HOST = 'smtp.test.com';
     process.env.SMTP_USER = 'user@test.com';
     process.env.SMTP_PASS = 'password';
-    delete process.env.SMTP_PORT;
-    delete process.env.SMTP_SECURE;
-    delete process.env.EMAIL_FROM;
-    delete process.env.EMAIL_TO;
+    delete (process.env as any).SMTP_PORT;
+    delete (process.env as any).SMTP_SECURE;
+    delete (process.env as any).EMAIL_FROM;
+    delete (process.env as any).EMAIL_TO;
 
     const req = {
       json: jest.fn().mockResolvedValue({
