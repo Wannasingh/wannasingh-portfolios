@@ -56,10 +56,11 @@ pipeline {
                 echo "📊 Running SonarQube Scanner..."
                 withSonarQubeEnv('SonarQube') {
                     writeFile file: 'Dockerfile.sonar', text: '''
-FROM node:20-alpine
+FROM node:20-slim
 WORKDIR /usr/src
 COPY . .
-RUN apk add --no-cache openjdk17-jre && npm install -g sonarqube-scanner
+RUN apt-get update && apt-get install -y default-jre-headless && npm install -g sonarqube-scanner
+ENV SONAR_SCANNER_SKIP_JRE_PROVISIONING=true
 CMD ["sonar-scanner"]
 '''
                     sh """
