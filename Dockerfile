@@ -17,7 +17,7 @@ ENV NEXT_TELEMETRY_DISABLED 1
 RUN bun install --frozen-lockfile
 # Run tests and linting
 RUN bun run tsc --noEmit
-RUN bun run lint
+RUN npm run lint
 RUN bun run test:ci
 RUN npm audit --audit-level=high || true
 
