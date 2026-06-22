@@ -7,15 +7,26 @@ FROM base AS deps
 COPY package.json bun.lockb* ./
 RUN bun install --frozen-lockfile --production
 
-# 2. Build Stage
-FROM base AS builder
+# 2. Build & Test Stage
+FROM base AS tester
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 # Note: Next.js build might require environment variables. 
 # We generally set standard ones here, but secrets must be passed at build time or runtime.
 ENV NEXT_TELEMETRY_DISABLED 1
 RUN bun install --frozen-lockfile
-# Run build
+# Run tests and linting
+RUN bun run tsc --noEmit
+RUN bun run lint
+RUN bun run test:ci
+RUN npm audit --audit-level=high || true
+
+# 3. Production Builder
+FROM base AS builder
+COPY --from=deps /app/node_modules ./node_modules
+COPY . .
+ENV NEXT_TELEMETRY_DISABLED 1
+RUN bun install --frozen-lockfile
 RUN bun run build
 
 # 3. Production Image

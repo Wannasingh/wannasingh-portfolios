@@ -32,88 +32,38 @@ pipeline {
             }
         }
 
-        stage('2. Install Dependencies') {
-            agent {
-                docker {
-                    image 'oven/bun:latest'
-                    alwaysPull true
-                    args '-u root'
-                }
-            }
+        stage('2. Build & Test') {
             steps {
-                echo "📦 Installing dependencies using bun..."
-                sh "bun install --frozen-lockfile"
+                echo "🧪 Running Tests & Linting via Docker Build..."
+                sh """
+                    docker build \
+                    --target tester \
+                    --tag ${IMAGE_NAME}:tester \
+                    --cache-from ${IMAGE_NAME}:tester \
+                    .
+                """
+                echo "📥 Extracting Coverage Report..."
+                sh """
+                    docker create --name ci-extractor ${IMAGE_NAME}:tester
+                    docker cp ci-extractor:/app/coverage ./coverage || true
+                    docker rm ci-extractor
+                """
             }
         }
 
-        stage('3. Parallel Build & Quality') {
-            parallel {
-                stage('Type Check') {
-                    agent {
-                        docker {
-                            image 'oven/bun:latest'
-                            args '-u root'
-                        }
-                    }
-                    steps {
-                        echo "🔍 Running Type Check..."
-                        sh "bun run tsc --noEmit"
-                    }
-                }
-                stage('Lint') {
-                    agent {
-                        docker {
-                            image 'oven/bun:latest'
-                            args '-u root'
-                        }
-                    }
-                    steps {
-                        echo "🧹 Running Lint..."
-                        sh "bun run lint"
-                    }
-                }
-                stage('Unit Tests') {
-                    agent {
-                        docker {
-                            image 'oven/bun:latest'
-                            args '-u root'
-                        }
-                    }
-                    steps {
-                        echo "🧪 Running Unit Tests with Coverage..."
-                        sh "bun run test:ci"
-                    }
-                }
-            }
-        }
-
-        stage('4. Code Quality & Security Scanning') {
-            parallel {
-                stage('SonarQube Analysis') {
-                    agent {
-                        docker {
-                            image 'sonarsource/sonar-scanner-cli:latest'
-                            args '-u root'
-                        }
-                    }
-                    steps {
-                        echo "📊 Running SonarQube Scanner..."
-                        withSonarQubeEnv('sonarqube') {
-                            sh "sonar-scanner -Dsonar.host.url=\${SONAR_HOST_URL} -Dsonar.token=\${SONAR_TOKEN}"
-                        }
-                    }
-                }
-                stage('Dependency Audit') {
-                    agent {
-                        docker {
-                            image 'oven/bun:latest'
-                            args '-u root'
-                        }
-                    }
-                    steps {
-                        echo "🔒 Running Dependency Audit..."
-                        sh "npm audit --audit-level=high || true"
-                    }
+        stage('3. Code Quality & Security Scanning') {
+            steps {
+                echo "📊 Running SonarQube Scanner..."
+                withSonarQubeEnv('sonarqube') {
+                    sh """
+                        cat << 'EOF' > Dockerfile.sonar
+                        FROM sonarsource/sonar-scanner-cli:latest
+                        WORKDIR /usr/src
+                        COPY . .
+                        EOF
+                        docker build -t sonar-runner -f Dockerfile.sonar .
+                        docker run --rm -e SONAR_HOST_URL=\${SONAR_HOST_URL} -e SONAR_TOKEN=\${SONAR_TOKEN} sonar-runner
+                    """
                 }
             }
         }
