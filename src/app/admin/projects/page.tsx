@@ -2,14 +2,17 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { supabaseAdmin } from "@/app/lib/supabase-admin";
-import { supabase, Project } from "@/app/lib/supabase";
+import Image from "next/image";
+import { supabaseAdmin } from '@/app/lib/admin-client';
+import { supabase, Project } from '@/app/lib/api-client';
+import { resolveImageUrl } from "@/app/lib/storage-utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Card, CardHeader, CardTitle, CardContent, CardFooter } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
-import { Loader2, Plus, Pencil, Trash2, ArrowLeft, Save, Star, ExternalLink, Github, Upload, Image as ImageIcon } from "lucide-react";
+import { Loader2, Plus, Pencil, Trash2, ArrowLeft, Save, Star, ExternalLink, Upload, Image as ImageIcon } from "lucide-react";
+import { FaGithub } from "react-icons/fa6";
 import Link from "next/link";
 import { toast } from "sonner";
 import {
@@ -99,7 +102,7 @@ export default function AdminProjectsPage() {
       
       try {
         const fileExt = file.name.split('.').pop();
-        const fileName = `${Math.random().toString(36).substring(2, 15)}.${fileExt}`;
+        const fileName = `${crypto.randomUUID()}.${fileExt}`;
         const filePath = `${fileName}`;
 
         const { error: uploadError } = await supabase.storage
@@ -119,7 +122,7 @@ export default function AdminProjectsPage() {
         setCurrentProject(prev => ({ ...prev, image_path: publicUrl }));
         toast.success("Image uploaded successfully");
 
-      } catch (error: unknown) {
+      } catch (error) {
           const err = error as Error;
           console.error("Error uploading image:", err);
           toast.error(`Upload failed: ${err.message || "Unknown error"}. Check console.`);
@@ -142,8 +145,9 @@ export default function AdminProjectsPage() {
       };
       
       // Remove id from payload if creating
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      const { id, created_at, ...updateData } = payload;
+      const updateData = { ...payload };
+      delete updateData.id;
+      delete updateData.created_at;
 
       let error;
       if (currentProject.id) {
@@ -193,10 +197,9 @@ export default function AdminProjectsPage() {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                 {projects.map((project) => (
                     <Card key={project.id} className="flex flex-col h-full border hover:border-primary/50 transition-colors">
-                        <div className="relative h-48 w-full bg-muted overflow-hidden rounded-t-lg">
+                        <div className="aspect-video relative bg-muted mb-4 rounded-md overflow-hidden flex items-center justify-center">
                             {project.image_path ? (
-                                /* eslint-disable-next-line @next/next/no-img-element */
-                                <img src={project.image_path} alt={project.title} className="w-full h-full object-cover" />
+                                <Image src={resolveImageUrl(project.image_path, 'projects')} alt={project.title} width={300} height={192} className="w-full h-full object-cover" unoptimized />
                             ) : (
                                 <div className="flex items-center justify-center h-full text-muted-foreground">
                                     <ImageIcon className="h-10 w-10 opacity-20" />
@@ -247,7 +250,7 @@ export default function AdminProjectsPage() {
                                 )}
                                 {project.github_link && (
                                     <a href={project.github_link} target="_blank" className="flex items-center hover:text-primary">
-                                        <Github className="h-3 w-3 mr-1"/> Code
+                                        <FaGithub className="h-3 w-3 mr-1"/> Code
                                     </a>
                                 )}
                             </div>
@@ -272,8 +275,7 @@ export default function AdminProjectsPage() {
                              <div className="flex items-center gap-4">
                                 {currentProject.image_path ? (
                                     <div className="relative w-32 h-20 rounded border overflow-hidden">
-                                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                                    <img src={currentProject.image_path} alt="Preview" className="w-full h-full object-cover" />
+                                        <Image src={resolveImageUrl(currentProject.image_path, 'projects')} alt="Preview" width={128} height={80} className="w-full h-full object-cover" unoptimized />
                                         <button 
                                             type="button"
                                             onClick={() => setCurrentProject(p => ({...p, image_path: ""}))}

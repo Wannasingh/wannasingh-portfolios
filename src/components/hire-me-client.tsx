@@ -2,14 +2,15 @@
 
 import React, { useState, useEffect } from "react";
 import { ProfileHeader } from "@/components/ProfileHeader";
-import { Github, Linkedin, Mail, FileText, Send, Loader2 } from "lucide-react";
+import { Mail, FileText, Send, Loader2 } from "lucide-react";
+import { FaGithub, FaLinkedin } from "react-icons/fa6";
 import { motion } from "framer-motion";
 import { sendEmail } from "@/lib/email";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea"; 
 import { Button } from "@/components/ui/button";
-import { supabase, Availability, Profile } from "@/app/lib/supabase";
+import { supabase, Availability, Profile } from '@/app/lib/api-client';
 
 export default function HireMeClient() {
   const [formData, setFormData] = useState({
@@ -65,6 +66,7 @@ export default function HireMeClient() {
           pageType="hire-me"
           title="Let's Build Something Scalable"
           description={profile?.bio_short || "Ready to bring database-level optimization to your full-stack project? I'm currently available for freelance and full-time opportunities."}
+          avatarUrl={profile?.avatar_url}
           primaryButton={{ text: "Email Me", href: `mailto:${profile?.email || 'wannasingh.khan@gmail.com'}` }}
           secondaryButton={{ text: "View Portfolio", href: "/portfolio" }}
         />
@@ -80,12 +82,12 @@ export default function HireMeClient() {
                  </a>
                  {profile?.github_link && (
                     <a href={profile.github_link} target="_blank" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
-                        <Github className="h-4 w-4" /> GitHub Profile
+                        <FaGithub className="h-4 w-4" /> GitHub Profile
                     </a>
                  )}
                  {profile?.linkedin_link && (
                     <a href={profile.linkedin_link} target="_blank" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
-                        <Linkedin className="h-4 w-4" /> LinkedIn Profile
+                        <FaLinkedin className="h-4 w-4" /> LinkedIn Profile
                     </a>
                  )}
               </div>

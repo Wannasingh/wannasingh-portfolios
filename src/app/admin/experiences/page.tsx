@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { supabaseAdmin } from "@/app/lib/supabase-admin";
-import { supabase, Experience } from "@/app/lib/supabase";
+import { supabaseAdmin } from '@/app/lib/admin-client';
+import { supabase, Experience } from '@/app/lib/api-client';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -193,7 +193,7 @@ export default function AdminExperiencesPage() {
                                     id="display_order" 
                                     type="number"
                                     value={currentExp.display_order || 0} 
-                                    onChange={(e) => setCurrentExp({...currentExp, display_order: parseInt(e.target.value)})}
+                                    onChange={(e) => setCurrentExp({...currentExp, display_order: Number.parseInt(e.target.value) || 0})}
                                     required
                                 />
                             </div>

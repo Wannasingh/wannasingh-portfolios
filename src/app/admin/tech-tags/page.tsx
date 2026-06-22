@@ -1,12 +1,12 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { supabaseAdmin } from "../../lib/supabase-admin";
+import { supabaseAdmin } from '../../lib/admin-client';
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import Link from "next/link";
-import { TechTag } from "../../lib/supabase";
+import { TechTag } from '../../lib/api-client';
 
 export default function AdminTechTagsPage() {
     const [techTags, setTechTags] = useState<TechTag[]>([]);
@@ -22,7 +22,8 @@ export default function AdminTechTagsPage() {
     useEffect(() => {
         checkAuth();
         fetchTechTags();
-    }, []); // eslint-disable-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     async function checkAuth() {
         const { data: { user } } = await supabaseAdmin.auth.getUser();
@@ -49,7 +50,7 @@ export default function AdminTechTagsPage() {
     }
 
     async function handleSave() {
-        if (!editingId || editingId === "new") {
+        if (editingId === "new") {
             const { error } = await supabaseAdmin.from("tech_tags").insert([formData]);
             if (error) return;
         } else {
@@ -96,8 +97,9 @@ export default function AdminTechTagsPage() {
                         <div className="space-y-4">
                             <div className="grid grid-cols-2 gap-4">
                                 <div>
-                                    <label className="block font-bold mb-2">ชื่อ</label>
+                                    <label htmlFor="tag-name" className="block font-bold mb-2">ชื่อ</label>
                                     <input
+                                        id="tag-name"
                                         type="text"
                                         value={formData.name || ""}
                                         onChange={(e) => setFormData({ ...formData, name: e.target.value })}
@@ -106,8 +108,9 @@ export default function AdminTechTagsPage() {
                                     />
                                 </div>
                                 <div>
-                                    <label className="block font-bold mb-2">Category</label>
+                                    <label htmlFor="tag-category" className="block font-bold mb-2">Category</label>
                                     <select
+                                        id="tag-category"
                                         value={formData.category || ""}
                                         onChange={(e) => setFormData({ ...formData, category: e.target.value })}
                                         className="w-full px-4 py-2 border-2 border-black rounded"
@@ -120,8 +123,9 @@ export default function AdminTechTagsPage() {
                             </div>
                             <div className="grid grid-cols-2 gap-4">
                                 <div>
-                                    <label className="block font-bold mb-2">สี</label>
+                                    <label htmlFor="tag-color" className="block font-bold mb-2">สี</label>
                                     <select
+                                        id="tag-color"
                                         value={formData.color || ""}
                                         onChange={(e) => setFormData({ ...formData, color: e.target.value })}
                                         className="w-full px-4 py-2 border-2 border-black rounded"
@@ -132,11 +136,12 @@ export default function AdminTechTagsPage() {
                                     </select>
                                 </div>
                                 <div>
-                                    <label className="block font-bold mb-2">ลำดับ</label>
+                                    <label htmlFor="tag-order" className="block font-bold mb-2">ลำดับ</label>
                                     <input
+                                        id="tag-order"
                                         type="number"
                                         value={formData.display_order || 0}
-                                        onChange={(e) => setFormData({ ...formData, display_order: parseInt(e.target.value) })}
+                                        onChange={(e) => setFormData({ ...formData, display_order: Number.parseInt(e.target.value) })}
                                         className="w-full px-4 py-2 border-2 border-black rounded"
                                     />
                                 </div>
@@ -159,7 +164,7 @@ export default function AdminTechTagsPage() {
                 )}
 
                 <div className="space-y-6">
-                    {Object.entries(groupedTags).map(([category, tags]) => (
+                    {(Object.entries(groupedTags) as [string, TechTag[]][]).map(([category, tags]) => (
                         <div key={category}>
                             <h2 className="text-2xl font-bold mb-4">{category}</h2>
                             <div className="grid gap-4">

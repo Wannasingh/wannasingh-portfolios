@@ -1,16 +1,16 @@
 "use client";
 import { useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
-import { supabaseAdmin } from "../lib/supabase-admin";
+import { supabaseAdmin } from '../lib/admin-client';
 import { Button } from "@/components/ui/button";
 import { LogOut } from "lucide-react";
 import { AdminSidebar, AdminMobileSidebar } from "@/components/admin-sidebar";
 
 export default function AdminLayout({
   children,
-}: {
+}: Readonly<{
   children: React.ReactNode;
-}) {
+}>) {
   const [user, setUser] = useState<{ email?: string } | null>(null);
   const router = useRouter();
   const pathname = usePathname();

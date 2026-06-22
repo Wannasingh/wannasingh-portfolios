@@ -1,11 +1,11 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { supabaseAdmin } from "../../lib/supabase-admin";
+import { supabaseAdmin } from '../../lib/admin-client';
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import Link from "next/link";
-import { Service } from "../../lib/supabase";
+import { Service } from '../../lib/api-client';
 
 export default function AdminServicesPage() {
     const [services, setServices] = useState<Service[]>([]);
@@ -38,12 +38,12 @@ export default function AdminServicesPage() {
     async function handleDelete(id: string) {
         if (!confirm("คุณแน่ใจหรือไม่?")) return;
         const { error } = await supabaseAdmin.from("services").delete().eq("id", id);
-        if (!error) fetchServices();
-        else alert("เกิดข้อผิดพลาด: " + error.message);
+        if (error) alert("เกิดข้อผิดพลาด: " + error.message);
+        else fetchServices();
     }
 
     async function handleSave() {
-        if (!editingId) {
+        if (editingId === "new") {
             const { error } = await supabaseAdmin.from("services").insert([formData]);
             if (error) {
                 alert("เกิดข้อผิดพลาด: " + error.message);
@@ -91,8 +91,9 @@ export default function AdminServicesPage() {
                         <h2 className="text-2xl font-bold mb-4">{editingId === "new" ? "เพิ่มบริการใหม่" : "แก้ไขบริการ"}</h2>
                         <div className="space-y-4">
                             <div>
-                                <label className="block font-bold mb-2">ชื่อบริการ</label>
+                                <label htmlFor="service-title" className="block font-bold mb-2">ชื่อบริการ</label>
                                 <input
+                                    id="service-title"
                                     type="text"
                                     value={formData.title || ""}
                                     onChange={(e) => setFormData({ ...formData, title: e.target.value })}
@@ -100,8 +101,9 @@ export default function AdminServicesPage() {
                                 />
                             </div>
                             <div>
-                                <label className="block font-bold mb-2">คำอธิบาย</label>
+                                <label htmlFor="service-desc" className="block font-bold mb-2">คำอธิบาย</label>
                                 <textarea
+                                    id="service-desc"
                                     value={formData.description || ""}
                                     onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                                     className="w-full px-4 py-2 border-2 border-black rounded"
@@ -110,8 +112,9 @@ export default function AdminServicesPage() {
                             </div>
                             <div className="grid grid-cols-2 gap-4">
                                 <div>
-                                    <label className="block font-bold mb-2">Icon</label>
+                                    <label htmlFor="service-icon" className="block font-bold mb-2">Icon</label>
                                     <select
+                                        id="service-icon"
                                         value={formData.icon_name || ""}
                                         onChange={(e) => setFormData({ ...formData, icon_name: e.target.value })}
                                         className="w-full px-4 py-2 border-2 border-black rounded"
@@ -122,8 +125,9 @@ export default function AdminServicesPage() {
                                     </select>
                                 </div>
                                 <div>
-                                    <label className="block font-bold mb-2">สี Icon (Hex)</label>
+                                    <label htmlFor="service-color" className="block font-bold mb-2">สี Icon (Hex)</label>
                                     <input
+                                        id="service-color"
                                         type="text"
                                         value={formData.icon_color || ""}
                                         onChange={(e) => setFormData({ ...formData, icon_color: e.target.value })}
@@ -134,11 +138,12 @@ export default function AdminServicesPage() {
                             </div>
                             <div className="grid grid-cols-2 gap-4">
                                 <div>
-                                    <label className="block font-bold mb-2">ลำดับการแสดง</label>
+                                    <label htmlFor="service-order" className="block font-bold mb-2">ลำดับการแสดง</label>
                                     <input
+                                        id="service-order"
                                         type="number"
                                         value={formData.display_order || 0}
-                                        onChange={(e) => setFormData({ ...formData, display_order: parseInt(e.target.value) })}
+                                        onChange={(e) => setFormData({ ...formData, display_order: Number.parseInt(e.target.value) })}
                                         className="w-full px-4 py-2 border-2 border-black rounded"
                                     />
                                 </div>

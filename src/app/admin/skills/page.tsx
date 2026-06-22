@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { supabaseAdmin } from "@/app/lib/supabase-admin";
-import { supabase, SkillCategory, Skill } from "@/app/lib/supabase";
+import { supabaseAdmin } from '@/app/lib/admin-client';
+import { supabase, SkillCategory, Skill } from '@/app/lib/api-client';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
@@ -18,6 +18,8 @@ import {
   DialogTitle,
   DialogFooter,
 } from "@/components/ui/dialog";
+
+// Simple mapping for demonstration of available icons
 const AVAILABLE_ICONS = [
   "SiOracle", "SiPostgresql", "SiDatabricks", "SiApachespark", "SiVeritas", 
   "SiNodedotjs", "SiDotnet", "SiOpenapiinitiative", "SiGraphql", "SiRedis", "SiDocker",
@@ -36,6 +38,7 @@ export default function AdminSkillsPage() {
   const [currentCat, setCurrentCat] = useState<Partial<SkillCategory>>({});
   const [currentSkill, setCurrentSkill] = useState<Partial<Skill>>({});
   
+  const [saving, setSaving] = useState(false);
   const [expandedCat, setExpandedCat] = useState<string | null>(null);
 
   const router = useRouter();
@@ -64,9 +67,9 @@ export default function AdminSkillsPage() {
        toast.error("Failed to load skills");
     } else {
        // Sort skills
-       const sorted = data?.map((cat: SkillCategory) => ({
+       const sorted = (data as unknown as (SkillCategory & { skills: Skill[] })[])?.map((cat) => ({
            ...cat,
-           skills: cat.skills.sort((a: Skill, b: Skill) => a.display_order - b.display_order)
+           skills: [...cat.skills].sort((a, b) => a.display_order - b.display_order)
        })) || [];
        setCategories(sorted);
     }
@@ -84,6 +87,7 @@ export default function AdminSkillsPage() {
   };
   const handleSaveCat = async (e: React.FormEvent) => {
       e.preventDefault();
+      setSaving(true);
       const payload = { name: currentCat.name, icon_name: currentCat.icon_name, class_name: currentCat.class_name, display_order: currentCat.display_order };
       
       let error;
@@ -97,6 +101,7 @@ export default function AdminSkillsPage() {
 
       if(error) toast.error("Failed to save category");
       else { toast.success("Category saved"); setIsCatDialogOpen(false); fetchData(); }
+      setSaving(false);
   };
   const handleDeleteCat = async (id: string) => {
       if(!confirm("Delete category? This will delete all skills inside it!")) return;
@@ -120,6 +125,7 @@ export default function AdminSkillsPage() {
   };
   const handleSaveSkill = async (e: React.FormEvent) => {
       e.preventDefault();
+      setSaving(true);
       const payload = { 
           name: currentSkill.name, 
           icon_key: currentSkill.icon_key, 
@@ -138,6 +144,7 @@ export default function AdminSkillsPage() {
 
       if(error) toast.error("Failed to save skill");
       else { toast.success("Skill saved"); setIsSkillDialogOpen(false); fetchData(); }
+      setSaving(false);
   };
   const handleDeleteSkill = async (id: string) => {
       if(!confirm("Delete skill?")) return;
@@ -169,18 +176,21 @@ export default function AdminSkillsPage() {
             <div className="space-y-4">
                 {categories.map(cat => (
                     <Card key={cat.id} className="overflow-hidden">
-                        <div 
-                            className="flex items-center p-4 bg-muted/30 cursor-pointer hover:bg-muted/50 transition-colors"
-                            onClick={() => setExpandedCat(expandedCat === cat.id ? null : cat.id)}
-                        >
-                            <div className="mr-2">
-                                {expandedCat === cat.id ? <ChevronDown className="h-5 w-5"/> : <ChevronRight className="h-5 w-5"/>}
-                            </div>
-                            <div className="flex-1 font-bold flex items-center gap-2">
-                                {cat.name} 
-                                <span className="text-xs font-normal text-muted-foreground bg-primary/10 px-2 py-0.5 rounded">{cat.skills.length} skills</span>
-                            </div>
-                            <div className="flex gap-1" onClick={e => e.stopPropagation()}>
+                        <div className="flex items-center justify-between p-2 sm:p-4 bg-muted/30">
+                            <button 
+                                type="button"
+                                className="flex-1 flex items-center text-left font-bold focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring rounded"
+                                onClick={() => setExpandedCat(expandedCat === cat.id ? null : cat.id)}
+                            >
+                                <div className="mr-2 shrink-0">
+                                    {expandedCat === cat.id ? <ChevronDown className="h-5 w-5"/> : <ChevronRight className="h-5 w-5"/>}
+                                </div>
+                                <div className="flex items-center gap-2 truncate mr-2">
+                                    <span className="truncate">{cat.name}</span>
+                                    <span className="text-xs font-normal text-muted-foreground bg-primary/10 px-2 py-0.5 rounded shrink-0">{cat.skills.length} skills</span>
+                                </div>
+                            </button>
+                            <div className="flex gap-1 shrink-0">
                                 <Button variant="ghost" size="icon" onClick={() => handleEditCat(cat)}><Pencil className="h-4 w-4"/></Button>
                                 <Button variant="ghost" size="icon" className="text-destructive" onClick={() => handleDeleteCat(cat.id)}><Trash2 className="h-4 w-4"/></Button>
                             </div>
@@ -219,10 +229,15 @@ export default function AdminSkillsPage() {
                     <DialogHeader><DialogTitle>{currentCat.id ? "Edit Category" : "New Category"}</DialogTitle></DialogHeader>
                     <form onSubmit={handleSaveCat} className="space-y-4 py-4">
                         <Input value={currentCat.name || ''} onChange={e => setCurrentCat({...currentCat, name: e.target.value})} placeholder="Category Name" required />
-                        <Input value={currentCat.display_order || 0} type="number" onChange={e => setCurrentCat({...currentCat, display_order: parseInt(e.target.value)})} placeholder="Order" required />
+                        <Input value={currentCat.display_order || 0} type="number" onChange={e => setCurrentCat({...currentCat, display_order: Number.parseInt(e.target.value) || 0})} placeholder="Order" required />
                         <Input value={currentCat.icon_name || ''} onChange={e => setCurrentCat({...currentCat, icon_name: e.target.value})} placeholder="Icon Name (Lucide)" />
                         <Input value={currentCat.class_name || ''} onChange={e => setCurrentCat({...currentCat, class_name: e.target.value})} placeholder="Tailwind Class (e.g. text-blue-500)" />
-                        <DialogFooter><Button type="submit">Save</Button></DialogFooter>
+                        <DialogFooter>
+                            <Button type="submit" disabled={saving}>
+                                {saving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                                Save
+                            </Button>
+                        </DialogFooter>
                     </form>
                 </DialogContent>
             </Dialog>
@@ -233,7 +248,7 @@ export default function AdminSkillsPage() {
                     <DialogHeader><DialogTitle>{currentSkill.id ? "Edit Skill" : "New Skill"}</DialogTitle></DialogHeader>
                     <form onSubmit={handleSaveSkill} className="space-y-4 py-4">
                         <Input value={currentSkill.name || ''} onChange={e => setCurrentSkill({...currentSkill, name: e.target.value})} placeholder="Skill Name" required />
-                        <Input value={currentSkill.display_order || 0} type="number" onChange={e => setCurrentSkill({...currentSkill, display_order: parseInt(e.target.value)})} placeholder="Order" required />
+                        <Input value={currentSkill.display_order || 0} type="number" onChange={e => setCurrentSkill({...currentSkill, display_order: Number.parseInt(e.target.value) || 0})} placeholder="Order" required />
                         <div className="space-y-2">
                              <Label>Icon Key (React Icons)</Label>
                              <div className="flex gap-2">
@@ -241,7 +256,12 @@ export default function AdminSkillsPage() {
                              </div>
                              <p className="text-xs text-muted-foreground">Available examples: {AVAILABLE_ICONS.slice(0, 5).join(", ")}...</p>
                         </div>
-                        <DialogFooter><Button type="submit">Save</Button></DialogFooter>
+                        <DialogFooter>
+                            <Button type="submit" disabled={saving}>
+                                {saving && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                                Save
+                            </Button>
+                        </DialogFooter>
                     </form>
                 </DialogContent>
             </Dialog>

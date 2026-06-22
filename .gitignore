@@ -39,3 +39,9 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# sonarqube & eslint reports
+.scannerwork/
+eslint-report.json
+
+supabase/oracle_migrations/save_secrets.js

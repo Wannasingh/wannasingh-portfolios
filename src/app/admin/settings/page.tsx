@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { supabaseAdmin } from "@/app/lib/supabase-admin";
-import { supabase } from "@/app/lib/supabase";
+import { supabaseAdmin } from '@/app/lib/admin-client';
+import { supabase } from '@/app/lib/api-client';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -106,7 +106,7 @@ export default function AdminSettingsPage() {
             setSettings(prev => prev ? ({ ...prev, resume_url: publicUrl }) : null);
             toast.success("Resume uploaded successfully");
 
-        } catch (error: unknown) {
+        } catch (error) {
             console.error("Upload error:", error);
             toast.error("Failed to upload resume. Ensure bucket exists.");
         } finally {

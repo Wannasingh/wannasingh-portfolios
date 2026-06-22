@@ -1,21 +1,43 @@
-import { Inter } from "next/font/google";
+import type { Metadata } from "next";
+import { Plus_Jakarta_Sans, DM_Mono } from "next/font/google";
 import "@/app/globals.css";
 import { Toaster } from "sonner";
 import { ThemeProvider } from "@/components/theme-provider";
 import ClientLayout from "@/components/client-layout";
 
-const inter = Inter({ subsets: ["latin"] });
+const plusJakartaSans = Plus_Jakarta_Sans({ 
+  subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700", "800"],
+  variable: "--font-plus-jakarta",
+});
 
-import { supabase } from "@/app/lib/supabase";
+const dmMono = DM_Mono({
+  subsets: ["latin"],
+  weight: ["400", "500"],
+  variable: "--font-dm-mono",
+});
 
-export async function generateMetadata() {
-  const { data: settings } = await supabase
-    .from('system_settings')
-    .select('site_title, site_description')
-    .single();
+import { supabase } from '@/app/lib/api-client';
 
-  const title = settings?.site_title || "Wannasingh Portfolio";
-  const description = settings?.site_description || "Full Stack Developer & Oracle DB Architect";
+export const dynamic = 'force-dynamic';
+
+export async function generateMetadata(): Promise<Metadata> {
+  let title = "Wannasingh Portfolio";
+  let description = "Full Stack Developer & Oracle DB Architect";
+
+  try {
+    const { data: settings } = await supabase
+      .from('system_settings')
+      .select('site_title, site_description')
+      .single();
+
+    if (settings) {
+      title = settings.site_title || title;
+      description = settings.site_description || description;
+    }
+  } catch (e) {
+    console.warn("Failed to fetch metadata settings at build/render time, using defaults:", e);
+  }
 
   return {
     title: {
@@ -34,15 +56,15 @@ export async function generateMetadata() {
 
 export default function RootLayout({
   children,
-}: {
+}: Readonly<{
   children: React.ReactNode;
-}) {
+}>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${inter.className} min-h-screen bg-background text-foreground select-none`}>
+      <body className={`${plusJakartaSans.className} ${dmMono.variable} min-h-screen bg-background text-foreground select-none`}>
         <ThemeProvider
             attribute="class"
-            defaultTheme="system"
+            defaultTheme="dark"
             enableSystem
             disableTransitionOnChange
           >

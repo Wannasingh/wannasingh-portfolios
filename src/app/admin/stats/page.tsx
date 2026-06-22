@@ -1,12 +1,12 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { supabaseAdmin } from "../../lib/supabase-admin";
+import { supabaseAdmin } from '../../lib/admin-client';
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import Link from "next/link";
-import { Stat } from "../../lib/supabase";
+import { Stat } from '../../lib/api-client';
 
 export default function AdminStatsPage() {
     const [stats, setStats] = useState<Stat[]>([]);
@@ -19,7 +19,8 @@ export default function AdminStatsPage() {
     useEffect(() => {
         checkAuth();
         fetchStats();
-    }, []); // eslint-disable-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     async function checkAuth() {
         const { data: { user } } = await supabaseAdmin.auth.getUser();
@@ -45,7 +46,7 @@ export default function AdminStatsPage() {
     }
 
     async function handleSave() {
-        if (!editingId || editingId === "new") {
+        if (editingId === "new") {
             const { error } = await supabaseAdmin.from("stats").insert([formData]);
             if (error) return;
         } else {
@@ -86,8 +87,9 @@ export default function AdminStatsPage() {
                         <div className="space-y-4">
                             <div className="grid grid-cols-2 gap-4">
                                 <div>
-                                    <label className="block font-bold mb-2">ตัวเลข</label>
+                                    <label htmlFor="stat-number" className="block font-bold mb-2">ตัวเลข</label>
                                     <input
+                                        id="stat-number"
                                         type="text"
                                         value={formData.number || ""}
                                         onChange={(e) => setFormData({ ...formData, number: e.target.value })}
@@ -96,8 +98,9 @@ export default function AdminStatsPage() {
                                     />
                                 </div>
                                 <div>
-                                    <label className="block font-bold mb-2">ป้ายกำกับ</label>
+                                    <label htmlFor="stat-label" className="block font-bold mb-2">ป้ายกำกับ</label>
                                     <input
+                                        id="stat-label"
                                         type="text"
                                         value={formData.label || ""}
                                         onChange={(e) => setFormData({ ...formData, label: e.target.value })}
@@ -105,11 +108,12 @@ export default function AdminStatsPage() {
                                         placeholder="Technologies"
                                     />
                                 </div>
-                            </div>
-                            <div className="grid grid-cols-2 gap-4">
+                             </div>
+                             <div className="grid grid-cols-2 gap-4">
                                 <div>
-                                    <label className="block font-bold mb-2">สี (Tailwind class)</label>
+                                    <label htmlFor="stat-color" className="block font-bold mb-2">สี (Tailwind class)</label>
                                     <select
+                                        id="stat-color"
                                         value={formData.color || ""}
                                         onChange={(e) => setFormData({ ...formData, color: e.target.value })}
                                         className="w-full px-4 py-2 border-2 border-black rounded"
@@ -122,15 +126,16 @@ export default function AdminStatsPage() {
                                     </select>
                                 </div>
                                 <div>
-                                    <label className="block font-bold mb-2">ลำดับ</label>
+                                    <label htmlFor="stat-order" className="block font-bold mb-2">ลำดับ</label>
                                     <input
+                                        id="stat-order"
                                         type="number"
                                         value={formData.display_order || 0}
-                                        onChange={(e) => setFormData({ ...formData, display_order: parseInt(e.target.value) })}
+                                        onChange={(e) => setFormData({ ...formData, display_order: Number.parseInt(e.target.value) })}
                                         className="w-full px-4 py-2 border-2 border-black rounded"
                                     />
                                 </div>
-                            </div>
+                        </div>
                             <label className="flex items-center gap-2">
                                 <input
                                     type="checkbox"

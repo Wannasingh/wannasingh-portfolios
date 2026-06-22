@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { supabaseAdmin } from "../../lib/supabase-admin";
+import { supabaseAdmin } from '../../lib/admin-client';
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -27,8 +27,12 @@ export default function AdminLoginPage() {
             const { data: { user } } = await supabaseAdmin.auth.getUser();
 
             if (user) {
-                const adminEmails = ['wannasingh.khan@gmail.com', 'sarankhtn@gmail.com'];
-                if (adminEmails.includes(user.email || '')) {
+                const { data } = await supabaseAdmin
+                    .from('admin_emails')
+                    .select('email')
+                    .eq('email', user.email || '')
+                    .single();
+                if (data) {
                     router.push("/admin");
                     return;
                 }
@@ -53,8 +57,12 @@ export default function AdminLoginPage() {
 
             if (error) throw error;
 
-            const adminEmails = ['wannasingh.khan@gmail.com', 'sarankhtn@gmail.com'];
-            if (!adminEmails.includes(email)) {
+            const { data } = await supabaseAdmin
+                .from('admin_emails')
+                .select('email')
+                .eq('email', email)
+                .single();
+            if (!data) {
                 await supabaseAdmin.auth.signOut();
                 throw new Error("Unauthorized Access Detected");
             }
@@ -106,8 +114,9 @@ export default function AdminLoginPage() {
 
                     <form onSubmit={handleLogin} className="space-y-4">
                         <div className="space-y-2">
-                            <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">Email Access</label>
+                            <label htmlFor="email" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">Email Access</label>
                             <Input
+                                id="email"
                                 type="email"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
@@ -118,8 +127,9 @@ export default function AdminLoginPage() {
                         </div>
 
                         <div className="space-y-2">
-                            <label className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">Security Key</label>
+                            <label htmlFor="password" className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70">Security Key</label>
                             <Input
+                                id="password"
                                 type="password"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}

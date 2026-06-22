@@ -3,7 +3,7 @@
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { FolderGit2, Code2, Briefcase, Layers } from "lucide-react";
 import { useEffect, useState } from "react";
-import { supabase } from "@/app/lib/supabase";
+import { supabase } from '@/app/lib/api-client';
 
 export function AdminStats() {
     const [counts, setCounts] = useState({
@@ -71,8 +71,8 @@ export function AdminStats() {
 
     return (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            {stats.map((stat, i) => (
-                <Card key={i}>
+            {stats.map((stat) => (
+                <Card key={stat.title}>
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                         <CardTitle className="text-sm font-medium">
                             {stat.title}
