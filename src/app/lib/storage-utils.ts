@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { supabaseAdmin } from "./supabase-admin";
 
 const BUCKET_NAME = "project-images";
@@ -26,6 +27,7 @@ export async function uploadImage(
       });
 
     if (error) throw error;
+    if (!data) throw new Error("Upload failed: No data returned");
 
     // ดึง public URL
     const { data: urlData } = supabaseAdmin.storage
@@ -79,7 +81,7 @@ export async function listImages(folder: string = "projects") {
 
     if (error) throw error;
 
-    return data.map((file) => {
+    return (data as any).map((file: any) => {
       const { data: urlData } = supabaseAdmin.storage
         .from(BUCKET_NAME)
         .getPublicUrl(`${folder}/${file.name}`);

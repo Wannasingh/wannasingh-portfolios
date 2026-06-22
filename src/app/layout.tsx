@@ -19,14 +19,25 @@ const dmMono = DM_Mono({
 
 import { supabase } from "@/app/lib/supabase";
 
-export async function generateMetadata(): Promise<Metadata> {
-  const { data: settings } = await supabase
-    .from('system_settings')
-    .select('site_title, site_description')
-    .single();
+export const dynamic = 'force-dynamic';
 
-  const title = settings?.site_title || "Wannasingh Portfolio";
-  const description = settings?.site_description || "Full Stack Developer & Oracle DB Architect";
+export async function generateMetadata(): Promise<Metadata> {
+  let title = "Wannasingh Portfolio";
+  let description = "Full Stack Developer & Oracle DB Architect";
+
+  try {
+    const { data: settings } = await supabase
+      .from('system_settings')
+      .select('site_title, site_description')
+      .single();
+
+    if (settings) {
+      title = settings.site_title || title;
+      description = settings.site_description || description;
+    }
+  } catch (e) {
+    console.warn("Failed to fetch metadata settings at build/render time, using defaults:", e);
+  }
 
   return {
     title: {
