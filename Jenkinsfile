@@ -55,23 +55,7 @@ pipeline {
             steps {
                 echo "📊 Running SonarQube Scanner..."
                 withSonarQubeEnv('SonarQube') {
-                    writeFile file: 'Dockerfile.sonar', text: '''
-FROM node:20-slim
-WORKDIR /usr/src
-COPY . .
-RUN apt-get update && apt-get install -y default-jre-headless && npm install -g sonarqube-scanner
-ENV SONAR_SCANNER_SKIP_JRE_PROVISIONING=true
-CMD ["sonar-scanner"]
-'''
-                    sh """
-                        docker build -t sonar-runner -f Dockerfile.sonar .
-                        docker run --name sonar-runner-container -e SONAR_HOST_URL=\${SONAR_HOST_URL} -e SONAR_TOKEN=\${SONAR_TOKEN} sonar-runner
-                        docker cp sonar-runner-container:/usr/src/.scannerwork ./.scannerwork || true
-                        docker rm sonar-runner-container
-                        docker run --name sonar-runner-container -e SONAR_HOST_URL=\${SONAR_HOST_URL} -e SONAR_TOKEN=\${SONAR_TOKEN} sonar-runner
-                        docker cp sonar-runner-container:/usr/src/.scannerwork ./.scannerwork || true
-                        docker rm sonar-runner-container
-                    """
+                    sh "sonar-scanner"
                 }
             }
         }
