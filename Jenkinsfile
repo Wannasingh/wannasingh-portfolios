@@ -114,15 +114,40 @@ pipeline {
             }
             steps {
                 echo "🚀 Deploying to Staging Apps VM..."
-                sh """
-                    scp -i \$APPS_KEY -o StrictHostKeyChecking=no docker-compose.staging.yml ubuntu@64.110.115.33:/home/ubuntu/portfolio-docker-compose-staging.yml
-                    ssh -i \$APPS_KEY -o StrictHostKeyChecking=no ubuntu@64.110.115.33 "
-                        echo \$DOCKER_CREDS_PSW | docker login ap-singapore-1.ocir.io -u \$DOCKER_CREDS_USR --password-stdin
-                        IMAGE_TAG=${IMAGE_TAG} docker compose -f portfolio-docker-compose-staging.yml pull
-                        IMAGE_TAG=${IMAGE_TAG} docker compose -f portfolio-docker-compose-staging.yml up -d
-                        docker logout ap-singapore-1.ocir.io
-                    "
-                """
+                withCredentials([string(credentialsId: 'vault-root-token', variable: 'VAULT_TOKEN')]) {
+                    sh '''
+                        set +x
+                        echo "🔒 Fetching staging secrets from Vault..."
+                        
+                        cat << 'EOF' > parse_vault.py
+import sys, json
+try:
+    resp = json.load(sys.stdin)
+    data = resp.get('data', {}).get('data', {})
+    for k, v in data.items():
+        print(f"{k}={v}")
+except Exception:
+    pass
+EOF
+
+                        > .env.staging
+                        curl -s -H "X-Vault-Token: $VAULT_TOKEN" https://vault.wannasingh.dev/v1/secret/data/wannasingh-portfolio/shared | python3 parse_vault.py >> .env.staging || true
+                        curl -s -H "X-Vault-Token: $VAULT_TOKEN" https://vault.wannasingh.dev/v1/secret/data/wannasingh-portfolio/staging | python3 parse_vault.py >> .env.staging || true
+
+                        scp -i $APPS_KEY -o StrictHostKeyChecking=no docker-compose.staging.yml ubuntu@64.110.115.33:/home/ubuntu/portfolio-docker-compose-staging.yml
+                        scp -i $APPS_KEY -o StrictHostKeyChecking=no .env.staging ubuntu@64.110.115.33:/home/ubuntu/.env
+                        
+                        ssh -i $APPS_KEY -o StrictHostKeyChecking=no ubuntu@64.110.115.33 "
+                            chmod 600 /home/ubuntu/.env
+                            echo $DOCKER_CREDS_PSW | docker login ap-singapore-1.ocir.io -u $DOCKER_CREDS_USR --password-stdin
+                            IMAGE_TAG=$IMAGE_TAG docker compose -f portfolio-docker-compose-staging.yml pull
+                            IMAGE_TAG=$IMAGE_TAG docker compose -f portfolio-docker-compose-staging.yml up -d
+                            docker logout ap-singapore-1.ocir.io
+                        "
+                        rm -f .env.staging parse_vault.py
+                        set -x
+                    '''
+                }
             }
         }
 
@@ -172,14 +197,40 @@ pipeline {
             }
             steps {
                 echo "🔥 Deploying to Production Apps VM..."
-                sh """
-                    ssh -i \$APPS_KEY -o StrictHostKeyChecking=no ubuntu@64.110.115.33 "
-                        echo \$DOCKER_CREDS_PSW | docker login ap-singapore-1.ocir.io -u \$DOCKER_CREDS_USR --password-stdin
-                        IMAGE_TAG=${IMAGE_TAG} docker compose -f portfolio-docker-compose.yml pull
-                        IMAGE_TAG=${IMAGE_TAG} docker compose -f portfolio-docker-compose.yml up -d
-                        docker logout ap-singapore-1.ocir.io
-                    "
-                """
+                withCredentials([string(credentialsId: 'vault-root-token', variable: 'VAULT_TOKEN')]) {
+                    sh '''
+                        set +x
+                        echo "🔒 Fetching production secrets from Vault..."
+                        
+                        cat << 'EOF' > parse_vault.py
+import sys, json
+try:
+    resp = json.load(sys.stdin)
+    data = resp.get('data', {}).get('data', {})
+    for k, v in data.items():
+        print(f"{k}={v}")
+except Exception:
+    pass
+EOF
+
+                        > .env.prod
+                        curl -s -H "X-Vault-Token: $VAULT_TOKEN" https://vault.wannasingh.dev/v1/secret/data/wannasingh-portfolio/shared | python3 parse_vault.py >> .env.prod || true
+                        curl -s -H "X-Vault-Token: $VAULT_TOKEN" https://vault.wannasingh.dev/v1/secret/data/wannasingh-portfolio/production | python3 parse_vault.py >> .env.prod || true
+
+                        scp -i $APPS_KEY -o StrictHostKeyChecking=no docker-compose.prod.yml ubuntu@64.110.115.33:/home/ubuntu/portfolio-docker-compose.yml
+                        scp -i $APPS_KEY -o StrictHostKeyChecking=no .env.prod ubuntu@64.110.115.33:/home/ubuntu/.env
+                        
+                        ssh -i $APPS_KEY -o StrictHostKeyChecking=no ubuntu@64.110.115.33 "
+                            chmod 600 /home/ubuntu/.env
+                            echo $DOCKER_CREDS_PSW | docker login ap-singapore-1.ocir.io -u $DOCKER_CREDS_USR --password-stdin
+                            IMAGE_TAG=$IMAGE_TAG docker compose -f portfolio-docker-compose.yml pull
+                            IMAGE_TAG=$IMAGE_TAG docker compose -f portfolio-docker-compose.yml up -d
+                            docker logout ap-singapore-1.ocir.io
+                        "
+                        rm -f .env.prod parse_vault.py
+                        set -x
+                    '''
+                }
                 echo "✅ Smoke Test..."
                 sh "curl -s -f ${PRODUCTION_URL} > /dev/null"
             }
