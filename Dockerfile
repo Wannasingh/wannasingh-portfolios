@@ -26,6 +26,7 @@ FROM base AS builder
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 ENV NEXT_TELEMETRY_DISABLED 1
+ENV JWT_SECRET="dummy_secret_for_build"
 RUN npm ci
 RUN npm run build
 
@@ -37,8 +38,8 @@ ENV NODE_ENV production
 ENV NEXT_TELEMETRY_DISABLED 1
 
 # Don't run as root
-RUN groupadd --system --gid 1001 nodejs
-RUN useradd --system --uid 1001 -g nodejs nextjs
+RUN addgroup --system --gid 1001 nodejs
+RUN adduser --system --uid 1001 --ingroup nodejs nextjs
 
 # Copy allowed public files and built assets
 COPY --from=builder /app/public ./public
