@@ -140,8 +140,8 @@ EOF
                         ssh -i $APPS_KEY -o StrictHostKeyChecking=no ubuntu@64.110.115.33 "
                             chmod 600 /home/ubuntu/.env
                             echo $DOCKER_CREDS_PSW | docker login ap-singapore-1.ocir.io -u $DOCKER_CREDS_USR --password-stdin
-                            IMAGE_TAG=$IMAGE_TAG docker compose -f portfolio-docker-compose-staging.yml pull
-                            IMAGE_TAG=$IMAGE_TAG docker compose -f portfolio-docker-compose-staging.yml up -d
+                            IMAGE_TAG=$IMAGE_TAG docker compose -p portfolio-staging -f portfolio-docker-compose-staging.yml pull
+                            IMAGE_TAG=$IMAGE_TAG docker compose -p portfolio-staging -f portfolio-docker-compose-staging.yml up -d
                             docker logout ap-singapore-1.ocir.io
                         "
                         rm -f .env.staging parse_vault.py
@@ -223,8 +223,8 @@ EOF
                         ssh -i $APPS_KEY -o StrictHostKeyChecking=no ubuntu@64.110.115.33 "
                             chmod 600 /home/ubuntu/.env
                             echo $DOCKER_CREDS_PSW | docker login ap-singapore-1.ocir.io -u $DOCKER_CREDS_USR --password-stdin
-                            IMAGE_TAG=$IMAGE_TAG docker compose -f portfolio-docker-compose.yml pull
-                            IMAGE_TAG=$IMAGE_TAG docker compose -f portfolio-docker-compose.yml up -d
+                            IMAGE_TAG=$IMAGE_TAG docker compose -p portfolio-prod -f portfolio-docker-compose.yml pull
+                            IMAGE_TAG=$IMAGE_TAG docker compose -p portfolio-prod -f portfolio-docker-compose.yml up -d
                             docker logout ap-singapore-1.ocir.io
                         "
                         rm -f .env.prod parse_vault.py
