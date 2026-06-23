@@ -12,7 +12,7 @@ pipeline {
         REGISTRY         = "${env.REGISTRY ?: 'ap-singapore-1.ocir.io/axwlz6nlaqwo'}"
         IMAGE_NAME       = "${REGISTRY}/wannasingh-portfolio"
         IMAGE_TAG        = "build-${env.BUILD_NUMBER}"
-        STAGING_URL      = "https://wannasingh.dev"
+        STAGING_URL      = "https://staging.wannasingh.dev"
         PRODUCTION_URL   = "https://wannasingh.dev"
         
         // Credentials IDs
@@ -115,11 +115,11 @@ pipeline {
             steps {
                 echo "🚀 Deploying to Staging Apps VM..."
                 sh """
-                    scp -i \$APPS_KEY -o StrictHostKeyChecking=no docker-compose.prod.yml ubuntu@64.110.115.33:/home/ubuntu/portfolio-docker-compose.yml
+                    scp -i \$APPS_KEY -o StrictHostKeyChecking=no docker-compose.staging.yml ubuntu@64.110.115.33:/home/ubuntu/portfolio-docker-compose-staging.yml
                     ssh -i \$APPS_KEY -o StrictHostKeyChecking=no ubuntu@64.110.115.33 "
                         echo \$DOCKER_CREDS_PSW | docker login ap-singapore-1.ocir.io -u \$DOCKER_CREDS_USR --password-stdin
-                        IMAGE_TAG=${IMAGE_TAG} docker compose -f portfolio-docker-compose.yml pull
-                        IMAGE_TAG=${IMAGE_TAG} docker compose -f portfolio-docker-compose.yml up -d
+                        IMAGE_TAG=${IMAGE_TAG} docker compose -f portfolio-docker-compose-staging.yml pull
+                        IMAGE_TAG=${IMAGE_TAG} docker compose -f portfolio-docker-compose-staging.yml up -d
                         docker logout ap-singapore-1.ocir.io
                     "
                 """
