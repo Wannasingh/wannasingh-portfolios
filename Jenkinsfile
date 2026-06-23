@@ -19,14 +19,14 @@ pipeline {
         DOCKER_CREDS     = credentials("docker-registry-creds")
         APPS_KEY         = credentials("apps-ssh-key")
         SONAR_TOKEN      = credentials("sonarqube-token")
-        // SLACK_WEBHOOK_URL = credentials("slack-webhook-token")
+        SLACK_WEBHOOK_URL = credentials("slack-webhook-token")
     }
 
     stages {
         stage('1. Initialization & Pre-check') {
             steps {
                 echo "🚀 Starting Pipeline..."
-                // slackSend(color: "good", message: "🟢 Started: ${env.JOB_NAME} #${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)")
+                slackSend(color: "good", message: "🟢 Started: ${env.JOB_NAME} #${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)")
                 
                 sh "docker run --rm trufflesecurity/trufflehog:latest github --repo https://github.com/wannasingh/wannasingh-portfolios.git --only-verified"
             }
@@ -54,23 +54,16 @@ pipeline {
         stage('3. Code Quality & Security Scanning') {
             steps {
                 echo "📊 Running SonarQube Scanner..."
-                withSonarQubeEnv('sonarqube') {
-                    sh """
-                        cat << 'EOF' > Dockerfile.sonar
-                        FROM sonarsource/sonar-scanner-cli:latest
-                        WORKDIR /usr/src
-                        COPY . .
-                        EOF
-                        docker build -t sonar-runner -f Dockerfile.sonar .
-                        docker run --rm -e SONAR_HOST_URL=\${SONAR_HOST_URL} -e SONAR_TOKEN=\${SONAR_TOKEN} sonar-runner
-                    """
+                withSonarQubeEnv('SonarQube') {
+                    sh "sonar-scanner"
                 }
             }
         }
 
         stage('Quality Gate') {
             steps {
-                timeout(time: 5, unit: 'MINUTES') {
+                echo "⏳ Waiting for SonarQube Quality Gate result..."
+                timeout(time: 10, unit: "MINUTES") {
                     waitForQualityGate abortPipeline: true
                 }
             }
@@ -165,7 +158,7 @@ pipeline {
                 }
             }
             steps {
-                // slackSend(color: "warning", message: "⏸️ Waiting for approval: ${env.JOB_NAME} #${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)")
+                slackSend(color: "warning", message: "⏸️ Waiting for approval: ${env.JOB_NAME} #${env.BUILD_NUMBER} (<${env.BUILD_URL}|Open>)")
                 input message: 'Approve deployment to Production?', ok: 'Deploy'
             }
         }
@@ -201,19 +194,19 @@ pipeline {
         }
         success {
             echo "✅ Pipeline Succeeded!"
-            // slackSend(color: "good", message: "✅ Success: ${env.JOB_NAME} #${env.BUILD_NUMBER}")
+            slackSend(color: "good", message: "✅ Success: ${env.JOB_NAME} #${env.BUILD_NUMBER}")
         }
         failure {
             echo "❌ Pipeline Failed!"
-            // slackSend(color: "danger", message: "❌ Failed: ${env.JOB_NAME} #${env.BUILD_NUMBER}")
+            slackSend(color: "danger", message: "❌ Failed: ${env.JOB_NAME} #${env.BUILD_NUMBER}")
         }
         unstable {
             echo "⚠️ Pipeline Unstable!"
-            // slackSend(color: "warning", message: "⚠️ Unstable: ${env.JOB_NAME} #${env.BUILD_NUMBER}")
+            slackSend(color: "warning", message: "⚠️ Unstable: ${env.JOB_NAME} #${env.BUILD_NUMBER}")
         }
         aborted {
             echo "🛑 Pipeline Aborted!"
-            // slackSend(color: "#808080", message: "🛑 Aborted: ${env.JOB_NAME} #${env.BUILD_NUMBER}")
+            slackSend(color: "#808080", message: "🛑 Aborted: ${env.JOB_NAME} #${env.BUILD_NUMBER}")
         }
     }
 }

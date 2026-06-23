@@ -29,7 +29,8 @@ describe('DynamicHeading Component', () => {
   });
   
   it('renders default title for unknown pageType', () => {
-    render(<DynamicHeading pageType={"unknown" as any} />);
+    // @ts-expect-error Testing invalid pageType
+    render(<DynamicHeading pageType="unknown" />);
     expect(screen.getByText('Wannasingh Khansophon')).toBeInTheDocument();
   });
 });

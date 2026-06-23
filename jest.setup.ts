@@ -68,49 +68,6 @@ jest.mock('framer-motion', () => {
   };
 });
 
-// Mock Supabase Client
-jest.mock('@/app/lib/supabase', () => {
-  const mockFrom = jest.fn().mockImplementation(() => {
-    return {
-      select: jest.fn().mockReturnThis(),
-      single: jest.fn().mockResolvedValue({ data: null, error: null }),
-      order: jest.fn().mockReturnThis(),
-      eq: jest.fn().mockReturnThis(),
-      limit: jest.fn().mockReturnThis(),
-    };
-  });
-  return {
-    supabase: {
-      from: mockFrom,
-      auth: {
-        getUser: jest.fn().mockResolvedValue({ data: { user: null }, error: null }),
-      },
-    },
-  };
-});
-
-// Mock Supabase Admin
-jest.mock('@/app/lib/supabase-admin', () => {
-  const mockFrom = jest.fn().mockImplementation(() => {
-    return {
-      select: jest.fn().mockReturnThis(),
-      single: jest.fn().mockResolvedValue({ data: null, error: null }),
-      order: jest.fn().mockReturnThis(),
-      eq: jest.fn().mockReturnThis(),
-      limit: jest.fn().mockReturnThis(),
-    };
-  });
-  return {
-    supabaseAdmin: {
-      from: mockFrom,
-      auth: {
-        getUser: jest.fn().mockResolvedValue({ data: { user: null }, error: null }),
-      },
-    },
-    isAdmin: jest.fn().mockResolvedValue(false),
-    requireAdmin: jest.fn().mockResolvedValue(true),
-  };
-});
 
 // Mock Nodemailer
 jest.mock('nodemailer', () => ({

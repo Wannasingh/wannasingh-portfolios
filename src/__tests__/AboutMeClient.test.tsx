@@ -3,6 +3,11 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import AboutMeClient from '@/components/AboutMeClient';
 import { supabase } from '@/app/lib/api-client';
 
+jest.mock('@/app/lib/api-client', () => ({
+  supabase: {
+    from: jest.fn()
+  }
+}));
 // Mock values
 const mockProfile = {
   tagline: "Custom Test Tagline",
