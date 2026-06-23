@@ -12,8 +12,8 @@ pipeline {
         REGISTRY         = "${env.REGISTRY ?: 'ap-singapore-1.ocir.io/axwlz6nlaqwo'}"
         IMAGE_NAME       = "${REGISTRY}/wannasingh-portfolio"
         IMAGE_TAG        = "build-${env.BUILD_NUMBER}"
-        STAGING_URL      = "https://portfolio.wannasingh.dev"
-        PRODUCTION_URL   = "https://portfolio.wannasingh.dev"
+        STAGING_URL      = "https://wannasingh.dev"
+        PRODUCTION_URL   = "https://wannasingh.dev"
         
         // Credentials IDs
         DOCKER_CREDS     = credentials("docker-registry-creds")
