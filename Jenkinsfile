@@ -44,9 +44,9 @@ pipeline {
                 """
                 echo "📥 Extracting Coverage Report..."
                 sh """
-                    docker create --name ci-extractor ${IMAGE_NAME}:tester
-                    docker cp ci-extractor:/app/coverage ./coverage || true
-                    docker rm ci-extractor
+                    docker create --name ci-extractor-${env.BUILD_NUMBER} ${IMAGE_NAME}:tester
+                    docker cp ci-extractor-${env.BUILD_NUMBER}:/app/coverage ./coverage || true
+                    docker rm ci-extractor-${env.BUILD_NUMBER}
                 """
             }
         }
