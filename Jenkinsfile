@@ -12,8 +12,8 @@ pipeline {
         REGISTRY         = "${env.REGISTRY ?: 'ap-singapore-1.ocir.io/axwlz6nlaqwo'}"
         IMAGE_NAME       = "${REGISTRY}/wannasingh-portfolio"
         IMAGE_TAG        = "build-${env.BUILD_NUMBER}"
-        STAGING_URL      = "https://portfolio.wannasingh.dev"
-        PRODUCTION_URL   = "https://portfolio.wannasingh.dev"
+        STAGING_URL      = "https://staging.wannasingh.dev"
+        PRODUCTION_URL   = "https://wannasingh.dev"
         
         // Credentials IDs
         DOCKER_CREDS     = credentials("docker-registry-creds")
@@ -44,9 +44,9 @@ pipeline {
                 """
                 echo "📥 Extracting Coverage Report..."
                 sh """
-                    docker create --name ci-extractor ${IMAGE_NAME}:tester
-                    docker cp ci-extractor:/app/coverage ./coverage || true
-                    docker rm ci-extractor
+                    docker create --name ci-extractor-${env.BUILD_NUMBER} ${IMAGE_NAME}:tester
+                    docker cp ci-extractor-${env.BUILD_NUMBER}:/app/coverage ./coverage || true
+                    docker rm ci-extractor-${env.BUILD_NUMBER}
                 """
             }
         }
@@ -115,11 +115,11 @@ pipeline {
             steps {
                 echo "🚀 Deploying to Staging Apps VM..."
                 sh """
-                    scp -i \$APPS_KEY -o StrictHostKeyChecking=no docker-compose.prod.yml ubuntu@64.110.115.33:/home/ubuntu/portfolio-docker-compose.yml
+                    scp -i \$APPS_KEY -o StrictHostKeyChecking=no docker-compose.staging.yml ubuntu@64.110.115.33:/home/ubuntu/portfolio-docker-compose-staging.yml
                     ssh -i \$APPS_KEY -o StrictHostKeyChecking=no ubuntu@64.110.115.33 "
                         echo \$DOCKER_CREDS_PSW | docker login ap-singapore-1.ocir.io -u \$DOCKER_CREDS_USR --password-stdin
-                        IMAGE_TAG=${IMAGE_TAG} docker compose -f portfolio-docker-compose.yml pull
-                        IMAGE_TAG=${IMAGE_TAG} docker compose -f portfolio-docker-compose.yml up -d
+                        IMAGE_TAG=${IMAGE_TAG} docker compose -f portfolio-docker-compose-staging.yml pull
+                        IMAGE_TAG=${IMAGE_TAG} docker compose -f portfolio-docker-compose-staging.yml up -d
                         docker logout ap-singapore-1.ocir.io
                     "
                 """
