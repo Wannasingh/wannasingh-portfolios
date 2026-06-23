@@ -62,54 +62,12 @@ jest.mock('framer-motion', () => {
       p: Dummy('p'),
       span: Dummy('span'),
       button: Dummy('button'),
+      article: Dummy('article'),
     },
     AnimatePresence: ({ children }: any) => children,
   };
 });
 
-// Mock Supabase Client
-jest.mock('@/app/lib/supabase', () => {
-  const mockFrom = jest.fn().mockImplementation(() => {
-    return {
-      select: jest.fn().mockReturnThis(),
-      single: jest.fn().mockResolvedValue({ data: null, error: null }),
-      order: jest.fn().mockReturnThis(),
-      eq: jest.fn().mockReturnThis(),
-      limit: jest.fn().mockReturnThis(),
-    };
-  });
-  return {
-    supabase: {
-      from: mockFrom,
-      auth: {
-        getUser: jest.fn().mockResolvedValue({ data: { user: null }, error: null }),
-      },
-    },
-  };
-});
-
-// Mock Supabase Admin
-jest.mock('@/app/lib/supabase-admin', () => {
-  const mockFrom = jest.fn().mockImplementation(() => {
-    return {
-      select: jest.fn().mockReturnThis(),
-      single: jest.fn().mockResolvedValue({ data: null, error: null }),
-      order: jest.fn().mockReturnThis(),
-      eq: jest.fn().mockReturnThis(),
-      limit: jest.fn().mockReturnThis(),
-    };
-  });
-  return {
-    supabaseAdmin: {
-      from: mockFrom,
-      auth: {
-        getUser: jest.fn().mockResolvedValue({ data: { user: null }, error: null }),
-      },
-    },
-    isAdmin: jest.fn().mockResolvedValue(false),
-    requireAdmin: jest.fn().mockResolvedValue(true),
-  };
-});
 
 // Mock Nodemailer
 jest.mock('nodemailer', () => ({
@@ -121,8 +79,9 @@ jest.mock('nodemailer', () => ({
 // Automatic Proxy mocks for icon libraries to bypass ESM compilation issues
 jest.mock('lucide-react', () => {
   const React = require('react');
-  return new Proxy({}, {
+  return new Proxy({ __esModule: true }, {
     get: (target, prop) => {
+      if (prop === '__esModule') return true;
       return (props: any) => React.createElement('svg', { ...props, 'data-testid': `lucide-${String(prop).toLowerCase()}` });
     }
   });
@@ -130,8 +89,9 @@ jest.mock('lucide-react', () => {
 
 jest.mock('react-icons/fa', () => {
   const React = require('react');
-  return new Proxy({}, {
+  return new Proxy({ __esModule: true }, {
     get: (target, prop) => {
+      if (prop === '__esModule') return true;
       return (props: any) => React.createElement('svg', { ...props, 'data-testid': `fa-${String(prop).toLowerCase()}` });
     }
   });
@@ -139,10 +99,52 @@ jest.mock('react-icons/fa', () => {
 
 jest.mock('react-icons/fa6', () => {
   const React = require('react');
-  return new Proxy({}, {
+  return new Proxy({ __esModule: true }, {
     get: (target, prop) => {
+      if (prop === '__esModule') return true;
       return (props: any) => React.createElement('svg', { ...props, 'data-testid': `fa6-${String(prop).toLowerCase()}` });
     }
   });
 });
 
+jest.mock('react-icons/si', () => {
+  const React = require('react');
+  return new Proxy({ __esModule: true }, {
+    get: (target, prop) => {
+      if (prop === '__esModule') return true;
+      return (props: any) => React.createElement('svg', { ...props, 'data-testid': `si-${String(prop).toLowerCase()}` });
+    }
+  });
+});
+
+jest.mock('react-icons/md', () => {
+  const React = require('react');
+  return new Proxy({ __esModule: true }, {
+    get: (target, prop) => {
+      if (prop === '__esModule') return true;
+      return (props: any) => React.createElement('svg', { ...props, 'data-testid': `md-${String(prop).toLowerCase()}` });
+    }
+  });
+});
+
+jest.mock('sonner', () => ({
+  toast: {
+    promise: jest.fn().mockImplementation(async (promise, options) => {
+      try {
+        const res = await promise;
+        if (options.success) {
+          const successRes = options.success(res);
+          return successRes instanceof Promise ? await successRes : successRes;
+        }
+        return res;
+      } catch (err) {
+        if (options.error && typeof options.error === 'function') {
+          options.error(err);
+        }
+        throw err;
+      }
+    }),
+    success: jest.fn(),
+    error: jest.fn(),
+  }
+}));

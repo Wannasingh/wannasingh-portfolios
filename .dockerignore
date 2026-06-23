@@ -9,4 +9,3 @@ Dockerfile
 .dockerignore
 SUPABASE_RLS_FIX.sql
 SUPABASE_SETTINGS_SETUP.sql
-src/__tests__

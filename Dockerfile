@@ -1,22 +1,33 @@
 # Base stage for shared settings
-FROM oven/bun:1 AS base
+FROM node:20-alpine AS base
 WORKDIR /app
 
 # 1. Install Dependencies
 FROM base AS deps
-COPY package.json bun.lockb* ./
-RUN bun install --frozen-lockfile --production
+COPY package.json package-lock.json* ./
+RUN npm ci --omit=dev
 
-# 2. Build Stage
-FROM base AS builder
+# 2. Build & Test Stage
+FROM base AS tester
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 # Note: Next.js build might require environment variables. 
 # We generally set standard ones here, but secrets must be passed at build time or runtime.
 ENV NEXT_TELEMETRY_DISABLED 1
-RUN bun install --frozen-lockfile
-# Run build
-RUN bun run build
+RUN npm ci
+# Run tests and linting
+RUN npx tsc --noEmit
+RUN npm run lint
+RUN npm run test:ci
+RUN npm audit --audit-level=high || true
+
+# 3. Production Builder
+FROM base AS builder
+COPY --from=deps /app/node_modules ./node_modules
+COPY . .
+ENV NEXT_TELEMETRY_DISABLED 1
+RUN npm ci
+RUN npm run build
 
 # 3. Production Image
 FROM base AS runner
@@ -45,4 +56,4 @@ ENV PORT 3000
 # set hostname to localhost
 ENV HOSTNAME "0.0.0.0"
 
-CMD ["bun", "server.js"]
+CMD ["node", "server.js"]
