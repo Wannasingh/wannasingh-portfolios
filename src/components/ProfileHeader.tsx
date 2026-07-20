@@ -32,48 +32,57 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
 }) => {
   return (
     <motion.div
-      initial={{ opacity: 0, y: 20 }}
+      initial={{ opacity: 0, y: 15 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6 }}
-      className="mb-16"
+      transition={{ duration: 0.55 }}
+      className="mb-16 border border-border p-6 bg-card/30 relative overflow-hidden"
       data-page-type={pageType}
     >
-      <div className="flex flex-col md:flex-row items-center gap-10">
-        <div className="relative w-40 h-40 md:w-56 md:h-56 shrink-0 rounded-full overflow-hidden border-4 border-background shadow-2xl ring-1 ring-border">
+      {/* Structural coordinates anchor */}
+      <div className="absolute top-2 right-3 mono text-[8px] text-muted-foreground select-none">
+        [ SYS: OK / POS: 13.75N 100.5E ]
+      </div>
+      
+      <div className="flex flex-col md:flex-row items-center gap-8 md:gap-10">
+        {/* Sharp technical border image box */}
+        <div className="relative w-36 h-36 md:w-44 md:h-44 shrink-0 rounded-none overflow-hidden border border-border bg-muted/20">
           <Image
             src={avatarUrl ? resolveImageUrl(avatarUrl, 'profile') : profilePic}
             alt="Profile Picture"
             layout="fill"
             objectFit="cover"
-            className="rounded-full hover:scale-105 transition-transform duration-500"
+            className="rounded-none hover:scale-[1.03] transition-transform duration-500"
             unoptimized={!!avatarUrl}
           />
         </div>
         
-        <div className="flex-1 space-y-6 text-center md:text-left">
-          <div className="space-y-2">
-            <h1 className="text-4xl md:text-5xl font-bold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-foreground to-foreground/70 pb-2">
+        <div className="flex-1 space-y-4 text-center md:text-left">
+          <div className="space-y-1">
+            <div className="mono text-[10px] text-primary uppercase tracking-widest">
+              [ PAGE: {pageType.toUpperCase()} ]
+            </div>
+            <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight text-foreground">
               {title || "Hello, I'm Wannasingh"}
             </h1>
-            <p className="text-xl text-muted-foreground leading-relaxed max-w-2xl">
+            <p className="text-base sm:text-lg text-muted-foreground leading-relaxed max-w-2xl pt-1">
               {description}
             </p>
           </div>
           
-          <div className="flex flex-wrap gap-4 justify-center md:justify-start">
+          <div className="flex flex-wrap gap-3 justify-center md:justify-start">
             {primaryButton && (
               <Link
                 href={primaryButton.href}
-                className="inline-flex h-11 items-center justify-center rounded-md bg-primary px-8 text-sm font-medium text-primary-foreground shadow transition-colors hover:bg-primary/90 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+                className="inline-flex h-10 items-center justify-center rounded-none bg-primary px-6 text-xs font-mono uppercase tracking-wider text-primary-foreground shadow-md transition-all hover:-translate-y-0.5 hover:shadow-lg active:translate-y-0"
               >
                 {primaryButton.text}
-                <ArrowRight className="ml-2 h-4 w-4" />
+                <ArrowRight className="ml-2 h-3.5 w-3.5" />
               </Link>
             )}
             {secondaryButton && (
               <Link
                 href={secondaryButton.href}
-                className="inline-flex h-11 items-center justify-center rounded-md border border-input bg-background px-8 text-sm font-medium shadow-sm transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
+                className="inline-flex h-10 items-center justify-center rounded-none border border-border bg-background px-6 text-xs font-mono uppercase tracking-wider text-foreground shadow transition-all hover:bg-muted"
               >
                 {secondaryButton.text}
               </Link>

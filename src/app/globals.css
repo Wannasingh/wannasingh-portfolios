@@ -4,42 +4,42 @@
 
 @layer base {
   :root {
-    /* ── Dark-first: "The Engineer" palette ── */
-    --background: 222 47% 5%;
+    /* ── Dark-first: "Matte Industrial" palette ── */
+    --background: 240 10% 6%;
     --foreground: 210 20% 92%;
 
-    --card: 220 38% 8%;
+    --card: 220 10% 12%;
     --card-foreground: 210 20% 92%;
 
-    --popover: 220 38% 8%;
+    --popover: 220 10% 12%;
     --popover-foreground: 210 20% 92%;
 
-    /* Electric blue — singular, authoritative */
-    --primary: 210 100% 56%;
-    --primary-foreground: 222 47% 5%;
+    /* Safety Orange — singular, authoritative */
+    --primary: 21 100% 50%;
+    --primary-foreground: 240 10% 6%;
 
-    --secondary: 220 28% 12%;
+    --secondary: 220 10% 16%;
     --secondary-foreground: 210 15% 70%;
 
-    --muted: 220 28% 12%;
-    --muted-foreground: 213 14% 46%;
+    --muted: 220 10% 16%;
+    --muted-foreground: 222 10% 60%;
 
-    --accent: 220 28% 12%;
-    --accent-foreground: 210 100% 62%;
+    --accent: 220 10% 16%;
+    --accent-foreground: 21 100% 60%;
 
     --destructive: 0 72% 51%;
     --destructive-foreground: 0 0% 98%;
 
-    --border: 220 22% 14%;
-    --input: 220 22% 14%;
-    --ring: 210 100% 56%;
+    --border: 220 10% 18%;
+    --input: 220 10% 18%;
+    --ring: 21 100% 50%;
 
-    --radius: 0.625rem;
+    --radius: 0rem; /* Sharp corners for industrial product aesthetic */
 
-    /* Gradient: blue → cyan (for text only) */
-    --gradient-from: 210 100% 56%;
-    --gradient-via: 200 95% 50%;
-    --gradient-to: 186 88% 46%;
+    /* Gradient: orange → yellow-orange */
+    --gradient-from: 21 100% 50%;
+    --gradient-via: 24 100% 58%;
+    --gradient-to: 36 100% 62%;
   }
 
   /* Light mode override (less priority, dark is canonical) */
@@ -53,7 +53,7 @@
     --popover: 0 0% 100%;
     --popover-foreground: 220 35% 10%;
 
-    --primary: 210 100% 48%;
+    --primary: 21 100% 45%;
     --primary-foreground: 0 0% 100%;
 
     --secondary: 210 20% 95%;
@@ -63,11 +63,11 @@
     --muted-foreground: 210 14% 50%;
 
     --accent: 210 20% 95%;
-    --accent-foreground: 210 100% 44%;
+    --accent-foreground: 21 100% 40%;
 
     --border: 214 18% 88%;
     --input: 214 18% 88%;
-    --ring: 210 100% 48%;
+    --ring: 21 100% 45%;
   }
 }
 

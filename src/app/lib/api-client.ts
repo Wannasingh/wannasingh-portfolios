@@ -69,6 +69,9 @@ export interface Project {
   key_features?: string[];
   challenges?: string[];
   created_at: string;
+  latency?: string;
+  throughput?: string;
+  blueprint_path?: string;
 }
 
 export interface Availability {
