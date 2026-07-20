@@ -4,7 +4,46 @@
 
 @layer base {
   :root {
-    /* ── Dark-first: "Matte Industrial" palette ── */
+    /* ── Light-first: Clean Behance Editorial palette ── */
+    --background: 0 0% 100%; /* Pure White */
+    --foreground: 220 10% 10%; /* #191919 Off-Black */
+
+    --card: 0 0% 100%;
+    --card-foreground: 220 10% 10%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 220 10% 10%;
+
+    /* Behance Blue Accent */
+    --primary: 217 100% 54%; /* #1769FF */
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 210 20% 96%; /* #F4F5F8 */
+    --secondary-foreground: 220 10% 41%; /* #696969 */
+
+    --muted: 210 20% 96%; /* #F4F5F8 */
+    --muted-foreground: 220 10% 64%; /* #A4A4A4 */
+
+    --accent: 210 20% 96%;
+    --accent-foreground: 217 100% 54%;
+
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 210 20% 91%; /* #E8E8E8 Very Light Grey */
+    --input: 210 20% 91%;
+    --ring: 217 100% 54%;
+
+    --radius: 0rem; /* Sharp editorial grid layout */
+
+    /* Gradients: soft blue to clean indigo */
+    --gradient-from: 217 100% 54%;
+    --gradient-via: 224 100% 58%;
+    --gradient-to: 236 100% 62%;
+  }
+
+  /* Dark mode override */
+  .dark {
     --background: 240 10% 6%;
     --foreground: 210 20% 92%;
 
@@ -14,8 +53,7 @@
     --popover: 220 10% 12%;
     --popover-foreground: 210 20% 92%;
 
-    /* Safety Orange — singular, authoritative */
-    --primary: 21 100% 50%;
+    --primary: 21 100% 50%; /* Safety Orange for Dark Mode contrast */
     --primary-foreground: 240 10% 6%;
 
     --secondary: 220 10% 16%;
@@ -33,41 +71,6 @@
     --border: 220 10% 18%;
     --input: 220 10% 18%;
     --ring: 21 100% 50%;
-
-    --radius: 0rem; /* Sharp corners for industrial product aesthetic */
-
-    /* Gradient: orange → yellow-orange */
-    --gradient-from: 21 100% 50%;
-    --gradient-via: 24 100% 58%;
-    --gradient-to: 36 100% 62%;
-  }
-
-  /* Light mode override (less priority, dark is canonical) */
-  .light {
-    --background: 210 20% 98%;
-    --foreground: 220 35% 10%;
-
-    --card: 0 0% 100%;
-    --card-foreground: 220 35% 10%;
-
-    --popover: 0 0% 100%;
-    --popover-foreground: 220 35% 10%;
-
-    --primary: 21 100% 45%;
-    --primary-foreground: 0 0% 100%;
-
-    --secondary: 210 20% 95%;
-    --secondary-foreground: 210 25% 30%;
-
-    --muted: 210 20% 95%;
-    --muted-foreground: 210 14% 50%;
-
-    --accent: 210 20% 95%;
-    --accent-foreground: 21 100% 40%;
-
-    --border: 214 18% 88%;
-    --input: 214 18% 88%;
-    --ring: 21 100% 45%;
   }
 }
 
