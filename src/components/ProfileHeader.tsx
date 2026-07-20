@@ -4,6 +4,7 @@ import Image from "next/legacy/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import profilePic from "@/images/profile.jpg";
+import { resolveImageUrl } from "@/app/lib/storage-utils";
 import { ArrowRight } from "lucide-react";
 
 interface ProfileHeaderProps {
@@ -40,7 +41,7 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
       <div className="flex flex-col md:flex-row items-center gap-10">
         <div className="relative w-40 h-40 md:w-56 md:h-56 shrink-0 rounded-full overflow-hidden border-4 border-background shadow-2xl ring-1 ring-border">
           <Image
-            src={avatarUrl || profilePic}
+            src={avatarUrl ? resolveImageUrl(avatarUrl, 'profile') : profilePic}
             alt="Profile Picture"
             layout="fill"
             objectFit="cover"

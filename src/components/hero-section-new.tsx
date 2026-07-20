@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { ArrowRight, Database, Code2, Loader2 } from "lucide-react";
 import Link from "next/link";
 import { supabase, Profile } from '@/app/lib/api-client';
+import { resolveImageUrl } from '@/app/lib/storage-utils';
 import Image from "next/image";
 
 const FALLBACK_NAME = "Wannasingh";
@@ -188,7 +189,7 @@ export default function HeroSectionNew() {
               <div className="relative aspect-[3/4] bg-muted/20">
                 {profileLoaded ? (
                   <Image
-                    src={profile?.avatar_url || "/images/profile.jpg"}
+                    src={profile?.avatar_url ? resolveImageUrl(profile.avatar_url, 'profile') : "/images/profile.jpg"}
                     alt={`${name} — ${role}`}
                     fill
                     sizes="(max-width: 1024px) 0px, 360px"

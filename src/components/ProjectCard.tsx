@@ -2,6 +2,7 @@ import { Card } from "@/components/ui/card";
 import Link from "next/link";
 import Image from "next/image";
 import { Project } from '@/app/lib/api-client';
+import { resolveImageUrl } from '@/app/lib/storage-utils';
 import { ExternalLink, Maximize2, ArrowUpRight } from "lucide-react";
 import { FaGithub } from "react-icons/fa6";
 import {
@@ -49,7 +50,7 @@ export default function ProjectCard({ project }: ProjectCardProps) {
                   {/* Screenshot viewport container */}
                   <div className="relative w-full flex-1 overflow-hidden bg-muted/10">
                     <Image
-                      src={project.image_path}
+                      src={resolveImageUrl(project.image_path, 'projects')}
                       alt={project.title}
                       fill
                       sizes="(max-width: 1024px) 100vw, 40vw"
@@ -85,7 +86,7 @@ export default function ProjectCard({ project }: ProjectCardProps) {
                   <div className="flex-1 overflow-y-auto bg-muted/10 p-4 sm:p-6 scrollbar-thin">
                     <div className="relative w-full rounded-lg border border-border bg-background shadow-md overflow-hidden">
                       <Image
-                        src={project.image_path}
+                        src={resolveImageUrl(project.image_path, 'projects')}
                         alt={project.title}
                         width={1200}
                         height={800}
