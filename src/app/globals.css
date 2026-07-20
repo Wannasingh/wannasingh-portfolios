@@ -203,4 +203,49 @@
     pointer-events: none;
     z-index: 0;
   }
+
+  /* ── Hand-Drawn Sketch Styles ── */
+  .font-handwriting {
+    font-family: var(--font-caveat), cursive, sans-serif;
+  }
+  
+  .font-serif-elegant {
+    font-family: var(--font-playfair), Georgia, serif;
+  }
+
+  /* Simulates hand-sketched boundaries */
+  .hand-drawn-border-1 {
+    border: 2px solid currentColor;
+    border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
+  }
+
+  .hand-drawn-border-2 {
+    border: 2px solid currentColor;
+    border-radius: 120px 20px 100px 30px/20px 100px 30px 120px;
+  }
+
+  .hand-drawn-border-3 {
+    border: 2px solid currentColor;
+    border-radius: 20px 300px 15px 250px/250px 15px 300px 20px;
+  }
+
+  .hand-drawn-border-ellipse {
+    border: 2px solid currentColor;
+    border-radius: 50% 50% 50% 50% / 60% 40% 60% 40%;
+  }
+
+  /* Sketch wiggle animations */
+  @keyframes sketch-wiggle {
+    0%, 100% { transform: rotate(-0.5deg) scale(1); }
+    50% { transform: rotate(0.5deg) scale(1.01); }
+  }
+
+  .sketch-hover:hover {
+    animation: sketch-wiggle 0.3s ease-in-out infinite alternate;
+  }
+
+  .sketch-line {
+    stroke-dasharray: 4 4;
+    stroke-linecap: round;
+  }
 }

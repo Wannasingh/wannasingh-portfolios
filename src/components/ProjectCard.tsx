@@ -92,12 +92,12 @@ export default function ProjectCard({ project }: ProjectCardProps) {
 
         {/* Project Details Column */}
         <div className="w-full lg:w-[52%] space-y-6">
-          <div className="space-y-2">
-            <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-[#191919] dark:text-foreground">
+          <div className="space-y-1">
+            <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-[#191919] dark:text-foreground font-serif-elegant">
               {project.title}
             </h2>
-            <div className="mono text-[10px] text-primary uppercase tracking-widest">
-              [ {project.category || 'DEVELOPMENT_PRODUCT'} ]
+            <div className="font-handwriting text-lg text-primary font-bold">
+              {"// "}{project.category || 'Development Product'}
             </div>
           </div>
 
@@ -106,7 +106,7 @@ export default function ProjectCard({ project }: ProjectCardProps) {
           </p>
 
           {/* SPECIFICATION SHEET BLOCK (Stark editorial specification) */}
-          <div className="border border-border/80 p-5 bg-[#F4F5F8] dark:bg-muted/10 font-mono text-[10px] sm:text-[11px] space-y-2 rounded-none">
+          <div className="hand-drawn-border-1 p-5 bg-[#F4F5F8] dark:bg-muted/10 font-mono text-[10px] sm:text-[11px] space-y-2">
             <div className="flex justify-between border-b border-border/40 pb-1.5">
               <span className="text-muted-foreground">PRODUCT LINE:</span>
               <span className="text-[#191919] dark:text-foreground font-semibold uppercase">{project.category || 'SYSTEMS'}</span>
@@ -127,7 +127,7 @@ export default function ProjectCard({ project }: ProjectCardProps) {
 
           {/* Tech stack components inventory */}
           <div className="space-y-2">
-            <div className="mono text-[9px] text-muted-foreground tracking-wider uppercase">{"// COMPONENT INVENTORY"}</div>
+            <div className="font-handwriting text-lg text-[#696969] dark:text-muted-foreground font-bold">{"// Component Inventory"}</div>
             <div className="flex flex-wrap gap-1.5">
               {project.tech_stack?.map((tech) => (
                 <span
@@ -143,7 +143,7 @@ export default function ProjectCard({ project }: ProjectCardProps) {
           {/* Key Features */}
           {project.key_features && project.key_features.length > 0 && (
             <div className="space-y-2">
-              <div className="mono text-[9px] text-muted-foreground tracking-wider uppercase">{"// PRODUCT SPECIFICATIONS"}</div>
+              <div className="font-handwriting text-lg text-[#696969] dark:text-muted-foreground font-bold">{"// Product Specifications"}</div>
               <ul className="grid grid-cols-1 sm:grid-cols-2 gap-y-1.5 text-xs font-mono text-[#696969] dark:text-muted-foreground">
                 {project.key_features.slice(0, 4).map((feature) => (
                   <li key={feature} className="flex items-center gap-2">
