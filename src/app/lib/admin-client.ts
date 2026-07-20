@@ -1,9 +1,9 @@
-import { supabase } from './api-client';
+import { db } from './api-client';
 
-export const supabaseAdmin = supabase;
+export const dbAdmin = db;
 
 export async function isAdmin() {
-  const { data: { user } } = await supabaseAdmin.auth.getUser();
+  const { data: { user } } = await dbAdmin.auth.getUser();
   return !!user;
 }
 

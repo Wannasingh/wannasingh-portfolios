@@ -1,10 +1,10 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import AboutMeClient from '@/components/AboutMeClient';
-import { supabase } from '@/app/lib/api-client';
+import { db } from '@/app/lib/api-client';
 
 jest.mock('@/app/lib/api-client', () => ({
-  supabase: {
+  db: {
     from: jest.fn()
   }
 }));
@@ -38,7 +38,7 @@ describe('AboutMeClient Component', () => {
     jest.clearAllMocks();
     
     // Setup the mock returns
-    const fromSpy = supabase.from as jest.Mock;
+    const fromSpy = db.from as jest.Mock;
     fromSpy.mockImplementation((table: string) => {
       if (table === 'experiences') {
         return {
@@ -153,7 +153,7 @@ describe('AboutMeClient Component', () => {
 
   it('handles loading error or empty data cases gracefully', async () => {
     // Setup supabase to return null/error data
-    const fromSpy = supabase.from as jest.Mock;
+    const fromSpy = db.from as jest.Mock;
     fromSpy.mockImplementation(() => {
       return {
         select: jest.fn().mockReturnThis(),

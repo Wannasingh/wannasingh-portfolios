@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { supabaseAdmin } from '../lib/admin-client';
+import { dbAdmin } from '../lib/admin-client';
 import { Loader2 } from "lucide-react";
 import { AdminStats } from "@/components/admin-stats";
 
@@ -16,14 +16,14 @@ export default function AdminPage() {
     }, []);
 
     async function checkUser() {
-        const { data: { user } } = await supabaseAdmin.auth.getUser();
+        const { data: { user } } = await dbAdmin.auth.getUser();
 
         if (!user) {
             router.push("/admin/login");
             return;
         }
 
-        const { data } = await supabaseAdmin
+        const { data } = await dbAdmin
             .from('admin_emails')
             .select('email')
             .eq('email', user.email || '')

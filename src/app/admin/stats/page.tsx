@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { supabaseAdmin } from '../../lib/admin-client';
+import { dbAdmin } from '../../lib/admin-client';
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
@@ -23,12 +23,12 @@ export default function AdminStatsPage() {
     }, []);
 
     async function checkAuth() {
-        const { data: { user } } = await supabaseAdmin.auth.getUser();
+        const { data: { user } } = await dbAdmin.auth.getUser();
         if (!user) router.push("/admin/login");
     }
 
     async function fetchStats() {
-        const { data, error } = await supabaseAdmin
+        const { data, error } = await dbAdmin
             .from("stats")
             .select("*")
             .order("display_order", { ascending: true });
@@ -38,7 +38,7 @@ export default function AdminStatsPage() {
     }
 
     async function handleDelete(id: string) {
-        const { error } = await supabaseAdmin.from("stats").delete().eq("id", id);
+        const { error } = await dbAdmin.from("stats").delete().eq("id", id);
         if (!error) {
             fetchStats();
             setDeleteDialog({ open: false, id: null });
@@ -47,10 +47,10 @@ export default function AdminStatsPage() {
 
     async function handleSave() {
         if (editingId === "new") {
-            const { error } = await supabaseAdmin.from("stats").insert([formData]);
+            const { error } = await dbAdmin.from("stats").insert([formData]);
             if (error) return;
         } else {
-            const { error } = await supabaseAdmin.from("stats").update(formData).eq("id", editingId);
+            const { error } = await dbAdmin.from("stats").update(formData).eq("id", editingId);
             if (error) return;
         }
         setEditingId(null);

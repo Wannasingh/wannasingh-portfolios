@@ -2,7 +2,7 @@
 import Link from "next/link";
 import { FaGithub, FaLinkedin, FaXTwitter } from "react-icons/fa6";
 import { useEffect, useState } from "react";
-import { supabase } from '@/app/lib/api-client';
+import { db } from '@/app/lib/api-client';
 
 export default function Footer() {
   const [socials, setSocials] = useState({
@@ -12,7 +12,7 @@ export default function Footer() {
   });
 
   useEffect(() => {
-    supabase.from("profile").select("github_link, linkedin_link, twitter_link").single()
+    db.from("profile").select("github_link, linkedin_link, twitter_link").single()
       .then(({ data }) => {
         if (data) setSocials({
           github: data.github_link || "https://github.com",

@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { Database, Layout, Loader2 } from "lucide-react";
 import { motion } from "framer-motion";
 import { ProfileHeader } from "@/components/ProfileHeader";
-import { supabase, Experience, Profile } from '@/app/lib/api-client';
+import { db, Experience, Profile } from '@/app/lib/api-client';
 
 const dataTags = ["Oracle 21c", "PostgreSQL", "PL/SQL Tuning", "Data Guard"];
 const uiTags = ["React", "Next.js", "Tailwind CSS", "Framer Motion"];
@@ -61,9 +61,9 @@ const AboutMeClient = () => {
   useEffect(() => {
     async function fetchData() {
         const [expResult, profileResult] = await Promise.all([
-            supabase.from('experiences').select('*').order('display_order', { ascending: true }),
-            supabase.from('profile').select('*').single()
-        ]);
+             db.from('experiences').select('*').order('display_order', { ascending: true }),
+             db.from('profile').select('*').single()
+         ]);
 
         if (expResult.data) setExperiences(expResult.data);
         if (profileResult.data) setProfile(profileResult.data);

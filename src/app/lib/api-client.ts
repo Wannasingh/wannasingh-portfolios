@@ -224,7 +224,7 @@ class QueryBuilder {
   }
 }
 
-export const supabase = {
+export const db = {
   from: (table: string) => {
     return new QueryBuilder(table);
   },

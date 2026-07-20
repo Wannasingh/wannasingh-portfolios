@@ -10,7 +10,7 @@ import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea"; 
 import { Button } from "@/components/ui/button";
-import { supabase, Availability, Profile } from '@/app/lib/api-client';
+import { db, Availability, Profile } from '@/app/lib/api-client';
 
 export default function HireMeClient() {
   const [formData, setFormData] = useState({
@@ -27,9 +27,9 @@ export default function HireMeClient() {
   useEffect(() => {
     async function fetchData() {
         const [availResult, profileResult] = await Promise.all([
-            supabase.from('availability').select('*').order('display_order', { ascending: true }),
-            supabase.from('profile').select('*').single()
-        ]);
+             db.from('availability').select('*').order('display_order', { ascending: true }),
+             db.from('profile').select('*').single()
+         ]);
         
         if (availResult.data) setAvailability(availResult.data);
         if (profileResult.data) setProfile(profileResult.data);

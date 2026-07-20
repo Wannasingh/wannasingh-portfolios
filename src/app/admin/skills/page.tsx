@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { supabaseAdmin } from '@/app/lib/admin-client';
-import { supabase, SkillCategory, Skill } from '@/app/lib/api-client';
+import { dbAdmin } from '@/app/lib/admin-client';
+import { db, SkillCategory, Skill } from '@/app/lib/api-client';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
@@ -49,13 +49,13 @@ export default function AdminSkillsPage() {
   }, []);
 
   async function fetchData() {
-    const { data: { user } } = await supabaseAdmin.auth.getUser();
+    const { data: { user } } = await dbAdmin.auth.getUser();
     if (!user) {
       router.push("/admin/login");
       return;
     }
 
-    const { data, error } = await supabase
+    const { data, error } = await db
       .from('skill_categories')
       .select(`
         *,
@@ -92,10 +92,10 @@ export default function AdminSkillsPage() {
       
       let error;
       if (currentCat.id) {
-          const res = await supabaseAdmin.from('skill_categories').update(payload).eq('id', currentCat.id);
+          const res = await dbAdmin.from('skill_categories').update(payload).eq('id', currentCat.id);
           error = res.error;
       } else {
-          const res = await supabaseAdmin.from('skill_categories').insert([payload]);
+          const res = await dbAdmin.from('skill_categories').insert([payload]);
           error = res.error;
       }
 
@@ -107,7 +107,7 @@ export default function AdminSkillsPage() {
       if(!confirm("Delete category? This will delete all skills inside it!")) return;
       // Note: Cascade delete should handle skills if configured, otherwise needs manual delete
       // Assuming cascade for now or manual
-      const { error } = await supabaseAdmin.from('skill_categories').delete().eq('id', id);
+      const { error } = await dbAdmin.from('skill_categories').delete().eq('id', id);
       if(error) toast.error("Failed to delete category");
       else { toast.success("Category deleted"); fetchData(); }
   };
@@ -135,10 +135,10 @@ export default function AdminSkillsPage() {
       
       let error;
       if (currentSkill.id) {
-          const res = await supabaseAdmin.from('skills').update(payload).eq('id', currentSkill.id);
+          const res = await dbAdmin.from('skills').update(payload).eq('id', currentSkill.id);
           error = res.error;
       } else {
-          const res = await supabaseAdmin.from('skills').insert([payload]);
+          const res = await dbAdmin.from('skills').insert([payload]);
           error = res.error;
       }
 
@@ -148,7 +148,7 @@ export default function AdminSkillsPage() {
   };
   const handleDeleteSkill = async (id: string) => {
       if(!confirm("Delete skill?")) return;
-      const { error } = await supabaseAdmin.from('skills').delete().eq('id', id);
+      const { error } = await dbAdmin.from('skills').delete().eq('id', id);
       if(error) toast.error("Failed to delete skill");
       else { toast.success("Skill deleted"); fetchData(); }
   };

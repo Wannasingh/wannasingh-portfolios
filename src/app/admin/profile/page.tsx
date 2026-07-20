@@ -3,8 +3,8 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import { supabaseAdmin } from '@/app/lib/admin-client';
-import { supabase } from '@/app/lib/api-client'; 
+import { dbAdmin } from '@/app/lib/admin-client';
+import { db } from '@/app/lib/api-client'; 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -71,14 +71,14 @@ export default function AdminProfilePage() {
   }, []);
 
   async function checkUserAndFetch() {
-    const { data: { user } } = await supabaseAdmin.auth.getUser();
+    const { data: { user } } = await dbAdmin.auth.getUser();
     if (!user) {
       router.push("/admin/login");
       return;
     }
     
     // Fetch Profile
-    const { data, error } = await supabase
+    const { data, error } = await db
       .from('profile')
       .select('*')
       .single();
@@ -97,7 +97,7 @@ export default function AdminProfilePage() {
       if (!profile) return;
       setSaving(true);
 
-      const { error } = await supabaseAdmin
+      const { error } = await dbAdmin
         .from('profile')
         .update({
             name: profile.name,

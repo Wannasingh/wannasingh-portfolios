@@ -1,4 +1,4 @@
-export function isSupabaseConfigured(): boolean {
+export function isDatabaseConfigured(): boolean {
   // Now behaves as "isDatabaseConfigured"
   const dbUrl = process.env.DATABASE_URL;
   const pgHost = process.env.PGHOST;

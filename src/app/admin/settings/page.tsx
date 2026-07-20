@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { supabaseAdmin } from '@/app/lib/admin-client';
-import { supabase } from '@/app/lib/api-client';
+import { dbAdmin } from '@/app/lib/admin-client';
+import { db } from '@/app/lib/api-client';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -36,13 +36,13 @@ export default function AdminSettingsPage() {
     }, []);
 
     async function fetchSettings() {
-        const { data: { user } } = await supabaseAdmin.auth.getUser();
+        const { data: { user } } = await dbAdmin.auth.getUser();
         if (!user) {
             router.push("/admin/login");
             return;
         }
 
-        const { data, error } = await supabase
+        const { data, error } = await db
             .from('system_settings')
             .select('*')
             .single();
@@ -63,7 +63,7 @@ export default function AdminSettingsPage() {
         if (!settings) return;
         setSaving(true);
 
-        const { error } = await supabaseAdmin
+        const { error } = await dbAdmin
             .from('system_settings')
             .update({
                 site_title: settings.site_title,
@@ -90,7 +90,7 @@ export default function AdminSettingsPage() {
         
         try {
             const fileName = `resume-${Date.now()}.pdf`; // Simple unique name
-            const { error: uploadError } = await supabase.storage
+            const { error: uploadError } = await db.storage
                 .from('portfolio-assets')
                 .upload(fileName, file, {
                     contentType: 'application/pdf',
@@ -99,7 +99,7 @@ export default function AdminSettingsPage() {
 
             if (uploadError) throw uploadError;
 
-            const { data: { publicUrl } } = supabase.storage
+            const { data: { publicUrl } } = db.storage
                 .from('portfolio-assets')
                 .getPublicUrl(fileName);
 

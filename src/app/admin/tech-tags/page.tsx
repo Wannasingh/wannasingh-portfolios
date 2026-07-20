@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { supabaseAdmin } from '../../lib/admin-client';
+import { dbAdmin } from '../../lib/admin-client';
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
@@ -26,12 +26,12 @@ export default function AdminTechTagsPage() {
     }, []);
 
     async function checkAuth() {
-        const { data: { user } } = await supabaseAdmin.auth.getUser();
+        const { data: { user } } = await dbAdmin.auth.getUser();
         if (!user) router.push("/admin/login");
     }
 
     async function fetchTechTags() {
-        const { data, error } = await supabaseAdmin
+        const { data, error } = await dbAdmin
             .from("tech_tags")
             .select("*")
             .order("category", { ascending: true })
@@ -42,7 +42,7 @@ export default function AdminTechTagsPage() {
     }
 
     async function handleDelete(id: string) {
-        const { error } = await supabaseAdmin.from("tech_tags").delete().eq("id", id);
+        const { error } = await dbAdmin.from("tech_tags").delete().eq("id", id);
         if (!error) {
             fetchTechTags();
             setDeleteDialog({ open: false, id: null });
@@ -51,10 +51,10 @@ export default function AdminTechTagsPage() {
 
     async function handleSave() {
         if (editingId === "new") {
-            const { error } = await supabaseAdmin.from("tech_tags").insert([formData]);
+            const { error } = await dbAdmin.from("tech_tags").insert([formData]);
             if (error) return;
         } else {
-            const { error } = await supabaseAdmin.from("tech_tags").update(formData).eq("id", editingId);
+            const { error } = await dbAdmin.from("tech_tags").update(formData).eq("id", editingId);
             if (error) return;
         }
         setEditingId(null);

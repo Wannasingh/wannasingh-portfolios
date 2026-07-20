@@ -4,7 +4,7 @@ import { motion } from "framer-motion";
 import { ExternalLink, ArrowRight, Loader2 } from "lucide-react";
 import { FaGithub } from "react-icons/fa6";
 import Link from "next/link";
-import { supabase, Project } from '@/app/lib/api-client';
+import { db, Project } from '@/app/lib/api-client';
 
 const FALLBACK_PROJECTS: Project[] = [
   {
@@ -51,7 +51,7 @@ export default function FeaturedProjectsSection() {
       }
     }, 5000);
 
-    supabase
+    db
       .from("projects")
       .select("*")
       .eq("is_featured", true)

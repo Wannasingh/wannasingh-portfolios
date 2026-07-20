@@ -3,7 +3,7 @@
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { FolderGit2, Code2, Briefcase, Layers } from "lucide-react";
 import { useEffect, useState } from "react";
-import { supabase } from '@/app/lib/api-client';
+import { db } from '@/app/lib/api-client';
 
 export function AdminStats() {
     const [counts, setCounts] = useState({
@@ -16,10 +16,10 @@ export function AdminStats() {
 
     useEffect(() => {
         async function fetchCounts() {
-            const { count: projectsCount } = await supabase.from('projects').select('*', { count: 'exact', head: true });
-            const { count: skillsCount } = await supabase.from('skills').select('*', { count: 'exact', head: true });
-            const { count: expCount } = await supabase.from('experiences').select('*', { count: 'exact', head: true });
-            const { count: availCount } = await supabase.from('availability').select('*', { count: 'exact', head: true });
+            const { count: projectsCount } = await db.from('projects').select('*', { count: 'exact', head: true });
+            const { count: skillsCount } = await db.from('skills').select('*', { count: 'exact', head: true });
+            const { count: expCount } = await db.from('experiences').select('*', { count: 'exact', head: true });
+            const { count: availCount } = await db.from('availability').select('*', { count: 'exact', head: true });
 
             setCounts({
                 projects: projectsCount || 0,

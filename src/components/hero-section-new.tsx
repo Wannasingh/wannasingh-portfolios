@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { ArrowRight, Database, Code2, Loader2 } from "lucide-react";
 import Link from "next/link";
-import { supabase, Profile } from '@/app/lib/api-client';
+import { db, Profile } from '@/app/lib/api-client';
 import { resolveImageUrl } from '@/app/lib/storage-utils';
 import Image from "next/image";
 
@@ -24,7 +24,7 @@ export default function HeroSectionNew() {
 
   useEffect(() => {
     const controller = new AbortController();
-    supabase.from("profile").select("*").single().then(({ data }) => {
+    db.from("profile").select("*").single().then(({ data }) => {
       if (data) {
         setProfile(data);
       }

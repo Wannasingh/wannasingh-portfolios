@@ -17,7 +17,7 @@ const dmMono = DM_Mono({
   variable: "--font-dm-mono",
 });
 
-import { supabase } from '@/app/lib/api-client';
+import { db } from '@/app/lib/api-client';
 
 export const dynamic = 'force-dynamic';
 
@@ -26,7 +26,7 @@ export async function generateMetadata(): Promise<Metadata> {
   let description = "Full Stack Developer & Oracle DB Architect";
 
   try {
-    const { data: settings } = await supabase
+    const { data: settings } = await db
       .from('system_settings')
       .select('site_title, site_description')
       .single();
