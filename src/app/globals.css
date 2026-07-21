@@ -4,73 +4,75 @@
 
 @layer base {
   :root {
-    /* ── Light-first: Clean Behance Editorial palette ── */
-    --background: 0 0% 100%; /* Pure White */
+    /* ── Light-first: Behance Monospace Typewriter palette ── */
+    --background: 40 15% 95%; /* Warm paper color #f5f3ef */
     --foreground: 220 10% 10%; /* #191919 Off-Black */
 
-    --card: 0 0% 100%;
+    --card: 40 15% 95%;
     --card-foreground: 220 10% 10%;
 
-    --popover: 0 0% 100%;
+    --popover: 40 15% 95%;
     --popover-foreground: 220 10% 10%;
 
-    /* Behance Blue Accent */
-    --primary: 217 100% 54%; /* #1769FF */
-    --primary-foreground: 0 0% 100%;
+    /* Behance Electric Blue Accent */
+    --primary: 231 100% 41%; /* #001fd1 Electric Blue */
+    --primary-foreground: 40 15% 95%;
 
-    --secondary: 210 20% 96%; /* #F4F5F8 */
-    --secondary-foreground: 220 10% 41%; /* #696969 */
+    --secondary: 40 10% 90%; /* Sightly darker paper tone */
+    --secondary-foreground: 220 10% 30%;
 
-    --muted: 210 20% 96%; /* #F4F5F8 */
-    --muted-foreground: 220 10% 64%; /* #A4A4A4 */
+    --muted: 40 10% 90%;
+    --muted-foreground: 220 10% 50%;
 
-    --accent: 210 20% 96%;
-    --accent-foreground: 217 100% 54%;
+    --accent: 40 10% 90%;
+    --accent-foreground: 231 100% 41%;
 
     --destructive: 0 72% 51%;
-    --destructive-foreground: 0 0% 98%;
+    --destructive-foreground: 40 15% 95%;
 
-    --border: 210 20% 91%; /* #E8E8E8 Very Light Grey */
-    --input: 210 20% 91%;
-    --ring: 217 100% 54%;
+    --border: 36 10% 81%; /* Soft warm paper border #d3cfc9 */
+    --input: 36 10% 81%;
+    --ring: 231 100% 41%;
 
     --radius: 0rem; /* Sharp editorial grid layout */
 
-    /* Gradients: soft blue to clean indigo */
-    --gradient-from: 217 100% 54%;
-    --gradient-via: 224 100% 58%;
-    --gradient-to: 236 100% 62%;
+    /* Mulberry Paper Texture SVG for Light Mode */
+    --paper-texture: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.045' numOctaves='3' result='noise'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.05 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' fill='none'/%3E%3Cpath d='M50,50 Q60,55 55,70' stroke='%237a756b' stroke-width='0.5' fill='none' opacity='0.15' stroke-linecap='round'/%3E%3Cpath d='M180,40 Q190,35 200,45' stroke='%23686358' stroke-width='0.4' fill='none' opacity='0.12' stroke-linecap='round'/%3E%3Cpath d='M320,180 Q315,200 330,210' stroke='%237a756b' stroke-width='0.6' fill='none' opacity='0.15' stroke-linecap='round'/%3E%3Cpath d='M80,320 Q90,330 85,345' stroke='%235a554b' stroke-width='0.5' fill='none' opacity='0.1' stroke-linecap='round'/%3E%3Cpath d='M270,120 Q265,135 275,140' stroke='%23001fd1' stroke-width='0.5' fill='none' opacity='0.08' stroke-linecap='round'/%3E%3Cpath d='M350,70 Q345,85 355,90' stroke='%237a756b' stroke-width='0.4' fill='none' opacity='0.13' stroke-linecap='round'/%3E%3Cpath d='M30,160 Q40,155 45,170' stroke='%235a554b' stroke-width='0.5' fill='none' opacity='0.14' stroke-linecap='round'/%3E%3Cpath d='M240,280 Q245,290 235,300' stroke='%23001fd1' stroke-width='0.4' fill='none' opacity='0.08' stroke-linecap='round'/%3E%3Cpath d='M150,220 Q160,215 155,230' stroke='%237a756b' stroke-width='0.5' fill='none' opacity='0.12' stroke-linecap='round'/%3E%3C/svg%3E");
   }
 
   /* Dark mode override */
   .dark {
-    --background: 240 10% 6%;
-    --foreground: 210 20% 92%;
+    --background: 225 11% 9%; /* Slate dark paper bg #131417 */
+    --foreground: 40 15% 95%; /* Warm paper color #f5f3ef */
 
-    --card: 220 10% 12%;
-    --card-foreground: 210 20% 92%;
+    --card: 225 11% 9%;
+    --card-foreground: 40 15% 95%;
 
-    --popover: 220 10% 12%;
-    --popover-foreground: 210 20% 92%;
+    --popover: 225 11% 9%;
+    --popover-foreground: 40 15% 95%;
 
-    --primary: 21 100% 50%; /* Safety Orange for Dark Mode contrast */
-    --primary-foreground: 240 10% 6%;
+    /* Bright Electric Blue for Dark Mode readability */
+    --primary: 230 85% 65%; /* #5c75f2 Electric Blue */
+    --primary-foreground: 225 11% 9%;
 
-    --secondary: 220 10% 16%;
-    --secondary-foreground: 210 15% 70%;
+    --secondary: 225 10% 15%;
+    --secondary-foreground: 220 10% 70%;
 
-    --muted: 220 10% 16%;
-    --muted-foreground: 222 10% 60%;
+    --muted: 225 10% 15%;
+    --muted-foreground: 220 10% 60%;
 
-    --accent: 220 10% 16%;
-    --accent-foreground: 21 100% 60%;
+    --accent: 225 10% 15%;
+    --accent-foreground: 230 85% 65%;
 
     --destructive: 0 72% 51%;
-    --destructive-foreground: 0 0% 98%;
+    --destructive-foreground: 40 15% 95%;
 
-    --border: 220 10% 18%;
-    --input: 220 10% 18%;
-    --ring: 21 100% 50%;
+    --border: 225 10% 20%; /* #2e3037 */
+    --input: 225 10% 20%;
+    --ring: 230 85% 65%;
+
+    /* Mulberry Paper Texture SVG for Dark Mode */
+    --paper-texture: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.045' numOctaves='3' result='noise'/%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 0.08 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' fill='none'/%3E%3Cpath d='M50,50 Q60,55 55,70' stroke='%23a1a09b' stroke-width='0.5' fill='none' opacity='0.12' stroke-linecap='round'/%3E%3Cpath d='M180,40 Q190,35 200,45' stroke='%23918f89' stroke-width='0.4' fill='none' opacity='0.1' stroke-linecap='round'/%3E%3Cpath d='M320,180 Q315,200 330,210' stroke='%23a1a09b' stroke-width='0.6' fill='none' opacity='0.12' stroke-linecap='round'/%3E%3Cpath d='M80,320 Q90,330 85,345' stroke='%23817f79' stroke-width='0.5' fill='none' opacity='0.08' stroke-linecap='round'/%3E%3Cpath d='M270,120 Q265,135 275,140' stroke='%235c75f2' stroke-width='0.5' fill='none' opacity='0.12' stroke-linecap='round'/%3E%3Cpath d='M350,70 Q345,85 355,90' stroke='%23a1a09b' stroke-width='0.4' fill='none' opacity='0.11' stroke-linecap='round'/%3E%3Cpath d='M30,160 Q40,155 45,170' stroke='%23817f79' stroke-width='0.5' fill='none' opacity='0.11' stroke-linecap='round'/%3E%3Cpath d='M240,280 Q245,290 235,300' stroke='%235c75f2' stroke-width='0.4' fill='none' opacity='0.12' stroke-linecap='round'/%3E%3Cpath d='M150,220 Q160,215 155,230' stroke='%23a1a09b' stroke-width='0.5' fill='none' opacity='0.1' stroke-linecap='round'/%3E%3C/svg%3E");
   }
 }
 
@@ -85,7 +87,11 @@
   }
 
   body {
-    @apply bg-background text-foreground;
+    background-color: hsl(var(--background));
+    background-image: var(--paper-texture);
+    background-repeat: repeat;
+    background-size: 400px 400px;
+    @apply text-foreground;
     font-feature-settings: "rlig" 1, "calt" 1;
     overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
@@ -93,7 +99,7 @@
   }
 
   h1, h2, h3, h4, h5, h6 {
-    letter-spacing: -0.03em;
+    letter-spacing: -0.02em;
     line-height: 1.1;
   }
 
@@ -109,10 +115,10 @@
 
   /* Custom scrollbar */
   ::-webkit-scrollbar { width: 6px; }
-  ::-webkit-scrollbar-track { background: hsl(var(--background)); }
+  ::-webkit-scrollbar-track { background: transparent; }
   ::-webkit-scrollbar-thumb {
     background: hsl(var(--border));
-    border-radius: 3px;
+    border-radius: 0px;
   }
   ::-webkit-scrollbar-thumb:hover { background: hsl(var(--muted-foreground)); }
 }
@@ -247,5 +253,18 @@
   .sketch-line {
     stroke-dasharray: 4 4;
     stroke-linecap: round;
+  }
+
+  /* ── Blurred text utility (merci!) ── */
+  .blurred-text {
+    color: transparent;
+    text-shadow: 0 0 16px hsl(var(--foreground) / 0.95);
+    filter: blur(12px);
+    transition: text-shadow 0.8s cubic-bezier(0.16, 1, 0.3, 1), filter 0.8s cubic-bezier(0.16, 1, 0.3, 1), color 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .blurred-text:hover {
+    color: hsl(var(--foreground));
+    text-shadow: 0 0 0px transparent;
+    filter: blur(0px);
   }
 }

@@ -115,7 +115,7 @@ export default function HeroSectionNew() {
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4, delay: 0.5 }}
-              className="text-xs sm:text-sm text-[#696969] dark:text-muted-foreground leading-relaxed max-w-lg mb-8 font-sans"
+              className="text-xs sm:text-sm text-[#696969] dark:text-muted-foreground leading-relaxed max-w-lg mb-8 font-mono"
             >
               {bio}
             </motion.p>
@@ -184,7 +184,6 @@ export default function HeroSectionNew() {
                     sizes="(max-width: 1024px) 0px, 360px"
                     className="object-cover object-top filter grayscale hover:grayscale-0 transition-all duration-700"
                     priority
-                    unoptimized={!!profile?.avatar_url}
                   />
                 ) : (
                   <div className="absolute inset-0 bg-secondary/10 animate-pulse flex items-center justify-center">

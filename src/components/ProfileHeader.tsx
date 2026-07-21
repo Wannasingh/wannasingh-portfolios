@@ -47,7 +47,6 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
             layout="fill"
             objectFit="cover"
             className="hover:scale-[1.02] transition-transform duration-500"
-            unoptimized={!!avatarUrl}
           />
         </div>
         
@@ -59,7 +58,7 @@ export const ProfileHeader: React.FC<ProfileHeaderProps> = ({
             <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight text-[#191919] dark:text-foreground">
               {title || "Hello, I'm Wannasingh"}
             </h1>
-            <p className="text-sm sm:text-base text-[#696969] dark:text-muted-foreground leading-relaxed max-w-2xl pt-1 font-sans">
+            <p className="text-sm sm:text-base text-[#696969] dark:text-muted-foreground leading-relaxed max-w-2xl pt-1 font-mono">
               {description}
             </p>
           </div>

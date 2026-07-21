@@ -83,7 +83,7 @@ export default function HandDrawnMindMap() {
         {/* EDUCATION NODE (Top-Left) */}
         <div className="absolute left-[12%] top-[3%] w-[28%] z-10">
           <div className="p-6 bg-background hand-drawn-border-2 bg-white dark:bg-card text-center hover:shadow-md transition-shadow duration-300">
-            <h3 className="font-sans font-bold text-lg lowercase tracking-tight mb-3">education</h3>
+            <h3 className="font-mono font-bold text-lg lowercase tracking-tight mb-3">education</h3>
             <div className="font-handwriting text-[#696969] dark:text-muted-foreground text-lg space-y-3 leading-tight">
               <div>
                 <p className="font-bold text-[#191919] dark:text-foreground">Computer Science, BSc</p>
@@ -101,7 +101,7 @@ export default function HandDrawnMindMap() {
         {/* LANGUAGES NODE (Top-Right) */}
         <div className="absolute right-[12%] top-[4%] w-[22%] z-10">
           <div className="p-5 bg-background hand-drawn-border-3 bg-white dark:bg-card text-center hover:shadow-md transition-shadow duration-300">
-            <h3 className="font-sans font-bold text-lg lowercase tracking-tight mb-2">languages</h3>
+            <h3 className="font-mono font-bold text-lg lowercase tracking-tight mb-2">languages</h3>
             <div className="font-handwriting text-[#696969] dark:text-muted-foreground text-lg leading-tight space-y-1">
               <p><span className="font-bold text-[#191919] dark:text-foreground">Thai</span> (native)</p>
               <p><span className="font-bold text-[#191919] dark:text-foreground">English</span> (fluent / advanced)</p>
@@ -112,7 +112,7 @@ export default function HandDrawnMindMap() {
         {/* WORK HISTORY NODE (Bottom-Left) */}
         <div className="absolute left-[3%] top-[48%] w-[33%] z-10">
           <div className="p-6 bg-background hand-drawn-border-1 bg-white dark:bg-card text-center hover:shadow-md transition-shadow duration-300">
-            <h3 className="font-sans font-bold text-lg lowercase tracking-tight mb-4">work history</h3>
+            <h3 className="font-mono font-bold text-lg lowercase tracking-tight mb-4">work history</h3>
             <div className="font-handwriting text-[#696969] dark:text-muted-foreground text-[16px] text-left space-y-4 leading-snug">
               <div>
                 <p className="font-bold text-[#191919] dark:text-foreground">2024 - Present ★ Lead DBA & Architect</p>
@@ -133,7 +133,7 @@ export default function HandDrawnMindMap() {
         {/* SKILLS NODE (Bottom-Right stacked ellipses) */}
         <div className="absolute right-[5%] top-[40%] w-[30%] z-10">
           <div className="p-6 bg-background hand-drawn-border-ellipse bg-white dark:bg-card text-center hover:shadow-md transition-shadow duration-300 flex flex-col items-center">
-            <h3 className="font-sans font-bold text-lg lowercase tracking-tight mb-4">skills</h3>
+            <h3 className="font-mono font-bold text-lg lowercase tracking-tight mb-4">skills</h3>
             
             <div className="w-full space-y-4 font-handwriting text-[#696969] dark:text-muted-foreground text-left">
               {/* Personal Group */}
@@ -161,7 +161,7 @@ export default function HandDrawnMindMap() {
         <div className="absolute left-[40%] top-[80%] w-[20%] z-10 text-center">
           <Link href="#projects">
             <div className="p-4 bg-primary text-primary-foreground hand-drawn-border-3 cursor-pointer hover:scale-102 hover:shadow-lg transition-all duration-300 select-none">
-              <h3 className="font-sans font-bold text-base lowercase tracking-tight flex items-center justify-center gap-1">
+              <h3 className="font-mono font-bold text-base lowercase tracking-tight flex items-center justify-center gap-1">
                 selected projects
                 <ArrowUpRight className="h-4 w-4" />
               </h3>
@@ -192,7 +192,7 @@ export default function HandDrawnMindMap() {
 
         {/* Education Node */}
         <div className="relative z-10 bg-white dark:bg-card hand-drawn-border-2 p-5">
-          <h3 className="font-sans font-bold text-base lowercase tracking-tight mb-2 text-center">education</h3>
+          <h3 className="font-mono font-bold text-base lowercase tracking-tight mb-2 text-center">education</h3>
           <div className="font-handwriting text-[#696969] dark:text-muted-foreground text-base space-y-3 leading-tight text-center">
             <div>
               <p className="font-bold text-[#191919] dark:text-foreground">Computer Science, BSc</p>
@@ -208,7 +208,7 @@ export default function HandDrawnMindMap() {
 
         {/* Work History Node */}
         <div className="relative z-10 bg-white dark:bg-card hand-drawn-border-1 p-5">
-          <h3 className="font-sans font-bold text-base lowercase tracking-tight mb-3 text-center">work history</h3>
+          <h3 className="font-mono font-bold text-base lowercase tracking-tight mb-3 text-center">work history</h3>
           <div className="font-handwriting text-[#696969] dark:text-muted-foreground text-sm space-y-3 leading-tight">
             <div>
               <p className="font-bold text-[#191919] dark:text-foreground">2024 - Present ★ Lead DBA & Architect</p>
@@ -223,7 +223,7 @@ export default function HandDrawnMindMap() {
 
         {/* Skills Node */}
         <div className="relative z-10 bg-white dark:bg-card hand-drawn-border-ellipse p-5">
-          <h3 className="font-sans font-bold text-base lowercase tracking-tight mb-3 text-center">skills</h3>
+          <h3 className="font-mono font-bold text-base lowercase tracking-tight mb-3 text-center">skills</h3>
           <div className="font-handwriting text-[#696969] dark:text-muted-foreground text-sm space-y-3">
             <div>
               <p className="font-bold text-[#191919] dark:text-foreground text-center">{"// Stack Inventory"}</p>
@@ -238,7 +238,7 @@ export default function HandDrawnMindMap() {
 
         {/* Languages Node */}
         <div className="relative z-10 bg-white dark:bg-card hand-drawn-border-3 p-4">
-          <h3 className="font-sans font-bold text-base lowercase tracking-tight mb-2 text-center">languages</h3>
+          <h3 className="font-mono font-bold text-base lowercase tracking-tight mb-2 text-center">languages</h3>
           <div className="font-handwriting text-[#696969] dark:text-muted-foreground text-base text-center">
             <p>Thai (native) / English (fluent)</p>
           </div>
@@ -248,7 +248,7 @@ export default function HandDrawnMindMap() {
         <div className="relative z-10 text-center flex justify-center">
           <Link href="#projects">
             <div className="p-4 bg-primary text-primary-foreground hand-drawn-border-3 cursor-pointer w-48 shadow-md">
-              <h3 className="font-sans font-bold text-sm lowercase flex items-center justify-center gap-1">
+              <h3 className="font-mono font-bold text-sm lowercase flex items-center justify-center gap-1">
                 selected projects
                 <ArrowUpRight className="h-3 w-3" />
               </h3>

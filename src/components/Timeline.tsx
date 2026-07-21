@@ -147,7 +147,7 @@ export const Timeline = forwardRef<HTMLDivElement, TimelineProps>(
               <button
                 type="button"
                 key={skill.id}
-                className={`timeline-item mb-8 flex p-4 border-2 rounded-sm border-black transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2 w-full text-left font-sans ${
+                className={`timeline-item mb-8 flex p-4 border-2 rounded-sm border-black transition-all duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2 w-full text-left font-mono ${
                   activeSkill === index
                     ? `${skill.color} shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]`
                     : "bg-white shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]"

@@ -158,7 +158,7 @@ export default function FeaturedProjectsSection() {
                     <p className={`font-handwriting text-lg leading-none ${accent}`}>
                       {label}
                     </p>
-                    <p className="text-sm text-[#696969] dark:text-muted-foreground leading-relaxed font-sans">{value}</p>
+                    <p className="text-sm text-[#696969] dark:text-muted-foreground leading-relaxed font-mono">{value}</p>
                   </div>
                 ))}
               </div>

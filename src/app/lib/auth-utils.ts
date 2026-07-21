@@ -38,7 +38,11 @@ export function verifyJWT(token: string): JWTPayload | null {
       .update(`${header}.${payload}`)
       .digest('base64url');
       
-    if (signature !== expectedSignature) return null;
+    const signatureBuffer = Buffer.from(signature);
+    const expectedSignatureBuffer = Buffer.from(expectedSignature);
+    if (signatureBuffer.length !== expectedSignatureBuffer.length || !crypto.timingSafeEqual(signatureBuffer, expectedSignatureBuffer)) {
+      return null;
+    }
     
     const decodedPayload = JSON.parse(Buffer.from(payload, 'base64url').toString('utf8')) as JWTPayload;
     
@@ -68,11 +72,15 @@ export function verifyPassword(password: string, storedHash: string): boolean {
   const [salt, hash] = storedHash.split(':');
   if (!salt || !hash) return false;
   
+  const hashBuffer = Buffer.from(hash, 'hex');
+  
   // Try new iteration count first
   const newHash = crypto.pbkdf2Sync(password, salt, PBKDF2_ITERATIONS, 64, 'sha512').toString('hex');
-  if (hash === newHash) return true;
+  const newHashBuffer = Buffer.from(newHash, 'hex');
+  if (hashBuffer.length === newHashBuffer.length && crypto.timingSafeEqual(hashBuffer, newHashBuffer)) return true;
   
   // Fallback: legacy iterations (for existing hashed passwords)
   const legacyHash = crypto.pbkdf2Sync(password, salt, LEGACY_ITERATIONS, 64, 'sha512').toString('hex');
-  return hash === legacyHash;
+  const legacyHashBuffer = Buffer.from(legacyHash, 'hex');
+  return hashBuffer.length === legacyHashBuffer.length && crypto.timingSafeEqual(hashBuffer, legacyHashBuffer);
 }

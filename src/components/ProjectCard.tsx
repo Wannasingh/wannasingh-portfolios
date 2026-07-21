@@ -47,7 +47,6 @@ export default function ProjectCard({ project }: ProjectCardProps) {
                       fill
                       sizes="(max-width: 1024px) 100vw, 40vw"
                       className="object-cover object-top transition-transform duration-700 ease-out group-hover/mockup:scale-[1.02]"
-                      unoptimized={project.image_path.startsWith('http')}
                     />
                     
                     {/* Minimalist overlay */}
@@ -101,7 +100,7 @@ export default function ProjectCard({ project }: ProjectCardProps) {
             </div>
           </div>
 
-          <p className="text-[#696969] dark:text-muted-foreground text-xs sm:text-sm leading-relaxed font-sans">
+          <p className="text-[#696969] dark:text-muted-foreground text-xs sm:text-sm leading-relaxed font-mono">
             {project.overview}
           </p>
 

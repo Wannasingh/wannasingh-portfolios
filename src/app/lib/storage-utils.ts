@@ -169,6 +169,10 @@ export function resolveImageUrl(url: string | undefined | null, folder: string =
   
   const cleanUrl = url.replace(/^\/+/, '');
   
+  if (cleanUrl.startsWith('assets/') || cleanUrl.startsWith('images/')) {
+    return `/${cleanUrl}`;
+  }
+  
   if (cleanUrl.startsWith('Pictures/')) {
     return `/media-assets/${cleanUrl}`;
   }
