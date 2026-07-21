@@ -1,3 +1,5 @@
+"use client";
+import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Project } from '@/app/lib/api-client';
@@ -16,6 +18,7 @@ interface ProjectCardProps {
 }
 
 export default function ProjectCard({ project }: ProjectCardProps) {
+  const [activeView, setActiveView] = useState<'ui' | 'blueprint'>('ui');
   const isDemoActive = project.demo_link && project.demo_link !== "#";
   const isGithubActive = project.github_link && project.github_link !== "#";
 
@@ -36,7 +39,12 @@ export default function ProjectCard({ project }: ProjectCardProps) {
                   {/* Viewport status indicator */}
                   <div className="h-6 px-3 bg-muted/40 dark:bg-muted/10 border-b border-border/60 flex items-center justify-between text-[8px] font-mono text-muted-foreground">
                     <span className="uppercase tracking-wider">render_view_active.jpg</span>
-                    <span>100% RENDER SCALE</span>
+                    <span className="flex items-center gap-1.5">
+                      {project.blueprint_path && (
+                        <span className="text-primary font-bold animate-pulse">[ BLUEPRINT SCHEMATIC AVAILABLE ]</span>
+                      )}
+                      <span>100% RENDER SCALE</span>
+                    </span>
                   </div>
                   
                   {/* Screenshot Viewport */}
@@ -62,23 +70,39 @@ export default function ProjectCard({ project }: ProjectCardProps) {
               {/* Lightbox popup */}
               <DialogContent className="max-w-4xl w-[90vw] p-0 overflow-hidden bg-background border border-border rounded-none shadow-2xl">
                 <div className="flex flex-col h-[80vh]">
-                  <div className="p-4 border-b border-border bg-muted/20 flex items-center justify-between shrink-0">
+                  <div className="p-4 border-b border-border bg-muted/20 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 shrink-0">
                     <div>
                       <DialogTitle className="text-sm font-extrabold uppercase tracking-wide">{project.title}</DialogTitle>
                       <DialogDescription className="text-xs text-muted-foreground mt-0.5 font-mono">
-                        {isDemoActive ? `Resource URI: ${project.demo_link}` : "Product Visual Preview"}
+                        {activeView === 'ui' ? (isDemoActive ? `Resource URI: ${project.demo_link}` : "Product Visual Preview") : "System Architecture Blueprint"}
                       </DialogDescription>
                     </div>
+                    {project.blueprint_path && (
+                      <div className="flex border border-border bg-background p-0.5 text-[9px] font-mono select-none">
+                        <button
+                          onClick={() => setActiveView('ui')}
+                          className={`px-2.5 py-1 uppercase transition-colors ${activeView === 'ui' ? 'bg-primary text-primary-foreground font-bold' : 'text-muted-foreground hover:text-foreground'}`}
+                        >
+                          Product UI
+                        </button>
+                        <button
+                          onClick={() => setActiveView('blueprint')}
+                          className={`px-2.5 py-1 uppercase transition-colors ${activeView === 'blueprint' ? 'bg-primary text-primary-foreground font-bold' : 'text-muted-foreground hover:text-foreground'}`}
+                        >
+                          Architecture Blueprint
+                        </button>
+                      </div>
+                    )}
                   </div>
 
                   <div className="flex-1 overflow-y-auto p-4 sm:p-6 scrollbar-thin bg-muted/5">
-                    <div className="relative w-full border border-border bg-background overflow-hidden">
+                    <div className="relative w-full border border-border bg-background overflow-hidden flex justify-center items-center">
                       <Image
-                        src={resolveImageUrl(project.image_path, 'projects')}
+                        src={resolveImageUrl(activeView === 'ui' ? project.image_path : project.blueprint_path, 'projects')}
                         alt={project.title}
                         width={1200}
                         height={800}
-                        className="w-full h-auto object-contain"
+                        className="w-full h-auto object-contain max-h-[65vh]"
                         unoptimized
                       />
                     </div>
