@@ -21,7 +21,7 @@ describe('Navbar Component', () => {
   it('renders correctly', () => {
     render(<Header />);
     expect(screen.getByText('wannasingh')).toBeInTheDocument();
-    expect(screen.getAllByText('Home')[0]).toBeInTheDocument();
+    expect(screen.getAllByText('// Home')[0]).toBeInTheDocument();
     expect(screen.getAllByText('About')[0]).toBeInTheDocument();
     expect(screen.getAllByText('Portfolio')[0]).toBeInTheDocument();
   });
@@ -34,7 +34,7 @@ describe('Navbar Component', () => {
     
     fireEvent.scroll(window, { target: { scrollY: 100 } });
     
-    expect(header).toHaveClass('bg-background/90');
+    expect(header).toHaveClass('bg-background/95');
     
     fireEvent.scroll(window, { target: { scrollY: 0 } });
     
@@ -53,12 +53,12 @@ describe('Navbar Component', () => {
     
     // We should see mobile links now
     await waitFor(() => {
-      const mobileLinks = screen.getAllByText('Home');
+      const mobileLinks = screen.getAllByText('// Home');
       expect(mobileLinks.length).toBeGreaterThan(1);
     });
     
     // Click a link to close
-    const mobileHomeLink = screen.getAllByText('Home')[1];
+    const mobileHomeLink = screen.getAllByText('// Home')[1];
     fireEvent.click(mobileHomeLink);
     
     // Verify menu closes (AnimatePresence handles the unmounting, so we might need to wait)
