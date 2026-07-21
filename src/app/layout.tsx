@@ -1,23 +1,17 @@
 import type { Metadata } from "next";
-import { Plus_Jakarta_Sans, DM_Mono } from "next/font/google";
+import { Courier_Prime } from "next/font/google";
 import "@/app/globals.css";
 import { Toaster } from "sonner";
 import { ThemeProvider } from "@/components/theme-provider";
 import ClientLayout from "@/components/client-layout";
 
-const plusJakartaSans = Plus_Jakarta_Sans({ 
+const courierPrime = Courier_Prime({ 
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700", "800"],
-  variable: "--font-plus-jakarta",
+  weight: ["400", "700"],
+  variable: "--font-courier-prime",
 });
 
-const dmMono = DM_Mono({
-  subsets: ["latin"],
-  weight: ["400", "500"],
-  variable: "--font-dm-mono",
-});
-
-import { supabase } from '@/app/lib/api-client';
+import { db } from '@/app/lib/api-client';
 
 export const dynamic = 'force-dynamic';
 
@@ -26,7 +20,7 @@ export async function generateMetadata(): Promise<Metadata> {
   let description = "Full Stack Developer & Oracle DB Architect";
 
   try {
-    const { data: settings } = await supabase
+    const { data: settings } = await db
       .from('system_settings')
       .select('site_title, site_description')
       .single();
@@ -61,7 +55,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${plusJakartaSans.className} ${dmMono.variable} min-h-screen bg-background text-foreground select-none`}>
+      <body className={`${courierPrime.className} ${courierPrime.variable} min-h-screen bg-background text-foreground select-none`}>
         <ThemeProvider
             attribute="class"
             defaultTheme="dark"

@@ -1,10 +1,9 @@
 "use client";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { ExternalLink, ArrowRight, Loader2 } from "lucide-react";
-import { FaGithub } from "react-icons/fa6";
+import { ArrowRight, Loader2 } from "lucide-react";
 import Link from "next/link";
-import { supabase, Project } from '@/app/lib/api-client';
+import { db, Project } from '@/app/lib/api-client';
 
 const FALLBACK_PROJECTS: Project[] = [
   {
@@ -51,7 +50,7 @@ export default function FeaturedProjectsSection() {
       }
     }, 5000);
 
-    supabase
+    db
       .from("projects")
       .select("*")
       .eq("is_featured", true)
@@ -77,7 +76,7 @@ export default function FeaturedProjectsSection() {
   }
 
   return (
-    <section className="py-28 relative" id="projects">
+    <section className="py-24 relative" id="projects">
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-border to-transparent" />
 
       <div className="container mx-auto px-6 max-w-6xl">
@@ -90,13 +89,13 @@ export default function FeaturedProjectsSection() {
           className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 mb-16"
         >
           <div>
-            <p className="mono text-xs text-primary tracking-widest uppercase mb-3">
-              Selected Work
+            <p className="font-handwriting text-2xl text-primary font-bold tracking-wide mb-2">
+              {"// Selected Work"}
             </p>
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-foreground">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-[#191919] dark:text-foreground font-serif-elegant">
               Problems solved.
               <br />
-              <span className="text-gradient">Results measured.</span>
+              <span className="text-primary font-bold">Results measured.</span>
             </h2>
           </div>
           <Link
@@ -109,7 +108,7 @@ export default function FeaturedProjectsSection() {
         </motion.div>
 
         {/* Project cards */}
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-10">
           {projects.map((project, i) => (
             <motion.article
               key={project.id || i}
@@ -117,75 +116,70 @@ export default function FeaturedProjectsSection() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.45, delay: i * 0.07 }}
-              className="group relative rounded-xl border border-border bg-card card-glow overflow-hidden"
+              className="group relative p-6 sm:p-8 bg-white dark:bg-card hand-drawn-border-1"
             >
-              {/* Gradient top accent on hover */}
-              <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-primary/0 to-transparent group-hover:via-primary/70 transition-all duration-500" />
-
-              <div className="p-6 sm:p-8">
-                {/* Top row */}
-                <div className="flex items-start justify-between gap-4 mb-5">
-                  <div className="flex items-center gap-3">
-                    {project.category && (
-                      <span className="mono text-[10px] text-primary tracking-widest uppercase border border-primary/30 bg-primary/10 px-2 py-0.5 rounded">
-                        {project.category}
-                      </span>
-                    )}
-                    <h3 className="text-lg sm:text-xl font-bold text-foreground group-hover:text-primary transition-colors duration-200">
-                      {project.title}
-                    </h3>
-                  </div>
-                  {/* Links */}
-                  <div className="flex gap-2 shrink-0">
-                    {project.github_link && project.github_link !== "#" && (
-                       <Link href={project.github_link} target="_blank" rel="noopener noreferrer"
-                         className="p-2 rounded-lg border border-border text-muted-foreground hover:text-foreground hover:border-primary/30 transition-all duration-150">
-                         <FaGithub className="h-4 w-4" />
-                       </Link>
-                    )}
-                    {project.demo_link && project.demo_link !== "#" && (
-                      <Link href={project.demo_link} target="_blank" rel="noopener noreferrer"
-                        className="p-2 rounded-lg border border-primary/30 bg-primary/10 text-primary hover:bg-primary hover:text-primary-foreground transition-all duration-150">
-                        <ExternalLink className="h-4 w-4" />
-                      </Link>
-                    )}
-                  </div>
-                </div>
-
-                {/* PSI: Problem / Solution / Impact */}
-                <div className="grid sm:grid-cols-3 gap-px bg-border rounded-lg overflow-hidden mb-5">
-                  {[
-                    { label: "Problem", value: project.problem, accent: "text-rose-400/80" },
-                    { label: "Solution", value: project.solution, accent: "text-primary" },
-                    { label: "Impact", value: project.impact, accent: "text-emerald-400/80" },
-                  ].map(({ label, value, accent }) => (
-                    <div key={label} className="bg-card p-4">
-                      <p className={`mono text-[10px] font-bold tracking-widest uppercase mb-1.5 ${accent}`}>
-                        {label}
-                      </p>
-                      <p className="text-sm text-muted-foreground leading-relaxed">{value}</p>
-                    </div>
-                  ))}
-                </div>
-
-                {/* Stack */}
-                <div className="flex flex-wrap gap-1.5">
-                  {project.tech_stack?.map((tech) => (
-                    <span
-                      key={tech}
-                      className="px-2.5 py-0.5 rounded-md border border-border bg-secondary mono text-[11px] text-muted-foreground"
-                    >
-                      {tech}
+              {/* Top row */}
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 pb-4 border-b border-dashed border-border/80">
+                <div className="flex flex-wrap items-center gap-3">
+                  {project.category && (
+                    <span className="px-2 py-0.5 border border-primary/40 bg-primary/5 text-[10px] font-mono text-primary font-semibold uppercase rounded-none">
+                      {project.category}
                     </span>
-                  ))}
+                  )}
+                  <h3 className="text-xl font-bold text-[#191919] dark:text-foreground font-serif-elegant group-hover:text-primary transition-colors duration-200">
+                    {project.title}
+                  </h3>
                 </div>
+                {/* Links */}
+                <div className="flex gap-4 shrink-0 font-mono text-xs text-[#696969] dark:text-muted-foreground">
+                  {project.github_link && project.github_link !== "#" && (
+                    <Link href={project.github_link} target="_blank" rel="noopener noreferrer"
+                      className="hover:text-primary transition-colors flex items-center gap-1">
+                      {"// SOURCE"} <ArrowRight className="h-3 w-3" />
+                    </Link>
+                  )}
+                  {project.demo_link && project.demo_link !== "#" && (
+                    <Link href={project.demo_link} target="_blank" rel="noopener noreferrer"
+                      className="hover:text-primary transition-colors text-primary flex items-center gap-1 font-bold">
+                      {"// LIVE"} <ArrowRight className="h-3 w-3" />
+                    </Link>
+                  )}
+                </div>
+              </div>
+
+              {/* PSI: Problem / Solution / Impact */}
+              <div className="grid sm:grid-cols-3 gap-6 mb-6">
+                {[
+                  { label: "Problem", value: project.problem, accent: "text-rose-500 font-bold" },
+                  { label: "Solution", value: project.solution, accent: "text-primary font-bold" },
+                  { label: "Impact", value: project.impact, accent: "text-emerald-600 font-bold" },
+                ].map(({ label, value, accent }) => (
+                  <div key={label} className="space-y-1.5">
+                    <p className={`font-handwriting text-lg leading-none ${accent}`}>
+                      {label}
+                    </p>
+                    <p className="text-sm text-[#696969] dark:text-muted-foreground leading-relaxed font-mono">{value}</p>
+                  </div>
+                ))}
+              </div>
+
+              {/* Stack */}
+              <div className="flex flex-wrap gap-2 pt-4 border-t border-dashed border-border/80">
+                {project.tech_stack?.map((tech) => (
+                  <span
+                    key={tech}
+                    className="px-2 py-0.5 border border-border/80 bg-secondary/30 text-[10px] font-mono text-muted-foreground uppercase"
+                  >
+                    {tech}
+                  </span>
+                ))}
               </div>
             </motion.article>
           ))}
         </div>
 
         {/* Mobile: view all */}
-        <div className="flex justify-center mt-8 sm:hidden">
+        <div className="flex justify-center mt-10 sm:hidden">
           <Link href="/portfolio" className="inline-flex items-center gap-1.5 text-sm text-muted-foreground hover:text-primary transition-colors">
             View all projects <ArrowRight className="h-4 w-4" />
           </Link>

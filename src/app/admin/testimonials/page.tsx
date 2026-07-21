@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { supabaseAdmin } from '../../lib/admin-client';
+import { dbAdmin } from '../../lib/admin-client';
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
@@ -31,12 +31,12 @@ export default function AdminTestimonialsPage() {
     }, []);
 
     async function checkAuth() {
-        const { data: { user } } = await supabaseAdmin.auth.getUser();
+        const { data: { user } } = await dbAdmin.auth.getUser();
         if (!user) router.push("/admin/login");
     }
 
     async function fetchTestimonials() {
-        const { data, error } = await supabaseAdmin
+        const { data, error } = await dbAdmin
             .from("testimonials")
             .select("*")
             .order("display_order", { ascending: true });
@@ -46,7 +46,7 @@ export default function AdminTestimonialsPage() {
     }
 
     async function handleDelete(id: string) {
-        const { error } = await supabaseAdmin.from("testimonials").delete().eq("id", id);
+        const { error } = await dbAdmin.from("testimonials").delete().eq("id", id);
         if (!error) {
             fetchTestimonials();
             setDeleteDialog({ open: false, id: null });
@@ -55,10 +55,10 @@ export default function AdminTestimonialsPage() {
 
     async function handleSave() {
         if (editingId === "new") {
-            const { error } = await supabaseAdmin.from("testimonials").insert([formData]);
+            const { error } = await dbAdmin.from("testimonials").insert([formData]);
             if (error) return;
         } else {
-            const { error } = await supabaseAdmin.from("testimonials").update(formData).eq("id", editingId);
+            const { error } = await dbAdmin.from("testimonials").update(formData).eq("id", editingId);
             if (error) return;
         }
         setEditingId(null);

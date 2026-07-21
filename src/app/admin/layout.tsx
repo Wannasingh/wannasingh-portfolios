@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
-import { supabaseAdmin } from '../lib/admin-client';
+import { dbAdmin } from '../lib/admin-client';
 import { Button } from "@/components/ui/button";
 import { LogOut } from "lucide-react";
 import { AdminSidebar, AdminMobileSidebar } from "@/components/admin-sidebar";
@@ -20,7 +20,7 @@ export default function AdminLayout({
   }, [pathname]);
 
   async function checkUser() {
-    const { data: { user } } = await supabaseAdmin.auth.getUser();
+    const { data: { user } } = await dbAdmin.auth.getUser();
     if (user) {
         setUser(user);
     } else {
@@ -29,7 +29,7 @@ export default function AdminLayout({
   }
 
   async function handleSignOut() {
-    await supabaseAdmin.auth.signOut();
+    await dbAdmin.auth.signOut();
     router.push("/");
   }
 

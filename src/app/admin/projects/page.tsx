@@ -3,8 +3,8 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import { supabaseAdmin } from '@/app/lib/admin-client';
-import { supabase, Project } from '@/app/lib/api-client';
+import { dbAdmin } from '@/app/lib/admin-client';
+import { db, Project } from '@/app/lib/api-client';
 import { resolveImageUrl } from "@/app/lib/storage-utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -42,13 +42,13 @@ export default function AdminProjectsPage() {
   }, []);
 
   async function fetchData() {
-    const { data: { user } } = await supabaseAdmin.auth.getUser();
+    const { data: { user } } = await dbAdmin.auth.getUser();
     if (!user) {
       router.push("/admin/login");
       return;
     }
 
-    const { data, error } = await supabase
+    const { data, error } = await db
       .from('projects')
       .select('*')
       .order('created_at', { ascending: false });
@@ -84,7 +84,7 @@ export default function AdminProjectsPage() {
   const handleDelete = async (id: string) => {
       if(!confirm("Are you sure? This action cannot be undone.")) return;
 
-      const { error } = await supabaseAdmin.from('projects').delete().eq('id', id);
+      const { error } = await dbAdmin.from('projects').delete().eq('id', id);
       if(error) {
           toast.error("Failed to delete project");
       } else {
@@ -105,7 +105,7 @@ export default function AdminProjectsPage() {
         const fileName = `${crypto.randomUUID()}.${fileExt}`;
         const filePath = `${fileName}`;
 
-        const { error: uploadError } = await supabase.storage
+        const { error: uploadError } = await db.storage
             .from('portfolio-assets')
             .upload(filePath, file);
 
@@ -115,7 +115,7 @@ export default function AdminProjectsPage() {
         }
         
         // Get Public URL
-        const { data: { publicUrl } } = supabase.storage
+        const { data: { publicUrl } } = db.storage
             .from('portfolio-assets')
             .getPublicUrl(filePath);
 
@@ -151,10 +151,10 @@ export default function AdminProjectsPage() {
 
       let error;
       if (currentProject.id) {
-         const res = await supabaseAdmin.from('projects').update(updateData).eq('id', currentProject.id);
+         const res = await dbAdmin.from('projects').update(updateData).eq('id', currentProject.id);
          error = res.error;
       } else {
-         const res = await supabaseAdmin.from('projects').insert([updateData]);
+         const res = await dbAdmin.from('projects').insert([updateData]);
          error = res.error;
       }
 

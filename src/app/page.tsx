@@ -5,11 +5,11 @@ import FeaturedProjectsSection from "@/components/featured-projects-section";
 import TechStackSection from "@/components/tech-stack-section";
 import CTASection from "@/app/components/cta-section";
 
-console.log("Portfolio Redesign - Concept 'The Hybrid Architect' loaded");
+console.log("Portfolio Redesign - Typewriter Editorial Home loaded");
 
 export default function Home() {
   return (
-    <main className="flex min-h-screen flex-col bg-background">
+    <main className="flex min-h-screen flex-col bg-transparent">
       <HeroSectionNew />
       <HybridAdvantageSection />
       <FeaturedProjectsSection />

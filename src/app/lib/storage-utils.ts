@@ -156,18 +156,26 @@ export function isSupabaseStorageUrl(url: string): boolean {
  */
 export function resolveImageUrl(url: string | undefined | null, folder: string = 'projects'): string {
   if (!url) return '';
+  
+  // Convert media.wannasingh.dev URLs to same-origin /media-assets proxy paths
+  if (url.includes('media.wannasingh.dev/')) {
+    const parts = url.split('media.wannasingh.dev/');
+    return `/media-assets/${parts[1]}`;
+  }
+  
   if (url.startsWith('http://') || url.startsWith('https://')) {
     return url;
   }
   
-  // We use NEXT_PUBLIC_CDN_URL if available, otherwise fallback to the known domain
-  const cdnUrl = process.env.NEXT_PUBLIC_CDN_URL || 'https://media.wannasingh.dev';
-  
   const cleanUrl = url.replace(/^\/+/, '');
   
-  if (cleanUrl.startsWith('Pictures/')) {
-    return `${cdnUrl}/${cleanUrl}`;
+  if (cleanUrl.startsWith('assets/') || cleanUrl.startsWith('images/')) {
+    return `/${cleanUrl}`;
   }
   
-  return `${cdnUrl}/Pictures/${folder}/${cleanUrl}`;
+  if (cleanUrl.startsWith('Pictures/')) {
+    return `/media-assets/${cleanUrl}`;
+  }
+  
+  return `/media-assets/Pictures/${folder}/${cleanUrl}`;
 }

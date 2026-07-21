@@ -10,141 +10,238 @@ export interface Project {
   imagePath: string;
 }
 
-export const projects: Project[] =  [
-    {
-      name: "E-commerce Platform",
-      overview:
-        "A fully-featured e-commerce platform with a responsive design, secure payment processing, and real-time inventory management.",
-      technologies: [
-        "React",
-        "Node.js",
-        "Express",
-        "MongoDB",
-        "Redux",
-        "Stripe API",
-        "Docker",
-      ],
-      keyFeatures: [
-        "User authentication and authorization",
-        "Product catalog with search and filter functionality",
-        "Shopping cart and wishlist management",
-        "Secure checkout process with Stripe integration",
-        "Admin dashboard for inventory and order management",
-        "Real-time inventory updates",
-        "Responsive design for mobile and desktop",
-      ],
-      challenges: [
-        "Implementing real-time inventory updates across multiple users",
-        "Ensuring secure handling of sensitive payment information",
-        "Optimizing database queries for large product catalogs",
-      ],
-      solutions: [
-        "Utilized Socket.io for real-time communication between server and clients",
-        "Implemented Stripe Elements for secure payment processing",
-        "Designed efficient MongoDB indexes and implemented pagination for product listings",
-      ],
-      githubLink: "https://github.com/yourusername/e-commerce-platform",
-      demoLink: "https://your-ecommerce-demo.com",
-      imagePath: "/assets/1.png",
-    },
-    {
-      name: "Task Management App",
-      overview:
-        "A collaborative task management application with real-time updates and team collaboration features.",
-      technologies: [
-        "Next.js",
-        "TypeScript",
-        "Supabase",
-        "Tailwind CSS",
-        "React Query",
-      ],
-      keyFeatures: [
-        "User authentication with role-based access control",
-        "Real-time task updates and notifications",
-        "Drag-and-drop task organization",
-        "Team collaboration with shared workspaces",
-        "Task commenting and file attachments",
-        "Performance analytics and reporting",
-      ],
-      challenges: [
-        "Implementing real-time updates without compromising performance",
-        "Designing an intuitive and responsive user interface",
-        "Managing complex state across multiple components",
-      ],
-      solutions: [
-        "Leveraged Supabase's real-time subscriptions for instant updates",
-        "Utilized Tailwind CSS for rapid UI development and responsiveness",
-        "Implemented React Query for efficient state management and caching",
-      ],
-      githubLink: "https://github.com/yourusername/task-management-app",
-      demoLink: "https://your-task-app-demo.com",
-      imagePath: "/assets/2.png",
-    },
-    {
-      name: "AI-Powered Chatbot",
-      overview:
-        "An intelligent chatbot leveraging natural language processing to provide customer support and information retrieval.",
-      technologies: [
-        "Python",
-        "Flask",
-        "TensorFlow",
-        "NLTK",
-        "React",
-        "Docker",
-      ],
-      keyFeatures: [
-        "Natural language understanding and intent classification",
-        "Integration with knowledge base for accurate responses",
-        "Multi-language support",
-        "Conversation context maintenance",
-        "Easy integration with existing customer support systems",
-      ],
-      challenges: [
-        "Achieving high accuracy in intent classification",
-        "Maintaining context across long conversations",
-        "Optimizing response time for real-time interactions",
-      ],
-      solutions: [
-        "Fine-tuned BERT model for improved intent classification",
-        "Implemented a context management system using Redis",
-        "Utilized caching and model quantization for faster inference",
-      ],
-      githubLink: "https://github.com/yourusername/ai-chatbot",
-      demoLink: "https://your-chatbot-demo.com",
-      imagePath: "/assets/3.png",
-    },
-    {
-      name: "Fitness Tracking Mobile App",
-      overview:
-        "A comprehensive mobile application for tracking workouts, nutrition, and health metrics with personalized insights.",
-      technologies: [
-        "React Native",
-        "Redux",
-        "Node.js",
-        "MongoDB",
-        "GraphQL",
-        "AWS",
-      ],
-      keyFeatures: [
-        "Customizable workout plans and exercise library",
-        "Nutrition tracking with barcode scanning",
-        "Integration with wearable devices for health metrics",
-        "Progress visualization and goal setting",
-        "Social features for community engagement",
-        "Offline mode support",
-      ],
-      challenges: [
-        "Ensuring data accuracy and consistency across devices",
-        "Implementing efficient syncing mechanism for offline mode",
-        "Optimizing battery usage while tracking activities",
-      ],
-      solutions: [
-        "Implemented robust data validation and conflict resolution algorithms",
-        "Used a combination of local storage and queue-based syncing for offline support",
-        "Optimized background processes and implemented intelligent polling",
-      ],
-      githubLink: "https://github.com/yourusername/fitness-tracker-app",
-      demoLink: "https://your-fitness-app-demo.com",
-      imagePath: "/assets/4.png",
-    },
-  ];
+export const projects: Project[] = [
+  {
+    name: "wannasingh-master-data-management",
+    overview: "An enterprise-grade Master Data Management system designed with Python, SQLAlchemy, and Alembic database migrations. Resolves duplicate identity records and enforces gold-record standards across distributed transactional systems.",
+    technologies: ["Python", "FastAPI", "SQLAlchemy", "Alembic", "PostgreSQL", "Redis", "HashiCorp Vault", "Docker", "Jenkins CI/CD"],
+    keyFeatures: [
+      "Duplicate identity deduplication matching",
+      "Gold-record master schema enforcement",
+      "Alembic transaction-safe schema migrations",
+      "HashiCorp Vault secure secrets storage integration",
+      "Docker containerized staging environment",
+      "Jenkins auto-build & test pipeline"
+    ],
+    challenges: [
+      "Resolving record conflicts from legacy databases with inconsistent schema structures.",
+      "Maintaining rollback capabilities during massive batch migrations."
+    ],
+    solutions: [
+      "Developed an Alembic migration suite with robust downgrade scripts and mapped entities to SQLAlchemy core models.",
+      "Built custom record merging algorithms utilizing edit-distance indexing."
+    ],
+    githubLink: "https://github.com/Wannasingh/wannasingh-master-data-management",
+    demoLink: "#",
+    imagePath: "/assets/1.png"
+  },
+  {
+    name: "Oracle OCI Enterprise Database Architecture",
+    overview: "Design and deployment of high-availability Oracle Database Services on Oracle Cloud Infrastructure (OCI). Features Active Data Guard replication, Oracle Autonomous DB instances, and secure OCI Virtual Cloud Networks (VCN).",
+    technologies: ["Oracle 21c", "OCI VCN", "Active Data Guard", "Oracle Autonomous Database", "Terraform", "OCI IAM"],
+    keyFeatures: [
+      "Multi-region Active Data Guard disaster recovery replication",
+      "Automated patching and backup configurations on OCI DB Systems",
+      "Private subnet isolation architecture with OCI Security Lists",
+      "Terraform infrastructure-as-code deployment scripts"
+    ],
+    challenges: [
+      "Minimizing failover latency for transactional applications during network partitions.",
+      "Enforcing strict zero-trust access permissions for DBA roles."
+    ],
+    solutions: [
+      "Configured Fast-Start Failover (FSFO) with an OCI Observer instance across separate availability domains.",
+      "Integrated OCI Identity and Access Management (IAM) with fine-grained policy control."
+    ],
+    githubLink: "#",
+    demoLink: "#",
+    imagePath: "/assets/2.png"
+  },
+  {
+    name: "ETL-ELT Nuxt & Supabase Integration",
+    overview: "High-throughput data extraction and loading pipeline built with Nuxt 3, PostgreSQL, and Supabase. Optimized for streaming data files into structured database schemas.",
+    technologies: ["Nuxt.js 3", "Vue.js", "Supabase", "PostgreSQL", "TypeScript", "Tailwind CSS", "Chart.js"],
+    keyFeatures: [
+      "Streaming CSV/JSON bulk upload integrations",
+      "Supabase Real-time database event triggers",
+      "Dynamic data transformation stages",
+      "Vue Chart.js interactive data analytics dashboards"
+    ],
+    challenges: [
+      "Handling memory leaks when processing multi-gigabyte flat files on serverless environments.",
+      "Maintaining data validation consistency."
+    ],
+    solutions: [
+      "Implemented read streaming chunks on the Node server and batched INSERT statements.",
+      "Utilized PostgreSQL schema constraints and database-level validation functions."
+    ],
+    githubLink: "https://github.com/Wannasingh/ELT_ETL",
+    demoLink: "#",
+    imagePath: "/assets/3.png"
+  },
+  {
+    name: "wannasingh-e-commerce",
+    overview: "A full-stack, enterprise-grade e-commerce application. Focuses on test-driven development (TDD) using Cypress, containerized services with Docker Compose, and automated testing inside a Jenkins CI/CD pipeline.",
+    technologies: ["MedusaJS v2", "Astro", "React", "Docker", "Cypress", "Jenkins", "SonarQube", "PostgreSQL", "Stripe API"],
+    keyFeatures: [
+      "Astro server-side rendered (SSR) catalog storefront",
+      "MedusaJS headless e-commerce backend platform",
+      "Cypress end-to-end integration test coverage",
+      "Jenkins continuous integration pipelines",
+      "SonarQube static code quality analysis",
+      "Multi-container Docker Compose staging architecture"
+    ],
+    challenges: [
+      "Reducing pipeline build and test bottlenecks in automated CI/CD steps.",
+      "Ensuring database stability during load testing."
+    ],
+    solutions: [
+      "Optimized Cypress parallel execution runs and cached node_modules inside Jenkins build layers.",
+      "Configured connection pooling with PgBouncer."
+    ],
+    githubLink: "https://github.com/Wannasingh/wannasingh-e-comerce",
+    demoLink: "https://e-commerce.wannasingh.dev",
+    imagePath: "/assets/4.png"
+  },
+  {
+    name: "BytesTutor Academic Platform",
+    overview: "A comprehensive tutoring management and learning platform (TUTORA) designed with a clean API service layer and responsive client interface.",
+    technologies: ["Go (Golang)", "Gin Web Framework", "pgx (PostgreSQL)", "AWS SDK Go v2", "LiveKit WebRTC", "Omise API", "Redis", "React 19", "Zustand", "TanStack React Query", "HLS.js", "Docker"],
+    keyFeatures: [
+      "Gin-based high-performance RESTful API backend service",
+      "React 19 composition client app with Radix primitives",
+      "LiveKit WebRTC integrated virtual classroom modules",
+      "Interactive tutoring scheduling and booking workflows",
+      "Zustand lightweight client-side state management",
+      "Omise & Stripe secure payment gateway integrations",
+      "AWS SDK Go v2 cloud file uploads to R2 object storage"
+    ],
+    challenges: [
+      "Handling concurrent booking requests on popular tutoring time slots.",
+      "Ensuring secure handling of private student notes."
+    ],
+    solutions: [
+      "Utilized database transaction locks (SELECT FOR UPDATE) to prevent race conditions during booking.",
+      "Implemented AES-256 field-level encryption for private notes columns."
+    ],
+    githubLink: "https://github.com/Wannasingh/TUTORA_GO",
+    demoLink: "https://wannasingh.dev",
+    imagePath: "/assets/1.png"
+  },
+  {
+    name: "DevOps Local Developer Lab",
+    overview: "A robust developer lab environment containing pre-configured Docker containers for database monitoring, application logging, and pipeline orchestration.",
+    technologies: ["Docker", "Grafana", "Prometheus", "Uptime Kuma", "Nginx Proxy Manager", "GlitchTip", "Apache Atlas", "Jenkins"],
+    keyFeatures: [
+      "Nginx Proxy Manager domain routing",
+      "Grafana database performance dashboard",
+      "Prometheus resource usage scraper metrics",
+      "Uptime Kuma latency and health monitor alerts",
+      "GlitchTip real-time error tracking and exception capturing",
+      "Apache Atlas data governance metadata tracking"
+    ],
+    challenges: [
+      "Configuring seamless inter-container routing and domain mapping on localhost.",
+      "Managing memory constraints when running multiple heavy services simultaneously."
+    ],
+    solutions: [
+      "Created isolated Docker networks with local DNS routing via dnsmasq.",
+      "Tuned JVM parameters for Jenkins and Apache Atlas containers to run in low-memory profiles."
+    ],
+    githubLink: "#",
+    demoLink: "https://jenkins.wannasingh.dev",
+    imagePath: "/assets/2.png"
+  },
+  {
+    name: "note-app",
+    overview: "A monorepo note-taking application designed for high developer productivity. Leverages Supabase backend services, real-time sync, and Next.js frontend pages.",
+    technologies: ["C# ASP.NET Core", "Supabase", "React Native", "Expo", "TypeScript", "Tailwind CSS", "Turborepo"],
+    keyFeatures: [
+      "C# ASP.NET Core REST API controller service",
+      "Expo React Native cross-platform mobile client",
+      "Turborepo fast incremental caching builds",
+      "Supabase real-time row synchronization",
+      "Markdown parsing notes canvas",
+      "Supabase Auth authentication integration"
+    ],
+    challenges: [
+      "Managing complex build dependencies between frontend and backend in a monorepo structure.",
+      "Implementing low-latency notes syncing."
+    ],
+    solutions: [
+      "Configured workspace dependencies and shared package structures via npm workspaces.",
+      "Leveraged Supabase realtime-js subscription listeners."
+    ],
+    githubLink: "#",
+    demoLink: "#",
+    imagePath: "/assets/3.png"
+  },
+  {
+    name: "wannasingh-blog",
+    overview: "A personal blog engine featuring dynamic article rendering, database migrations, and a clean build deployment pipeline.",
+    technologies: ["Node.js", "Express", "Oracle Database", "oracledb", "Supabase", "React", "Vite", "Swagger/OpenAPI", "Jenkins"],
+    keyFeatures: [
+      "Node.js native `oracledb` query driver integration",
+      "Express API framework with Swagger OpenAPI documentation UI",
+      "Vite React client with Radix components",
+      "Sequelize automatic database migration tools",
+      "Dynamic article markdown parser",
+      "Jenkins continuous deployment script"
+    ],
+    challenges: [
+      "Preventing SQL injection through rich text markdown inputs.",
+      "Ensuring fast load times for asset-heavy articles."
+    ],
+    solutions: [
+      "Parsed markdown strictly using sanitized DOM Purify checks on the client.",
+      "Implemented server-side cache headers and image compression."
+    ],
+    githubLink: "https://github.com/Wannasingh/wannasingh-blog",
+    demoLink: "#",
+    imagePath: "/assets/4.png"
+  },
+  {
+    name: "miji-store",
+    overview: "A lightweight, custom e-commerce web application featuring a Vue 3 frontend and a Python Flask API backend, integrated with Supabase and Stripe.",
+    technologies: ["Vue.js 3", "Vite", "Flask", "Supabase", "Stripe API", "Tailwind CSS"],
+    keyFeatures: [
+      "Vue 3 composition API reactive frontend",
+      "Flask lightweight REST API backend",
+      "Supabase authentication and data synchronization",
+      "Stripe secure credit card payments checkout flow"
+    ],
+    challenges: [
+      "Handling secure payment verification callbacks in development.",
+      "Synchronizing cart state in real-time."
+    ],
+    solutions: [
+      "Implemented Stripe webhook listeners that update database orders upon payment verification.",
+      "Utilized Vue reactive stores to sync local state with Supabase tables."
+    ],
+    githubLink: "https://github.com/Wannasingh/miji-store",
+    demoLink: "#",
+    imagePath: "/assets/1.png"
+  },
+  {
+    name: "widget-toei",
+    overview: "A native iOS SwiftUI Widget application built with Swift and Xcode, designed to deliver dynamic, high-performance information widgets directly to the iOS home screen.",
+    technologies: ["Swift", "SwiftUI", "iOS WidgetKit", "Xcode", "iOS SDK"],
+    keyFeatures: [
+      "SwiftUI declarative layouts",
+      "WidgetKit background updates scheduling",
+      "Dynamic configuration intent options",
+      "Clean Apple-compliant UI design"
+    ],
+    challenges: [
+      "Meeting strict iOS memory limits (30MB constraint) for widget extensions.",
+      "Updating widgets efficiently in the background without draining battery life."
+    ],
+    solutions: [
+      "Optimized data structures and limited heavy library imports inside the widget target.",
+      "Scheduled updates utilizing WidgetCenter TimelineProvider APIs."
+    ],
+    githubLink: "#",
+    demoLink: "#",
+    imagePath: "/assets/2.png"
+  }
+];

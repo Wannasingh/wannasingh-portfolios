@@ -41,6 +41,14 @@ const nextConfig: NextConfig = {
   experimental: {
     optimizeCss: true,
   },
+  async rewrites() {
+    return [
+      {
+        source: "/media-assets/:path*",
+        destination: "https://media.wannasingh.dev/:path*",
+      },
+    ];
+  },
 };
 
 export default nextConfig;

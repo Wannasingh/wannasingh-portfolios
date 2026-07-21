@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { supabaseAdmin } from '@/app/lib/admin-client';
-import { supabase, Experience } from '@/app/lib/api-client';
+import { dbAdmin } from '@/app/lib/admin-client';
+import { db, Experience } from '@/app/lib/api-client';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -35,13 +35,13 @@ export default function AdminExperiencesPage() {
   }, []);
 
   async function fetchExperiences() {
-    const { data: { user } } = await supabaseAdmin.auth.getUser();
+    const { data: { user } } = await dbAdmin.auth.getUser();
     if (!user) {
       router.push("/admin/login");
       return;
     }
 
-    const { data, error } = await supabase
+    const { data, error } = await db
       .from('experiences')
       .select('*')
       .order('display_order', { ascending: true });
@@ -73,7 +73,7 @@ export default function AdminExperiencesPage() {
   const handleDelete = async (id: string) => {
       if(!confirm("Are you sure you want to delete this item?")) return;
 
-      const { error } = await supabaseAdmin.from('experiences').delete().eq('id', id);
+      const { error } = await dbAdmin.from('experiences').delete().eq('id', id);
       if(error) {
           toast.error("Failed to delete item");
       } else {
@@ -97,12 +97,12 @@ export default function AdminExperiencesPage() {
       let error;
       if (currentExp.id) {
          // Update
-         const res = await supabaseAdmin.from('experiences').update(payload).eq('id', currentExp.id);
-         error = res.error;
-      } else {
-         // Create
-         const res = await supabaseAdmin.from('experiences').insert([payload]);
-         error = res.error;
+          const res = await dbAdmin.from('experiences').update(payload).eq('id', currentExp.id);
+          error = res.error;
+       } else {
+          // Create
+          const res = await dbAdmin.from('experiences').insert([payload]);
+          error = res.error;
       }
 
       if (error) {

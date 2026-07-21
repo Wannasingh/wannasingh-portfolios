@@ -32,11 +32,11 @@ describe('ProjectCard Component', () => {
     expect(screen.getByText('Feature 2')).toBeInTheDocument();
 
     // Links
-    const sourceLink = screen.getByText('View Source');
+    const sourceLink = screen.getByText('// VIEW SOURCE');
     expect(sourceLink).toBeInTheDocument();
     expect(sourceLink.closest('a')).toHaveAttribute('href', 'https://github.com/test/project');
 
-    const demoLink = screen.getByText('Live Demo');
+    const demoLink = screen.getByText('// LIVE SERVICE');
     expect(demoLink).toBeInTheDocument();
     expect(demoLink.closest('a')).toHaveAttribute('href', 'https://demo.com/project');
   });
@@ -49,14 +49,14 @@ describe('ProjectCard Component', () => {
     };
     render(<ProjectCard project={inactiveProject} />);
 
-    expect(screen.queryByText('View Source')).not.toBeInTheDocument();
-    expect(screen.queryByText('Live Demo')).not.toBeInTheDocument();
+    expect(screen.queryByText('// VIEW SOURCE')).not.toBeInTheDocument();
+    expect(screen.queryByText('// LIVE SERVICE')).not.toBeInTheDocument();
   });
 
   it('renders click to expand overlay', () => {
     render(<ProjectCard project={mockProject} />);
     
-    const expandTrigger = screen.getByText('Click to Expand');
+    const expandTrigger = screen.getByText('Zoom Schematic');
     expect(expandTrigger).toBeInTheDocument();
   });
 });

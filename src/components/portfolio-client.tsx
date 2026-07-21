@@ -2,7 +2,7 @@
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import ProjectCard from "@/components/ProjectCard";
-import { supabase, Project, Profile } from '@/app/lib/api-client';
+import { db, Project, Profile } from '@/app/lib/api-client';
 import { ProfileHeader } from "@/components/ProfileHeader";
 import { Loader2 } from "lucide-react";
 
@@ -14,12 +14,12 @@ export default function PortfolioClient() {
   useEffect(() => {
     async function fetchData() {
       const [projectsResult, profileResult] = await Promise.all([
-        supabase
+        db
           .from('projects')
           .select('*')
           .order('is_featured', { ascending: false })
           .order('created_at', { ascending: false }),
-        supabase
+        db
           .from('profile')
           .select('*')
           .single()

@@ -31,7 +31,7 @@ const SERVICES = [
 
 export default function HybridAdvantageSection() {
   return (
-    <section className="py-28 relative overflow-hidden" id="advantage">
+    <section className="py-28 relative overflow-hidden font-mono" id="advantage">
       {/* Top separator */}
       <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-border to-transparent" />
 
@@ -45,16 +45,16 @@ export default function HybridAdvantageSection() {
           className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 mb-16"
         >
           <div>
-            <p className="mono text-xs text-primary tracking-widest uppercase mb-3">
-              What I Build
+            <p className="text-xs text-primary tracking-widest uppercase mb-3 font-bold">
+              {"// What I Build"}
             </p>
-            <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-foreground">
+            <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-foreground uppercase tracking-tight leading-none">
               Engineering from
               <br />
-              <span className="text-gradient">disk to display.</span>
+              <span className="text-primary font-bold">disk to display.</span>
             </h2>
           </div>
-          <p className="text-muted-foreground text-sm max-w-xs leading-relaxed sm:text-right">
+          <p className="text-muted-foreground text-xs max-w-xs leading-relaxed sm:text-right">
             Most developers work one layer. I own the full stack — database to browser.
           </p>
         </motion.div>
@@ -70,21 +70,21 @@ export default function HybridAdvantageSection() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ duration: 0.45, delay: i * 0.08 }}
-                className="relative group p-6 rounded-xl border border-border bg-card card-glow flex flex-col"
+                className="relative group p-6 rounded-none border border-border bg-card card-glow flex flex-col"
               >
                 {/* Number */}
-                <span className="mono text-[10px] text-muted-foreground tracking-widest mb-5">
+                <span className="text-[10px] text-muted-foreground tracking-widest mb-5 font-bold">
                   {service.number}
                 </span>
 
                 {/* Icon */}
-                <div className="w-10 h-10 rounded-lg bg-primary/10 border border-primary/20 flex items-center justify-center mb-5">
+                <div className="w-10 h-10 rounded-none bg-primary/5 border border-primary/20 flex items-center justify-center mb-5">
                   <Icon className="w-5 h-5 text-primary" />
                 </div>
 
                 {/* Content */}
-                <h3 className="text-base font-bold text-foreground mb-3">{service.title}</h3>
-                <p className="text-sm text-muted-foreground leading-relaxed flex-1 mb-6">
+                <h3 className="text-sm font-bold text-foreground mb-3 uppercase tracking-wider">{service.title}</h3>
+                <p className="text-xs text-muted-foreground leading-relaxed flex-1 mb-6">
                   {service.description}
                 </p>
 
@@ -93,7 +93,7 @@ export default function HybridAdvantageSection() {
                   {service.tags.map((tag) => (
                     <span
                       key={tag}
-                      className="px-2 py-0.5 rounded-md border border-border bg-secondary mono text-[10px] text-muted-foreground"
+                      className="px-2 py-0.5 rounded-none border border-border bg-secondary text-[9px] text-muted-foreground"
                     >
                       {tag}
                     </span>
@@ -101,7 +101,7 @@ export default function HybridAdvantageSection() {
                 </div>
 
                 {/* Hover accent */}
-                <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-primary/0 to-transparent group-hover:via-primary/60 transition-all duration-500 rounded-t-xl" />
+                <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-primary/0 to-transparent group-hover:via-primary/60 transition-all duration-500 rounded-none" />
               </motion.div>
             );
           })}
@@ -113,20 +113,20 @@ export default function HybridAdvantageSection() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.45, delay: 0.3 }}
-          className="mt-6 p-6 rounded-xl border border-primary/20 bg-primary/5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4"
+          className="mt-6 p-6 rounded-none border border-primary/20 bg-primary/5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4"
         >
           <div>
-            <p className="text-sm font-bold text-foreground mb-1">
+            <p className="text-xs font-bold text-foreground mb-1 uppercase tracking-wider">
               Why hire one person for all three?
             </p>
-            <p className="text-sm text-muted-foreground max-w-xl">
+            <p className="text-xs text-muted-foreground max-w-xl">
               Because when the database engineer <em>is</em> the frontend developer, there are no
               translation errors between layers — only faster, better decisions.
             </p>
           </div>
           <a
             href="/about"
-            className="shrink-0 inline-flex items-center gap-1.5 text-xs font-semibold text-primary hover:underline underline-offset-4 transition-colors"
+            className="shrink-0 inline-flex items-center gap-1.5 text-xs font-bold text-primary hover:underline underline-offset-4 transition-colors"
           >
             More about me <ArrowUpRight className="h-3.5 w-3.5" />
           </a>

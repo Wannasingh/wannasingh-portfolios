@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { supabaseAdmin } from '../../lib/admin-client';
+import { dbAdmin } from '../../lib/admin-client';
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import Link from "next/link";
@@ -21,12 +21,12 @@ export default function AdminServicesPage() {
     }, []);
 
     async function checkAuth() {
-        const { data: { user } } = await supabaseAdmin.auth.getUser();
+        const { data: { user } } = await dbAdmin.auth.getUser();
         if (!user) router.push("/admin/login");
     }
 
     async function fetchServices() {
-        const { data, error } = await supabaseAdmin
+        const { data, error } = await dbAdmin
             .from("services")
             .select("*")
             .order("display_order", { ascending: true });
@@ -37,20 +37,20 @@ export default function AdminServicesPage() {
 
     async function handleDelete(id: string) {
         if (!confirm("คุณแน่ใจหรือไม่?")) return;
-        const { error } = await supabaseAdmin.from("services").delete().eq("id", id);
+        const { error } = await dbAdmin.from("services").delete().eq("id", id);
         if (error) alert("เกิดข้อผิดพลาด: " + error.message);
         else fetchServices();
     }
 
     async function handleSave() {
         if (editingId === "new") {
-            const { error } = await supabaseAdmin.from("services").insert([formData]);
+            const { error } = await dbAdmin.from("services").insert([formData]);
             if (error) {
                 alert("เกิดข้อผิดพลาด: " + error.message);
                 return;
             }
         } else {
-            const { error } = await supabaseAdmin.from("services").update(formData).eq("id", editingId);
+            const { error } = await dbAdmin.from("services").update(formData).eq("id", editingId);
             if (error) {
                 alert("เกิดข้อผิดพลาด: " + error.message);
                 return;

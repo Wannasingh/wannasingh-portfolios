@@ -1,7 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { supabaseAdmin } from '../../lib/admin-client';
+import { dbAdmin } from '../../lib/admin-client';
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -24,10 +24,10 @@ export default function AdminLoginPage() {
 
     async function checkExistingSession() {
         try {
-            const { data: { user } } = await supabaseAdmin.auth.getUser();
+            const { data: { user } } = await dbAdmin.auth.getUser();
 
             if (user) {
-                const { data } = await supabaseAdmin
+                const { data } = await dbAdmin
                     .from('admin_emails')
                     .select('email')
                     .eq('email', user.email || '')
@@ -50,20 +50,20 @@ export default function AdminLoginPage() {
         setError("");
 
         try {
-            const { error } = await supabaseAdmin.auth.signInWithPassword({
+            const { error } = await dbAdmin.auth.signInWithPassword({
                 email,
                 password,
             });
 
             if (error) throw error;
 
-            const { data } = await supabaseAdmin
+            const { data } = await dbAdmin
                 .from('admin_emails')
                 .select('email')
                 .eq('email', email)
                 .single();
             if (!data) {
-                await supabaseAdmin.auth.signOut();
+                await dbAdmin.auth.signOut();
                 throw new Error("Unauthorized Access Detected");
             }
 

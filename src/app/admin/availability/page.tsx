@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { supabaseAdmin } from '@/app/lib/admin-client';
-import { supabase, Availability } from '@/app/lib/api-client';
+import { dbAdmin } from '@/app/lib/admin-client';
+import { db, Availability } from '@/app/lib/api-client';
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
@@ -33,13 +33,13 @@ export default function AdminAvailabilityPage() {
   }, []);
 
   async function fetchData() {
-    const { data: { user } } = await supabaseAdmin.auth.getUser();
+    const { data: { user } } = await dbAdmin.auth.getUser();
     if (!user) {
       router.push("/admin/login");
       return;
     }
 
-    const { data, error } = await supabase
+    const { data, error } = await db
       .from('availability')
       .select('*')
       .order('display_order', { ascending: true });
@@ -68,7 +68,7 @@ export default function AdminAvailabilityPage() {
   const handleDelete = async (id: string) => {
       if(!confirm("Delete this option?")) return;
 
-      const { error } = await supabaseAdmin.from('availability').delete().eq('id', id);
+      const { error } = await dbAdmin.from('availability').delete().eq('id', id);
       if(error) {
           toast.error("Failed to delete");
       } else {
@@ -88,10 +88,10 @@ export default function AdminAvailabilityPage() {
 
       let error;
       if (currentItem.id) {
-         const res = await supabaseAdmin.from('availability').update(payload).eq('id', currentItem.id);
+         const res = await dbAdmin.from('availability').update(payload).eq('id', currentItem.id);
          error = res.error;
       } else {
-         const res = await supabaseAdmin.from('availability').insert([payload]);
+         const res = await dbAdmin.from('availability').insert([payload]);
          error = res.error;
       }
 

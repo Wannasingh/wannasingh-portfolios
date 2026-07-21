@@ -6,11 +6,10 @@ import { Mail, FileText, Send, Loader2 } from "lucide-react";
 import { FaGithub, FaLinkedin } from "react-icons/fa6";
 import { motion } from "framer-motion";
 import { sendEmail } from "@/lib/email";
-import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea"; 
 import { Button } from "@/components/ui/button";
-import { supabase, Availability, Profile } from '@/app/lib/api-client';
+import { db, Availability, Profile } from '@/app/lib/api-client';
 
 export default function HireMeClient() {
   const [formData, setFormData] = useState({
@@ -27,9 +26,9 @@ export default function HireMeClient() {
   useEffect(() => {
     async function fetchData() {
         const [availResult, profileResult] = await Promise.all([
-            supabase.from('availability').select('*').order('display_order', { ascending: true }),
-            supabase.from('profile').select('*').single()
-        ]);
+             db.from('availability').select('*').order('display_order', { ascending: true }),
+             db.from('profile').select('*').single()
+         ]);
         
         if (availResult.data) setAvailability(availResult.data);
         if (profileResult.data) setProfile(profileResult.data);
@@ -60,7 +59,7 @@ export default function HireMeClient() {
   }
 
   return (
-    <div className="min-h-screen bg-background pt-32 pb-20">
+    <div className="min-h-screen bg-background pt-32 pb-20 text-[#191919] dark:text-foreground">
       <div className="container mx-auto px-4 md:px-6 max-w-5xl">
         <ProfileHeader
           pageType="hire-me"
@@ -75,32 +74,35 @@ export default function HireMeClient() {
           {/* Contact Information & Context */}
           <div className="space-y-8">
             <div className="space-y-4">
-              <h3 className="text-lg font-semibold">Connect & Profile</h3>
-              <div className="flex flex-col gap-3">
+              <h3 className="text-xl font-bold font-serif-elegant">Connect & Profile</h3>
+              <div className="flex flex-col gap-3 font-mono text-xs">
                  <a href={`mailto:${profile?.email || 'wannasingh.khan@gmail.com'}`} className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
                     <Mail className="h-4 w-4" /> {profile?.email || 'wannasingh.khan@gmail.com'}
                  </a>
                  {profile?.github_link && (
                     <a href={profile.github_link} target="_blank" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
-                        <FaGithub className="h-4 w-4" /> GitHub Profile
+                        <FaGithub className="h-4 w-4" /> {"// GITHUB PROFILE"}
                     </a>
                  )}
                  {profile?.linkedin_link && (
                     <a href={profile.linkedin_link} target="_blank" className="flex items-center gap-2 text-muted-foreground hover:text-primary transition-colors">
-                        <FaLinkedin className="h-4 w-4" /> LinkedIn Profile
+                        <FaLinkedin className="h-4 w-4" /> {"// LINKEDIN PROFILE"}
                     </a>
                  )}
               </div>
             </div>
 
             <div className="space-y-4">
-               <h3 className="text-lg font-semibold">Availability</h3>
-               <p className="text-sm text-muted-foreground leading-relaxed">
+               <h3 className="text-xl font-bold font-serif-elegant">Availability</h3>
+               <p className="text-sm text-[#696969] dark:text-muted-foreground leading-relaxed">
                   I typically respond within 24 hours. I am open to discussing:
                </p>
-               <ul className="list-disc list-inside text-sm text-muted-foreground space-y-1">
+               <ul className="font-handwriting text-lg text-[#696969] dark:text-muted-foreground space-y-1.5 list-none">
                   {availability.map((item, index) => (
-                      <li key={item.id || index}>{item.item_text}</li>
+                      <li key={item.id || index} className="flex items-center gap-2">
+                        <span className="w-1.5 h-1.5 bg-primary rounded-none" />
+                        {item.item_text}
+                      </li>
                   ))}
                </ul>
             </div>
@@ -112,11 +114,11 @@ export default function HireMeClient() {
              animate={{ opacity: 1, x: 0 }}
              transition={{ duration: 0.5, delay: 0.2 }}
           >
-            <Card className="p-6 md:p-8 bg-card border shadow-sm">
-               <h2 className="text-2xl font-bold mb-6">Send a Message</h2>
+            <div className="p-6 md:p-8 bg-white dark:bg-card hand-drawn-border-1">
+               <h2 className="text-2xl font-bold mb-6 font-serif-elegant">Send a Message</h2>
                <form onSubmit={handleSubmit} className="space-y-5">
                   <div className="space-y-2">
-                     <label htmlFor="name" className="text-sm font-medium">Name</label>
+                     <label htmlFor="name" className="text-sm font-semibold">Name</label>
                      <Input
                        id="name"
                        name="name"
@@ -124,11 +126,11 @@ export default function HireMeClient() {
                        value={formData.name}
                        onChange={handleChange}
                        required
-                       className="bg-background"
+                       className="bg-background rounded-none border-border"
                      />
                   </div>
                   <div className="space-y-2">
-                     <label htmlFor="email" className="text-sm font-medium">Email</label>
+                     <label htmlFor="email" className="text-sm font-semibold">Email</label>
                      <Input
                        type="email"
                        id="email"
@@ -137,11 +139,11 @@ export default function HireMeClient() {
                        value={formData.email}
                        onChange={handleChange}
                        required
-                       className="bg-background"
+                       className="bg-background rounded-none border-border"
                      />
                   </div>
                   <div className="space-y-2">
-                     <label htmlFor="message" className="text-sm font-medium">Message</label>
+                     <label htmlFor="message" className="text-sm font-semibold">Message</label>
                      <Textarea
                        id="message"
                        name="message"
@@ -150,7 +152,7 @@ export default function HireMeClient() {
                        onChange={handleChange}
                        rows={5}
                        required
-                       className="bg-background"
+                       className="bg-background rounded-none border-border"
                      />
                   </div>
                   
@@ -158,24 +160,24 @@ export default function HireMeClient() {
                     <input
                       type="checkbox"
                       id="resumeRequest"
-                      className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
+                      className="h-4 w-4 rounded-none border-gray-300 text-primary focus:ring-primary"
                       checked={formData.isResumeRequest}
                       onChange={(e) => setFormData({ ...formData, isResumeRequest: e.target.checked })}
                     />
                     <label
                       htmlFor="resumeRequest"
-                      className="text-sm text-muted-foreground cursor-pointer select-none"
+                      className="text-xs text-muted-foreground cursor-pointer select-none font-mono"
                     >
                       I would like to request a copy of your resume
                     </label>
                   </div>
 
-                  <Button type="submit" className="w-full gap-2">
+                  <Button type="submit" className="w-full gap-2 rounded-none bg-primary text-primary-foreground font-mono font-bold text-xs uppercase tracking-wider hover:bg-primary/95 transition-all">
                     {formData.isResumeRequest ? <FileText className="h-4 w-4" /> : <Send className="h-4 w-4" />}
                     {formData.isResumeRequest ? "Request Resume" : "Send Message"}
                   </Button>
                </form>
-            </Card>
+            </div>
           </motion.div>
         </div>
       </div>
